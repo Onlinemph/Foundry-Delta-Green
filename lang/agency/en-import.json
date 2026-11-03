@@ -1,0 +1,11 @@
+{
+  "GURPS": {
+    "agency": {
+      "import": {
+        "preserveName": "Import: Keep Foundry edits on re-import",
+        "preserveHint": "When re-importing a GCS character, keep what was changed in Foundry: equipment counts, uses, equipped/carried state and containers, text added to notes and names, OTFs, and entries added in Foundry. Values not changed in Foundry still take the new GCS values. Turn off to have the GCS file overwrite everything, as before.",
+        "disabled": "Disabled in GCS"
+      }
+    }
+  }
+}

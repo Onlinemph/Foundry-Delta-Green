@@ -47,7 +47,8 @@ export function calculateEncumbranceLevels(
 
     // Find the highest encumbrance level whose weightValue is equal to or greater than carriedWeight.
     encumbrance.current =
-      (carriedWeight < weightValue || encumbranceLevelIndex === 4 || basicLift === 0) &&
+      // AGENCY: '<=': a load of exactly BL is None (B17); with '<' a load equal to a threshold matched no level
+      (carriedWeight <= weightValue || encumbranceLevelIndex === 4 || basicLift === 0) &&
       (encumbranceLevelIndex === 0 ||
         carriedWeight > basicLift * encumbranceLevelWeightFactors[encumbranceLevelIndex - 1])
 

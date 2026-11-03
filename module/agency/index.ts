@@ -12,9 +12,20 @@ import * as defense from './defense/index.ts'
 import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
 import * as shooting from './shooting/index.ts'
+import * as gcsImport from './import/index.ts'
 import { registerAgencySettingsMenu } from './settings-app.ts'
 
-const features = [theme, wounds, sanity, defense, firearms, shooting, presets]
+// One feature per line keeps parallel branches from conflicting here.
+const features = [
+  theme,
+  wounds,
+  sanity,
+  defense,
+  firearms,
+  shooting,
+  gcsImport,
+  presets,
+]
 
 /** Sheet partials shared by all features. Features add their own via registerAgencyPartials(). */
 const partials: Record<string, string> = {

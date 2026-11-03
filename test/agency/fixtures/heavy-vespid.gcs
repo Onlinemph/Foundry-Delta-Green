@@ -1,0 +1,2201 @@
+{
+ "version": 5,
+ "id": "AAgencyHeavyFix01",
+ "total_points": 300,
+ "profile": {
+  "name": "Zix'ara Venn",
+  "title": "Hive Scout",
+  "player_name": "Agency Test",
+  "age": "19",
+  "birthday": "Frostmonth 3",
+  "eyes": "Faceted amber",
+  "hair": "None",
+  "skin": "Chitin, teal",
+  "handedness": "Ambidextrous",
+  "gender": "Female",
+  "height": "4' 2\"",
+  "weight": "90 lb",
+  "SM": 0,
+  "tech_level": "3",
+  "religion": "The Hive Mother"
+ },
+ "settings": {
+  "attributes": [
+   {
+    "id": "st",
+    "type": "integer",
+    "name": "ST",
+    "full_name": "Strength",
+    "base": "10",
+    "cost_per_point": 10,
+    "cost_adj_percent_per_sm": 10
+   },
+   {
+    "id": "dx",
+    "type": "integer",
+    "name": "DX",
+    "full_name": "Dexterity",
+    "base": "10",
+    "cost_per_point": 20
+   },
+   {
+    "id": "iq",
+    "type": "integer",
+    "name": "IQ",
+    "full_name": "Intelligence",
+    "base": "10",
+    "cost_per_point": 20
+   },
+   {
+    "id": "ht",
+    "type": "integer",
+    "name": "HT",
+    "full_name": "Health",
+    "base": "10",
+    "cost_per_point": 10
+   },
+   {
+    "id": "will",
+    "type": "integer",
+    "name": "Will",
+    "base": "$iq",
+    "cost_per_point": 5
+   },
+   {
+    "id": "fright_check",
+    "type": "integer",
+    "name": "Fright Check",
+    "base": "$will",
+    "cost_per_point": 2
+   },
+   {
+    "id": "per",
+    "type": "integer",
+    "name": "Per",
+    "full_name": "Perception",
+    "base": "$iq",
+    "cost_per_point": 5
+   },
+   {
+    "id": "vision",
+    "type": "integer",
+    "name": "Vision",
+    "base": "$per",
+    "cost_per_point": 2
+   },
+   {
+    "id": "hearing",
+    "type": "integer",
+    "name": "Hearing",
+    "base": "$per",
+    "cost_per_point": 2
+   },
+   {
+    "id": "taste_smell",
+    "type": "integer",
+    "name": "Taste & Smell",
+    "base": "$per",
+    "cost_per_point": 2
+   },
+   {
+    "id": "touch",
+    "type": "integer",
+    "name": "Touch",
+    "base": "$per",
+    "cost_per_point": 2
+   },
+   {
+    "id": "basic_speed",
+    "type": "decimal",
+    "name": "Basic Speed",
+    "base": "($dx + $ht) / 4",
+    "cost_per_point": 20
+   },
+   {
+    "id": "basic_move",
+    "type": "integer",
+    "name": "Basic Move",
+    "base": "Math.floor($basic_speed)",
+    "cost_per_point": 5
+   },
+   {
+    "id": "fp",
+    "type": "pool",
+    "name": "FP",
+    "full_name": "Fatigue Points",
+    "base": "$ht",
+    "cost_per_point": 3,
+    "thresholds": [
+     {
+      "state": "Unconscious",
+      "value": "-$fp",
+      "ops": [
+       "halve_move",
+       "halve_dodge",
+       "halve_st"
+      ]
+     },
+     {
+      "state": "Collapse",
+      "value": "0",
+      "ops": [
+       "halve_move",
+       "halve_dodge",
+       "halve_st"
+      ]
+     },
+     {
+      "state": "Tired",
+      "value": "Math.ceil($fp / 3) - 1",
+      "ops": [
+       "halve_move",
+       "halve_dodge",
+       "halve_st"
+      ]
+     },
+     {
+      "state": "Tiring",
+      "value": "$fp - 1"
+     },
+     {
+      "state": "Rested",
+      "value": "$fp"
+     }
+    ]
+   },
+   {
+    "id": "hp",
+    "type": "pool",
+    "name": "HP",
+    "full_name": "Hit Points",
+    "base": "$st",
+    "cost_per_point": 2,
+    "cost_adj_percent_per_sm": 10,
+    "thresholds": [
+     {
+      "state": "Dead",
+      "value": "Math.round(-$hp * 5)",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Dying #4",
+      "value": "Math.round(-$hp * 4)",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Dying #3",
+      "value": "Math.round(-$hp * 3)",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Dying #2",
+      "value": "Math.round(-$hp * 2)",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Dying #1",
+      "value": "-$hp",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Collapse",
+      "value": "0",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Reeling",
+      "value": "Math.ceil($hp / 3) - 1",
+      "ops": [
+       "halve_move",
+       "halve_dodge"
+      ]
+     },
+     {
+      "state": "Wounded",
+      "value": "$hp - 1"
+     },
+     {
+      "state": "Healthy",
+      "value": "$hp"
+     }
+    ]
+   },
+   {
+    "id": "mp",
+    "type": "pool",
+    "name": "MP",
+    "full_name": "Mana Points",
+    "base": "$iq",
+    "cost_per_point": 3,
+    "thresholds": [
+     {
+      "state": "",
+      "value": "0"
+     }
+    ]
+   },
+   {
+    "id": "er",
+    "type": "pool",
+    "name": "ER",
+    "full_name": "Energy Reserve",
+    "base": "0",
+    "cost_per_point": 3,
+    "thresholds": [
+     {
+      "state": "Empty",
+      "value": "0"
+     }
+    ]
+   },
+   {
+    "id": "luck",
+    "type": "integer",
+    "name": "Luck",
+    "full_name": "Luck",
+    "base": "10",
+    "cost_per_point": 5
+   }
+  ],
+  "body_type": {
+   "name": "Hexapod, Winged",
+   "roll": "3d",
+   "locations": [
+    {
+     "id": "eye",
+     "choice_name": "Eyes",
+     "table_name": "Eyes",
+     "hit_penalty": -9,
+     "calc": {
+      "roll_range": "-",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "skull",
+     "choice_name": "Skull",
+     "table_name": "Skull",
+     "slots": 2,
+     "hit_penalty": -7,
+     "dr_bonus": 2,
+     "calc": {
+      "roll_range": "3-4",
+      "dr": {
+       "all": 2
+      }
+     }
+    },
+    {
+     "id": "neck",
+     "choice_name": "Neck",
+     "table_name": "Neck",
+     "slots": 1,
+     "hit_penalty": -5,
+     "calc": {
+      "roll_range": "5",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "face",
+     "choice_name": "Face",
+     "table_name": "Face",
+     "slots": 1,
+     "hit_penalty": -5,
+     "calc": {
+      "roll_range": "6",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "leg",
+     "choice_name": "Leg",
+     "table_name": "Foreleg",
+     "slots": 2,
+     "hit_penalty": -2,
+     "calc": {
+      "roll_range": "7-8",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "torso",
+     "choice_name": "Torso",
+     "table_name": "Torso",
+     "slots": 2,
+     "calc": {
+      "roll_range": "9-10",
+      "dr": {
+       "all": 3,
+       "crushing": 1,
+       "fire": 2
+      }
+     }
+    },
+    {
+     "id": "leg",
+     "choice_name": "Leg",
+     "table_name": "Midleg",
+     "slots": 1,
+     "hit_penalty": -2,
+     "calc": {
+      "roll_range": "11",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "wing",
+     "choice_name": "Wing",
+     "table_name": "Wing",
+     "slots": 1,
+     "hit_penalty": -2,
+     "calc": {
+      "roll_range": "12",
+      "dr": {
+       "all": 1
+      }
+     }
+    },
+    {
+     "id": "leg",
+     "choice_name": "Leg",
+     "table_name": "Hindleg",
+     "slots": 2,
+     "hit_penalty": -2,
+     "calc": {
+      "roll_range": "13-14",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "leg",
+     "choice_name": "Leg",
+     "table_name": "Midleg",
+     "slots": 2,
+     "hit_penalty": -2,
+     "calc": {
+      "roll_range": "15-16",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "foot",
+     "choice_name": "Foot",
+     "table_name": "Foot",
+     "slots": 2,
+     "hit_penalty": -4,
+     "calc": {
+      "roll_range": "17-18",
+      "dr": {
+       "all": 0
+      }
+     }
+    },
+    {
+     "id": "vitals",
+     "choice_name": "Vitals",
+     "table_name": "Vitals",
+     "hit_penalty": -3,
+     "calc": {
+      "roll_range": "-",
+      "dr": {
+       "all": 0
+      }
+     }
+    }
+   ]
+  },
+  "default_length_units": "ft_in",
+  "default_weight_units": "lb"
+ },
+ "attributes": [
+  {
+   "attr_id": "st",
+   "adj": 1,
+   "calc": {
+    "value": 11,
+    "points": 10
+   }
+  },
+  {
+   "attr_id": "dx",
+   "adj": 3,
+   "calc": {
+    "value": 13,
+    "points": 60
+   }
+  },
+  {
+   "attr_id": "iq",
+   "adj": 2,
+   "calc": {
+    "value": 12,
+    "points": 40
+   }
+  },
+  {
+   "attr_id": "ht",
+   "adj": 1,
+   "calc": {
+    "value": 11,
+    "points": 10
+   }
+  },
+  {
+   "attr_id": "will",
+   "adj": 1,
+   "calc": {
+    "value": 13,
+    "points": 5
+   }
+  },
+  {
+   "attr_id": "fright_check",
+   "adj": 0,
+   "calc": {
+    "value": 15,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "per",
+   "adj": 0,
+   "calc": {
+    "value": 12,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "vision",
+   "adj": 0,
+   "calc": {
+    "value": 12,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "hearing",
+   "adj": 0,
+   "calc": {
+    "value": 12,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "taste_smell",
+   "adj": 0,
+   "calc": {
+    "value": 12,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "touch",
+   "adj": 0,
+   "calc": {
+    "value": 12,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "basic_speed",
+   "adj": 0.25,
+   "calc": {
+    "value": 6.25,
+    "points": 5
+   }
+  },
+  {
+   "attr_id": "basic_move",
+   "adj": 0,
+   "calc": {
+    "value": 6,
+    "points": 0
+   }
+  },
+  {
+   "attr_id": "fp",
+   "adj": 0,
+   "calc": {
+    "value": 11,
+    "points": 0,
+    "current": 7
+   }
+  },
+  {
+   "attr_id": "hp",
+   "adj": 2,
+   "calc": {
+    "value": 13,
+    "points": 4,
+    "current": 9
+   }
+  },
+  {
+   "attr_id": "mp",
+   "adj": 3,
+   "calc": {
+    "value": 15,
+    "points": 9,
+    "current": 10
+   }
+  },
+  {
+   "attr_id": "er",
+   "adj": 0,
+   "calc": {
+    "value": 6,
+    "points": 0,
+    "current": 4
+   }
+  },
+  {
+   "attr_id": "luck",
+   "adj": 1,
+   "calc": {
+    "value": 11,
+    "points": 5
+   }
+  }
+ ],
+ "traits": [
+  {
+   "id": "TAgencyFix0000003",
+   "name": "Vespid",
+   "reference": "Homebrew",
+   "container_type": "ancestry",
+   "local_notes": "Winged insectoid scouts",
+   "children": [
+    {
+     "id": "tAgencyFix0000004",
+     "name": "Flight",
+     "reference": "B56",
+     "base_points": 40,
+     "modifiers": [
+      {
+       "id": "mAgencyFix0000005",
+       "name": "Winged",
+       "reference": "B56",
+       "cost_adj": "-25%"
+      }
+     ],
+     "calc": {
+      "points": 30
+     }
+    },
+    {
+     "id": "tAgencyFix0000006",
+     "name": "Extra Legs (4 Legs)",
+     "reference": "B54",
+     "base_points": 5,
+     "calc": {
+      "points": 5
+     }
+    },
+    {
+     "id": "tAgencyFix0000007",
+     "name": "Large Frame",
+     "reference": "Homebrew",
+     "features": [
+      {
+       "type": "attribute_bonus",
+       "attribute": "sm",
+       "amount": 1
+      }
+     ],
+     "calc": {
+      "points": 0
+     }
+    },
+    {
+     "id": "tAgencyFix0000008",
+     "name": "Bad Grip",
+     "reference": "B123",
+     "points_per_level": -5,
+     "can_level": true,
+     "levels": 1,
+     "calc": {
+      "points": -5,
+      "level": 1,
+      "current_level": 1
+     }
+    }
+   ],
+   "calc": {
+    "points": 30
+   }
+  },
+  {
+   "id": "tGjjVtxav9KsrG7Wx",
+   "name": "Combat Reflexes",
+   "reference": "B43",
+   "local_notes": "Never freeze",
+   "tags": [
+    "Advantage",
+    "Mental"
+   ],
+   "base_points": 15,
+   "features": [
+    {
+     "type": "skill_bonus",
+     "selection_type": "skills_with_name",
+     "name": {
+      "compare": "starts_with",
+      "qualifier": "fast-draw"
+     },
+     "amount": 1
+    },
+    {
+     "type": "attribute_bonus",
+     "attribute": "dodge",
+     "amount": 1
+    },
+    {
+     "type": "attribute_bonus",
+     "attribute": "parry",
+     "amount": 1
+    },
+    {
+     "type": "attribute_bonus",
+     "attribute": "block",
+     "amount": 1
+    },
+    {
+     "type": "attribute_bonus",
+     "attribute": "fright_check",
+     "amount": 2
+    },
+    {
+     "type": "conditional_modifier",
+     "situation": "on all IQ rolls to wake up or to recover from surprise or mental stun",
+     "amount": 6
+    },
+    {
+     "type": "conditional_modifier",
+     "situation": "to initiative rolls for your side (+2 if you are the leader)",
+     "amount": 1
+    }
+   ],
+   "calc": {
+    "points": 15
+   }
+  },
+  {
+   "id": "tpnv8EEpAS6Er2pwK",
+   "name": "Magery",
+   "reference": "B66",
+   "tags": [
+    "Advantage",
+    "Mental",
+    "Supernatural"
+   ],
+   "modifiers": [
+    {
+     "id": "mtwqU3fcOaem8bFIH",
+     "name": "Dance",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "mG_rA5DrXWcLN8dZF",
+     "name": "Dark-Aspected",
+     "cost_adj": "-50%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "meoXcTrcKPP1HMolT",
+     "name": "Day-Aspected",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "mJoCDS10Dkj6fKZT-",
+     "name": "Musical",
+     "cost_adj": "-50%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "mwfZ4hw25U-iVWCdM",
+     "name": "Night-Aspected",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "mN8R9OfbWfzCzuG3Z",
+     "name": "One College",
+     "local_notes": "@College@",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": false,
+     "calc": {
+      "resolved_notes": "Fire"
+     }
+    },
+    {
+     "id": "mPWIeUq0LCgtchmGn",
+     "name": "Solitary",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": true
+    },
+    {
+     "id": "m9blqDrTqxaidYCW2",
+     "name": "Song",
+     "cost_adj": "-40%",
+     "affects": "levels_only",
+     "disabled": true
+    }
+   ],
+   "base_points": 5,
+   "points_per_level": 10,
+   "features": [
+    {
+     "type": "spell_bonus",
+     "match": "all_colleges",
+     "amount": 1,
+     "per_level": true
+    },
+    {
+     "type": "skill_bonus",
+     "selection_type": "skills_with_name",
+     "name": {
+      "compare": "is",
+      "qualifier": "thaumatology"
+     },
+     "amount": 1,
+     "per_level": true
+    }
+   ],
+   "can_level": true,
+   "levels": 2,
+   "calc": {
+    "points": 17,
+    "level": 2,
+    "current_level": 2
+   },
+   "replacements": {
+    "College": "Fire"
+   }
+  },
+  {
+   "id": "tdlCZw4YB4T7QkOnj",
+   "name": "Appearance",
+   "reference": "B21",
+   "tags": [
+    "Advantage",
+    "Physical"
+   ],
+   "modifiers": [
+    {
+     "id": "m6eUyZS9w6DPZKvxq",
+     "name": "Attractive",
+     "reference": "B21",
+     "cost_adj": "4",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 1
+      }
+     ],
+     "disabled": false
+    },
+    {
+     "id": "mamcYOmhTN9VaJdgB",
+     "name": "Average",
+     "reference": "B21",
+     "disabled": true
+    },
+    {
+     "id": "mH_LYQLrb3U6qrz5M",
+     "name": "Beautiful",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from those attracted to members of your sex, +2 from everyone else",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mUCaarOQ6aISZsLi8",
+     "name": "Beautiful (Androgynous)",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 3
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mhdlbPNUuppB7jcfS",
+     "name": "Beautiful (Impressive)",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 3
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mIQ2vw3Pazczpo4PF",
+     "name": "Handsome",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from those attracted to members of your sex, +2 from everyone else",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m10UesvCiYq8yk2o-",
+     "name": "Handsome (Androgynous)",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 3
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m0WR8xNMlkd_ndeEs",
+     "name": "Handsome (Impressive)",
+     "reference": "B21",
+     "cost_adj": "12",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 3
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mDp-CMUBUVvEib4lD",
+     "name": "Hideous",
+     "reference": "B21,B202",
+     "cost_adj": "-16",
+     "features": [
+      {
+       "type": "skill_bonus",
+       "selection_type": "skills_with_name",
+       "name": {
+        "compare": "is",
+        "qualifier": "Intimidation"
+       },
+       "amount": 2
+      },
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": -4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mwU_PPC4K1kG2jw2D",
+     "name": "Horrific",
+     "reference": "B21,B202",
+     "cost_adj": "-24",
+     "features": [
+      {
+       "type": "skill_bonus",
+       "selection_type": "skills_with_name",
+       "name": {
+        "compare": "is",
+        "qualifier": "Intimidation"
+       },
+       "amount": 4
+      },
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": -6
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m5QGxJiQW4E_IfiyG",
+     "name": "Impressive",
+     "reference": "B21",
+     "disabled": true
+    },
+    {
+     "id": "mChcH2ofF_baKWTw-",
+     "name": "Monstrous",
+     "reference": "B21,B202",
+     "cost_adj": "-20",
+     "features": [
+      {
+       "type": "skill_bonus",
+       "selection_type": "skills_with_name",
+       "name": {
+        "compare": "is",
+        "qualifier": "Intimidation"
+       },
+       "amount": 3
+      },
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": -5
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m5t2WnjBmNr7fPjv4",
+     "name": "Off-the-Shelf Looks",
+     "reference": "B21",
+     "local_notes": "Halves the usual reaction bonus - adjust manually",
+     "cost_adj": "-50%",
+     "disabled": true
+    },
+    {
+     "id": "mO0YBr_9_G2W6AjL3",
+     "name": "Transcendent",
+     "reference": "B21",
+     "cost_adj": "20",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from those attracted to members of your sex, +2 from everyone else. Exception: Members of the same sex with reason to dislike you (more than -4 in reaction penalties regardless of bonuses) resent your good looks and react at -2 instead.",
+       "amount": 8
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m92ChCxM8fIJFBLMw",
+     "name": "Transcendent (Androgynous)",
+     "reference": "B21",
+     "cost_adj": "20",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 5
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mCyLNDrSD3lwB5ymp",
+     "name": "Transcendent (Impressive)",
+     "reference": "B21",
+     "cost_adj": "20",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 5
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mOgWxFuRVbVwqEKwT",
+     "name": "Ugly",
+     "reference": "B21",
+     "cost_adj": "-8",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": -2
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m2ifyKuECCiKgM-4Z",
+     "name": "Unattractive",
+     "reference": "B21",
+     "cost_adj": "-4",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": -1
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mmkph7Dde7dFWEs4t",
+     "name": "Universal",
+     "reference": "B21",
+     "cost_adj": "25%",
+     "disabled": true
+    },
+    {
+     "id": "mZQyMA2gJHM05_Wwk",
+     "name": "Very Beautiful",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from those attracted to members of your sex, +2 from everyone else. Exception: Members of the same sex with reason to dislike you (more than -4 in reaction penalties regardless of bonuses) resent your good looks and react at -2 instead.",
+       "amount": 6
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mui1zNROmPDUd2KBj",
+     "name": "Very Beautiful (Androgynous)",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mhdKETgw48O9PQIPK",
+     "name": "Very Beautiful (Impressive)",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mgxWUcYSixy56Yrr4",
+     "name": "Very Handsome",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from those attracted to members of your sex, +2 from everyone else. Exception: Members of the same sex with reason to dislike you (more than -4 in reaction penalties regardless of bonuses) resent your good looks and react at -2 instead.",
+       "amount": 6
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "mfpMU_-AGSyMIzBQW",
+     "name": "Very Handsome (Androgynous)",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    },
+    {
+     "id": "m2vNtTTepCl5vzjAE",
+     "name": "Very Handsome (Impressive)",
+     "reference": "B21",
+     "cost_adj": "16",
+     "features": [
+      {
+       "type": "reaction_bonus",
+       "situation": "from others",
+       "amount": 4
+      }
+     ],
+     "disabled": true
+    }
+   ],
+   "calc": {
+    "points": 4
+   }
+  },
+  {
+   "id": "tELmv9bNG_8o75sYZ",
+   "name": "Berserk",
+   "reference": "B124",
+   "local_notes": "Make a self-control roll any time you suffer damage over 1/4 your HP in the space of one second, and whenever you witness equivalent harm to a loved one",
+   "tags": [
+    "Disadvantage",
+    "Mental"
+   ],
+   "modifiers": [
+    {
+     "id": "m7TFePBnSKGqV60-D",
+     "name": "Battle Rage",
+     "cost_adj": "50%",
+     "disabled": true
+    }
+   ],
+   "cr": 12,
+   "base_points": -10,
+   "calc": {
+    "points": 0
+   },
+   "disabled": true,
+   "features": [
+    {
+     "type": "reaction_bonus",
+     "situation": "from anyone who has seen you rage",
+     "amount": -2
+    }
+   ]
+  },
+  {
+   "id": "tnrtPQ0mWF4k75plo",
+   "name": "Bad Temper",
+   "reference": "B124",
+   "tags": [
+    "Disadvantage",
+    "Mental"
+   ],
+   "cr": 12,
+   "base_points": -10,
+   "calc": {
+    "points": -10
+   }
+  },
+  {
+   "id": "tAgencyFix0000001",
+   "name": "Danger Sense",
+   "reference": "B47",
+   "local_notes": "Roll vs. Per when ambushed",
+   "vtt_notes": "c:[Per Danger Sense]",
+   "base_points": 15,
+   "calc": {
+    "points": 15
+   }
+  },
+  {
+   "id": "tAgencyFix0000002",
+   "name": "Energy Reserve",
+   "reference": "P119",
+   "local_notes": "Magical",
+   "points_per_level": 3,
+   "can_level": true,
+   "levels": 6,
+   "features": [
+    {
+     "type": "attribute_bonus",
+     "attribute": "er",
+     "amount": 1,
+     "per_level": true
+    }
+   ],
+   "calc": {
+    "points": 18,
+    "level": 6,
+    "current_level": 6
+   }
+  },
+  {
+   "id": "TAgencyFix0000009",
+   "name": "Elemental Stings",
+   "container_type": "alternative_abilities",
+   "children": [
+    {
+     "id": "tAgencyFix0000010",
+     "name": "Burning Attack",
+     "reference": "B61",
+     "points_per_level": 5,
+     "can_level": true,
+     "levels": 3,
+     "modifiers": [
+      {
+       "id": "mAgencyFix0000011",
+       "name": "Accurate",
+       "reference": "B102",
+       "cost_adj": "5%",
+       "levels": 1
+      }
+     ],
+     "weapons": [
+      {
+       "id": "WAgencyFix0000012",
+       "sv": 1,
+       "damage": {
+        "type": "burn",
+        "base": "3d"
+       },
+       "usage": "Fire Jet",
+       "accuracy": "3",
+       "range": "10/100",
+       "rate_of_fire": "1",
+       "shots": "",
+       "bulk": "-10",
+       "calc": {
+        "level": 13,
+        "damage": "3d burn",
+        "accuracy": "4"
+       }
+      }
+     ],
+     "calc": {
+      "points": 16,
+      "level": 3,
+      "current_level": 3
+     }
+    },
+    {
+     "id": "tAgencyFix0000013",
+     "name": "Toxic Attack",
+     "reference": "B62",
+     "points_per_level": 4,
+     "can_level": true,
+     "levels": 2,
+     "weapons": [
+      {
+       "id": "wAgencyFix0000014",
+       "sv": 1,
+       "damage": {
+        "type": "tox",
+        "base": "2d"
+       },
+       "usage": "Sting",
+       "usage_notes": "Follow-up",
+       "reach": "C",
+       "parry": "No",
+       "calc": {
+        "level": 13,
+        "damage": "2d tox"
+       }
+      }
+     ],
+     "calc": {
+      "points": 8,
+      "level": 2,
+      "current_level": 2
+     }
+    }
+   ],
+   "calc": {
+    "points": 18
+   }
+  },
+  {
+   "id": "TAgencyFix0000015",
+   "name": "Perks & Quirks",
+   "children": [
+    {
+     "id": "tAgencyFix0000016",
+     "name": "Hums while working",
+     "reference": "B162",
+     "base_points": -1,
+     "calc": {
+      "points": -1
+     }
+    },
+    {
+     "id": "tAgencyFix0000017",
+     "name": "Chitin Polish",
+     "reference": "Homebrew",
+     "base_points": 1,
+     "userdesc": "Keeps the carapace gleaming",
+     "calc": {
+      "points": 1
+     }
+    }
+   ],
+   "calc": {
+    "points": 0
+   }
+  }
+ ],
+ "skills": [
+  {
+   "id": "SAgencyFix0000018",
+   "name": "Combat",
+   "children": [
+    {
+     "id": "sAgencyFix0000019",
+     "name": "Broadsword",
+     "reference": "B208",
+     "difficulty": "dx/a",
+     "points": 4,
+     "calc": {
+      "level": 14,
+      "rsl": "DX+1"
+     }
+    },
+    {
+     "id": "sAgencyFix0000020",
+     "name": "Bow",
+     "reference": "B182",
+     "difficulty": "dx/a",
+     "points": 2,
+     "calc": {
+      "level": 13,
+      "rsl": "DX+0"
+     }
+    },
+    {
+     "id": "sAgencyFix0000021",
+     "name": "Guns",
+     "reference": "B198",
+     "tech_level": "7",
+     "specialization": "Pistol",
+     "difficulty": "dx/e",
+     "points": 1,
+     "calc": {
+      "level": 13,
+      "rsl": "DX+0"
+     }
+    },
+    {
+     "id": "SAgencyFix0000022",
+     "name": "Unarmed",
+     "children": [
+      {
+       "id": "sAgencyFix0000023",
+       "name": "Brawling",
+       "reference": "B182",
+       "difficulty": "dx/e",
+       "points": 2,
+       "calc": {
+        "level": 14,
+        "rsl": "DX+1"
+       }
+      },
+      {
+       "id": "qAgencyFix0000024",
+       "name": "Feint",
+       "reference": "MA70",
+       "difficulty": "h",
+       "default": {
+        "type": "skill",
+        "name": {
+         "compare": "is",
+         "qualifier": "Broadsword"
+        }
+       },
+       "limit": 4,
+       "points": 2,
+       "calc": {
+        "level": 15,
+        "rsl": "+1"
+       }
+      },
+      {
+       "id": "qAgencyFix0000025",
+       "name": "Disarming",
+       "reference": "B230",
+       "difficulty": "h",
+       "default": {
+        "type": "skill",
+        "name": {
+         "compare": "is",
+         "qualifier": "Shield"
+        },
+        "specialization": {
+         "compare": "is",
+         "qualifier": "Buckler"
+        }
+       },
+       "limit": 5,
+       "points": 1,
+       "calc": {
+        "level": 12,
+        "rsl": "+0"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sAgencyFix0000026",
+   "name": "Thaumatology",
+   "reference": "B225",
+   "difficulty": "iq/vh",
+   "points": 1,
+   "calc": {
+    "level": 11,
+    "rsl": "IQ-1"
+   }
+  },
+  {
+   "id": "sAgencyFix0000027",
+   "name": "Stealth",
+   "reference": "B222",
+   "difficulty": "dx/a",
+   "points": 4,
+   "encumbrance_penalty_multiplier": 1,
+   "local_notes": "Silent while hovering",
+   "calc": {
+    "level": 13,
+    "rsl": "DX+1"
+   }
+  },
+  {
+   "id": "sAgencyFix0000028",
+   "name": "Savoir-Faire",
+   "reference": "B218",
+   "specialization": "High Society",
+   "difficulty": "iq/e",
+   "points": 1,
+   "disabled": true,
+   "calc": {
+    "level": 12,
+    "rsl": "IQ+0"
+   }
+  }
+ ],
+ "spells": [
+  {
+   "id": "PAgencyFix0000029",
+   "name": "Fire College",
+   "children": [
+    {
+     "id": "pAgencyFix0000030",
+     "name": "Ignite Fire",
+     "reference": "B196",
+     "difficulty": "iq/h",
+     "college": [
+      "Fire"
+     ],
+     "power_source": "Arcane",
+     "spell_class": "Regular",
+     "casting_cost": "1 to 4",
+     "maintenance_cost": "Same",
+     "casting_time": "1 sec",
+     "duration": "1 sec",
+     "points": 1,
+     "calc": {
+      "level": 13,
+      "rsl": "IQ+1"
+     }
+    },
+    {
+     "id": "pAgencyFix0000031",
+     "name": "Fireball",
+     "reference": "B247",
+     "difficulty": "iq/h",
+     "college": [
+      "Fire"
+     ],
+     "power_source": "Arcane",
+     "spell_class": "Missile",
+     "casting_cost": "1 to Magery",
+     "casting_time": "1 to 3 sec",
+     "duration": "Instant",
+     "points": 2,
+     "weapons": [
+      {
+       "id": "WAgencyFix0000032",
+       "sv": 1,
+       "damage": {
+        "type": "burn",
+        "base": "1d"
+       },
+       "usage": "Thrown",
+       "accuracy": "1",
+       "range": "25/50",
+       "rate_of_fire": "1",
+       "bulk": "-1",
+       "calc": {
+        "level": 14,
+        "damage": "2d burn"
+       }
+      }
+     ],
+     "calc": {
+      "level": 14,
+      "rsl": "IQ+2"
+     }
+    },
+    {
+     "id": "pAgencyFix0000033",
+     "name": "Shape Fire",
+     "reference": "B246",
+     "difficulty": "iq/h",
+     "college": [
+      "Fire",
+      "Movement"
+     ],
+     "spell_class": "Area",
+     "casting_cost": "2/20 sq yds",
+     "maintenance_cost": "Half",
+     "casting_time": "1 sec",
+     "duration": "1 min",
+     "points": 1,
+     "calc": {
+      "level": 13,
+      "rsl": "IQ+1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rAgencyFix0000034",
+   "name": "Light",
+   "reference": "M31",
+   "difficulty": "h",
+   "college": [
+    "Light and Darkness"
+   ],
+   "power_source": "Arcane",
+   "spell_class": "Regular",
+   "casting_cost": "1",
+   "maintenance_cost": "1",
+   "casting_time": "1 sec",
+   "duration": "1 min",
+   "base_skill": "Ritual Magic",
+   "prereq_count": 0,
+   "calc": {
+    "level": 10,
+    "rsl": "-2"
+   }
+  }
+ ],
+ "equipment": [
+  {
+   "id": "eT91Kw-sURBn7M7Li",
+   "description": "Broadsword",
+   "reference": "B271",
+   "tech_level": "2",
+   "tags": [
+    "Melee Weapon"
+   ],
+   "base_value": "500",
+   "base_weight": "3 lb",
+   "weapons": [
+    {
+     "id": "w3Mv6vbbDTfG9tS3J",
+     "sv": 1,
+     "damage": {
+      "type": "cut",
+      "st": "sw",
+      "base": "1"
+     },
+     "strength": "10",
+     "usage": "Swung",
+     "reach": "1",
+     "parry": "0",
+     "calc": {
+      "level": 14,
+      "damage": "1d+2 cut",
+      "parry": "11"
+     }
+    },
+    {
+     "id": "wiDc84PMNESu6VGl8",
+     "sv": 1,
+     "damage": {
+      "type": "cr",
+      "st": "thr",
+      "base": "1"
+     },
+     "strength": "10",
+     "usage": "Thrust",
+     "reach": "1",
+     "parry": "0",
+     "calc": {
+      "level": 14,
+      "damage": "1d cr",
+      "parry": "11"
+     }
+    }
+   ],
+   "quantity": 1,
+   "calc": {
+    "value": 2000,
+    "extended_value": 2000,
+    "weight": "3 lb",
+    "extended_weight": "3 lb"
+   },
+   "equipped": true,
+   "modifiers": [
+    {
+     "id": "fAgencyFix0000035",
+     "name": "Fine Quality",
+     "reference": "B274",
+     "cost_type": "to_final_cost",
+     "cost": "x4"
+    }
+   ]
+  },
+  {
+   "id": "enuElHkbotKsmNZFf",
+   "description": "Small Shield",
+   "reference": "B287",
+   "local_notes": "DR 6, HP 30",
+   "tech_level": "1",
+   "tags": [
+    "Shield"
+   ],
+   "base_value": "40",
+   "base_weight": "8 lb",
+   "weapons": [
+    {
+     "id": "wmDswK6LD9JprILJG",
+     "sv": 1,
+     "damage": {
+      "type": "cr",
+      "st": "thr"
+     },
+     "usage": "Shield Bash",
+     "reach": "1",
+     "block": "0",
+     "calc": {
+      "level": 12,
+      "damage": "1d-1 cr",
+      "block": "10"
+     }
+    }
+   ],
+   "features": [
+    {
+     "type": "conditional_modifier",
+     "situation": "to Dodge, Parry & Block against attacks from the front or shield side",
+     "amount": 1
+    }
+   ],
+   "quantity": 1,
+   "calc": {
+    "value": 40,
+    "extended_value": 40,
+    "weight": "8 lb",
+    "extended_weight": "8 lb"
+   },
+   "equipped": true
+  },
+  {
+   "id": "ezUsY06LxChQRA_qQ",
+   "description": "Longbow",
+   "reference": "B275",
+   "tech_level": "0",
+   "tags": [
+    "Missile Weapon",
+    "UsesAmmoType:Arrow"
+   ],
+   "base_value": "200",
+   "base_weight": "3 lb",
+   "weapons": [
+    {
+     "id": "WdJrfwk7x9Bvy0x34",
+     "sv": 1,
+     "damage": {
+      "type": "imp",
+      "st": "thr",
+      "base": "2"
+     },
+     "strength": "11†",
+     "accuracy": "3",
+     "range": "x15/x20",
+     "rate_of_fire": "1",
+     "shots": "1(2)",
+     "bulk": "-8",
+     "calc": {
+      "level": 13,
+      "damage": "1d+1 imp",
+      "range": "165/220"
+     }
+    }
+   ],
+   "rated_strength": 11,
+   "quantity": 1,
+   "calc": {
+    "value": 200,
+    "extended_value": 200,
+    "weight": "3 lb",
+    "extended_weight": "3 lb"
+   },
+   "equipped": true
+  },
+  {
+   "id": "ePXFnsYiFB2rr3oZ0",
+   "description": "Auto Pistol, 9mm",
+   "reference": "B278",
+   "tech_level": "7",
+   "legality_class": "3",
+   "tags": [
+    "Missile Weapon"
+   ],
+   "base_value": "350",
+   "base_weight": "2.4 lb",
+   "weapons": [
+    {
+     "id": "WSArc0lCxT_6K2eoC",
+     "sv": 1,
+     "damage": {
+      "type": "pi",
+      "base": "2d+2"
+     },
+     "strength": "9",
+     "accuracy": "2",
+     "range": "150/1,850",
+     "rate_of_fire": "3",
+     "shots": "8+1(3)",
+     "bulk": "-2",
+     "recoil": "2",
+     "calc": {
+      "level": 13,
+      "damage": "2d+2 pi",
+      "accuracy": "2+2"
+     }
+    }
+   ],
+   "quantity": 1,
+   "calc": {
+    "value": 500,
+    "extended_value": 500,
+    "weight": "2.4 lb",
+    "extended_weight": "2.4 lb"
+   },
+   "equipped": true,
+   "modifiers": [
+    {
+     "id": "fAgencyFix0000036",
+     "name": "Scope",
+     "local_notes": "+2 Acc",
+     "cost": "+150"
+    }
+   ]
+  },
+  {
+   "id": "eAgencyFix0000037",
+   "description": "First Aid Kit",
+   "base_value": "50",
+   "base_weight": "2 lb",
+   "quantity": 1,
+   "reference": "B289",
+   "uses": 7,
+   "max_uses": 10,
+   "equipped": true,
+   "tags": [
+    "Medical Gear"
+   ],
+   "vtt_notes": "during:[/hp +1d]",
+   "calc": {
+    "value": 50,
+    "extended_value": 50,
+    "weight": "2 lb",
+    "extended_weight": "2 lb"
+   }
+  },
+  {
+   "id": "EAgencyFix0000051",
+   "description": "Backpack, Frame",
+   "base_value": "100",
+   "base_weight": "10 lb",
+   "quantity": 1,
+   "reference": "B288",
+   "tags": [
+    "Camping and Survival Gear"
+   ],
+   "local_notes": "Straps adjusted for wings",
+   "children": [
+    {
+     "id": "eAgencyFix0000049",
+     "description": "Traveler's Rations",
+     "base_value": "2",
+     "base_weight": "0.5 lb",
+     "quantity": 6,
+     "reference": "B288",
+     "local_notes": "One meal each",
+     "calc": {
+      "value": 2,
+      "extended_value": 12,
+      "weight": "0.5 lb",
+      "extended_weight": "3.0 lb"
+     }
+    },
+    {
+     "id": "eAgencyFix0000050",
+     "description": "Rope, 3/8\", 10 yards",
+     "base_value": "5",
+     "base_weight": "1.5 lb",
+     "quantity": 1,
+     "reference": "B288",
+     "calc": {
+      "value": 5,
+      "extended_value": 5,
+      "weight": "1.5 lb",
+      "extended_weight": "1.5 lb"
+     }
+    },
+    {
+     "id": "EAgencyFix0000046",
+     "description": "Pouch, Small",
+     "base_value": "10",
+     "base_weight": "0.5 lb",
+     "quantity": 1,
+     "children": [
+      {
+       "id": "eAgencyFix0000045",
+       "description": "Lockpicks",
+       "base_value": "15",
+       "base_weight": "0 lb",
+       "quantity": 1,
+       "reference": "B289",
+       "tags": [
+        "Tools"
+       ],
+       "calc": {
+        "value": 15,
+        "extended_value": 15,
+        "weight": "0 lb",
+        "extended_weight": "0 lb"
+       }
+      },
+      {
+       "id": "EAgencyFix0000044",
+       "description": "Coin Purse",
+       "base_value": "5",
+       "base_weight": "0.1 lb",
+       "quantity": 1,
+       "children": [
+        {
+         "id": "eAgencyFix0000040",
+         "description": "Silver Coins",
+         "base_value": "1",
+         "base_weight": "0.02 lb",
+         "quantity": 40,
+         "calc": {
+          "value": 1,
+          "extended_value": 40,
+          "weight": "0.02 lb",
+          "extended_weight": "0.8 lb"
+         }
+        },
+        {
+         "id": "eAgencyFix0000041",
+         "description": "Gold Ring",
+         "base_value": "100",
+         "base_weight": "0.05 lb",
+         "quantity": 0,
+         "local_notes": "Lost in the river",
+         "calc": {
+          "value": 100,
+          "extended_value": 0,
+          "weight": "0.05 lb",
+          "extended_weight": "0 lb"
+         }
+        },
+        {
+         "id": "EAgencyFix0000043",
+         "description": "Hidden Compartment",
+         "base_value": "0",
+         "base_weight": "0 lb",
+         "quantity": 1,
+         "children": [
+          {
+           "id": "eAgencyFix0000042",
+           "description": "Folded Map",
+           "base_value": "0",
+           "base_weight": "0 lb",
+           "quantity": 1,
+           "local_notes": "Route to the hive",
+           "calc": {
+            "value": 0,
+            "extended_value": 0,
+            "weight": "0 lb",
+            "extended_weight": "0 lb"
+           }
+          }
+         ],
+         "calc": {
+          "value": 0,
+          "extended_value": 0,
+          "weight": "0 lb",
+          "extended_weight": "0 lb"
+         }
+        }
+       ],
+       "calc": {
+        "value": 5,
+        "extended_value": 45,
+        "weight": "0.1 lb",
+        "extended_weight": "0.9 lb"
+       }
+      }
+     ],
+     "calc": {
+      "value": 10,
+      "extended_value": 70,
+      "weight": "0.5 lb",
+      "extended_weight": "1.4 lb"
+     }
+    },
+    {
+     "id": "EAgencyFix0000048",
+     "description": "Bag of Holding",
+     "base_value": "1000",
+     "base_weight": "1 lb",
+     "quantity": 1,
+     "features": [
+      {
+       "type": "contained_weight_reduction",
+       "reduction": "50%"
+      }
+     ],
+     "children": [
+      {
+       "id": "eAgencyFix0000047",
+       "description": "Bedroll",
+       "base_value": "5",
+       "base_weight": "5 lb",
+       "quantity": 1,
+       "calc": {
+        "value": 5,
+        "extended_value": 5,
+        "weight": "5 lb",
+        "extended_weight": "5 lb"
+       }
+      }
+     ],
+     "calc": {
+      "value": 1000,
+      "extended_value": 1005,
+      "weight": "1 lb",
+      "extended_weight": "3.5 lb"
+     }
+    }
+   ],
+   "calc": {
+    "value": 100,
+    "extended_value": 1192,
+    "weight": "10 lb",
+    "extended_weight": "19.4 lb"
+   }
+  },
+  {
+   "id": "ezs_tGacOl7kuHwQk",
+   "description": "Torch",
+   "reference": "B288",
+   "local_notes": "Burns for 1 hour",
+   "tech_level": "0",
+   "tags": [
+    "Camping and Survival Gear"
+   ],
+   "base_value": "3",
+   "base_weight": "1 lb",
+   "quantity": 2,
+   "calc": {
+    "value": 3,
+    "extended_value": 6,
+    "weight": "1 lb",
+    "extended_weight": "2 lb"
+   },
+   "equipped": false,
+   "weapons": [
+    {
+     "id": "wAgencyFix0000038",
+     "sv": 1,
+     "damage": {
+      "type": "burn",
+      "base": "1d-3"
+     },
+     "usage": "Swung",
+     "reach": "1",
+     "parry": "0",
+     "calc": {
+      "level": 12,
+      "damage": "1d-3 burn",
+      "parry": "9"
+     }
+    }
+   ]
+  },
+  {
+   "id": "eAgencyFix0000039",
+   "description": "Cursed Amulet",
+   "base_value": "0",
+   "base_weight": "0.1 lb",
+   "quantity": 1,
+   "disabled": true,
+   "equipped": true,
+   "features": [
+    {
+     "type": "reaction_bonus",
+     "situation": "from spirits",
+     "amount": -3
+    }
+   ],
+   "calc": {
+    "value": 0,
+    "extended_value": 0,
+    "weight": "0.1 lb",
+    "extended_weight": "0.1 lb"
+   }
+  }
+ ],
+ "other_equipment": [
+  {
+   "id": "EAgencyFix0000054",
+   "description": "Saddlebags",
+   "base_value": "100",
+   "base_weight": "3 lb",
+   "quantity": 1,
+   "children": [
+    {
+     "id": "eAgencyFix0000052",
+     "description": "Horse Blanket",
+     "base_value": "20",
+     "base_weight": "4 lb",
+     "quantity": 1,
+     "calc": {
+      "value": 20,
+      "extended_value": 20,
+      "weight": "4 lb",
+      "extended_weight": "4 lb"
+     }
+    },
+    {
+     "id": "eAgencyFix0000053",
+     "description": "Oats",
+     "base_value": "1",
+     "base_weight": "1 lb",
+     "quantity": 10,
+     "local_notes": "Feed bag",
+     "calc": {
+      "value": 1,
+      "extended_value": 10,
+      "weight": "1 lb",
+      "extended_weight": "10 lb"
+     }
+    }
+   ],
+   "calc": {
+    "value": 100,
+    "extended_value": 130,
+    "weight": "3 lb",
+    "extended_weight": "17 lb"
+   }
+  },
+  {
+   "id": "eAgencyFix0000055",
+   "description": "Arrows",
+   "base_value": "2",
+   "base_weight": "0.1 lb",
+   "quantity": 50,
+   "tags": [
+    "Ammunition"
+   ],
+   "calc": {
+    "value": 2,
+    "extended_value": 100,
+    "weight": "0.1 lb",
+    "extended_weight": "5 lb"
+   }
+  }
+ ],
+ "notes": [
+  {
+   "id": "nAgencyFix0000056",
+   "markdown": "Joined the Vespid scouts in the year of the long frost."
+  },
+  {
+   "id": "NAgencyFix0000057",
+   "markdown": "Session Log",
+   "children": [
+    {
+     "id": "nAgencyFix0000058",
+     "markdown": "Session 1: found the ruined hive."
+    },
+    {
+     "id": "nAgencyFix0000059",
+     "markdown": "Session 2: bargained with the fire spirit.",
+     "reference": "Campaign p2"
+    }
+   ]
+  },
+  {
+   "id": "nAgencyFix0000060",
+   "markdown": "Current HP: <script>$hp</script>",
+   "calc": {
+    "resolved_text": "Current HP: 13"
+   }
+  }
+ ],
+ "created_date": "2026-09-14T18:30:00-07:00",
+ "modified_date": "2026-10-28T21:05:00-07:00",
+ "calc": {
+  "swing": "1d+1",
+  "thrust": "1d-1",
+  "basic_lift": "24 lb",
+  "dodge_bonus": 1,
+  "parry_bonus": 1,
+  "block_bonus": 1,
+  "move": [
+   6,
+   4,
+   3,
+   2,
+   1
+  ],
+  "dodge": [
+   10,
+   9,
+   8,
+   7,
+   6
+  ]
+ }
+}

@@ -5,6 +5,8 @@ import * as HitLocations from '../hitlocation/hitlocation.js'
 import { SmartImporter } from '../smart-importer.js'
 import { commitUpdate, deleteKey, replaceValue } from '../utilities/foundry-compat.js'
 import { calculateEncumbranceLevels, readXmlText } from '../utilities/import-utilities.js'
+// AGENCY: GCS 5.x field readers and re-import merge (module/agency/import)
+import * as AgencyImport from '../agency/import/index.ts'
 import {
   Advantage,
   Encumbrance,
@@ -137,13 +139,13 @@ export class ActorImporter {
         exit = true
       }
     }
-    this.GCSVersion = r.version
+    this.GCSVersion = r?.version // AGENCY: r is undefined when the JSON didn't parse
 
     if (msg.length > 0) {
       ui.notifications?.error(msg.join('<br>'))
       let content = await renderTemplate('systems/gurps/templates/chat-import-actor-errors.hbs', {
         lines: msg,
-        version: version,
+        version: 'GCS Direct', // AGENCY: was the undefined identifier `version` (ReferenceError)
         GCAVersion: GCAVersion,
         GCSVersion: this.GCSVersion,
         url: GURPS.USER_GUIDE_URL,
@@ -167,7 +169,11 @@ export class ActorImporter {
     let ar = this.actor.system.additionalresources || {}
     ar.importname = importname || ar.importname
     ar.importpath = importpath || ar.importpath
+    // AGENCY: snapshot the actor's lists for the re-import merge (undefined when agency-import-preserve is off)
+    this._agencyMerge = AgencyImport.createMerger(this.actor.system)
     try {
+      // AGENCY: custom GCS pools (mana, energy reserve...) become resource trackers
+      ar.tracker = AgencyImport.mergePoolTrackers(ar.tracker, AgencyImport.customPools(r), !!this._agencyMerge)
       commit = { ...commit, ...{ 'system.additionalresources': ar } }
       commit = { ...commit, ...(await this.importAttributesFromGCS(r.attributes, r.equipment, r.calc)) }
       commit = { ...commit, ...(await this.importTraitsFromGCS(r.profile, r.created_date, r.modified_date)) }
@@ -183,7 +189,7 @@ export class ActorImporter {
 
       commit = {
         ...commit,
-        ...(await this.importProtectionFromGCS(r.settings.body_type || r.settings.hit_locations)),
+        ...(await this.importProtectionFromGCS(r.settings?.body_type || r.settings?.hit_locations)), // AGENCY: settings may be absent
       }
       commit = {
         ...commit,
@@ -598,7 +604,8 @@ export class ActorImporter {
     let saveCurrent = false
     if (!!data.lastImport && (data.HP.value != hp || data.FP.value != fp)) {
       let option = game.settings.get(Settings.SYSTEM_NAME, Settings.SETTING_IMPORT_HP_FP)
-      if (option == 0) {
+      // AGENCY: choices are 0 = use the file's values, 1 = ignore them (keep current), 2 = ask; this tested 0.
+      if (option == 1) {
         saveCurrent = true
       }
       if (option == 2) {
@@ -996,6 +1003,10 @@ export class ActorImporter {
           itemType === 'equipment'
             ? this.actor._findEqtkeyForId('itemid', item.id)
             : this.actor._findSysKeyForId('itemid', item.id, item.actorComponentKey)
+        // AGENCY: with agency-import-preserve, only items of this type (the '|| !save' clause matched every Item of
+        // another type, e.g. dropped equipment during the trait import, and deleted it) that the importer created
+        if (this._agencyMerge && item.type !== itemType) return false
+        if (this._agencyMerge && !item.system.importid) return false
         return (
           (!!item.system.importid && item.system.importFrom === generator && item.type === itemType) ||
           !foundry.utils.getProperty(this.actor, sysKey)?.save
@@ -1507,7 +1518,7 @@ export class ActorImporter {
     data.touch = atts.find(e => e.attr_id === 'touch')?.calc?.value || 0
     data.vision = atts.find(e => e.attr_id === 'vision')?.calc?.value || 0
 
-    let total_carried = this.calcTotalCarried(eqp)
+    let total_carried = AgencyImport.carriedWeight(eqp) // AGENCY: GCS 5 has no 'weight' field; use calc.extended_weight
     const encumbranceLevels = calculateEncumbranceLevels(bl_value, total_carried, bl_unit, calc)
     const currentMove = Object.values(encumbranceLevels).find(e => e.current)?.move || 0
     const currentDodge = Object.values(encumbranceLevels).find(e => e.current)?.dodge || 0
@@ -1557,6 +1568,13 @@ export class ActorImporter {
     ts.hair = p.hair || ''
     ts.skin = p.skin || ''
     ts.sizemod = p.SM || '+0'
+    // AGENCY: race from the ancestry container; with agency-import-preserve keep profile fields GCS leaves empty
+    ts.race = AgencyImport.ancestryName(this.json?.traits ?? this.json?.advantages)
+    if (this._agencyMerge) {
+      const current = this.actor.system.traits || {}
+      for (const [key, value] of Object.entries(current)) if (!ts[key] && !!value) ts[key] = value
+    }
+    this._agencyTraits = ts // AGENCY: importSizeFromGCS reads this; commit['system.traits'] is a _replace() wrapper on v14
 
     const r = {
       ...replaceValue('system.traits', ts),
@@ -1597,6 +1615,7 @@ export class ActorImporter {
       })
     }
 
+    temp = temp.concat(this._agencyMerge?.userEntries('ads', temp) ?? []) // AGENCY: keep entries added in Foundry
     return {
       ...replaceValue('system.ads', this.foldList(temp)),
     }
@@ -1607,7 +1626,8 @@ export class ActorImporter {
   }
 
   async importAd(i, p) {
-    const name = i.name + (i.levels ? ' ' + i.levels.toString() : '') || 'Trait'
+    const level = AgencyImport.traitLevel(i) // AGENCY: calc.level is the level GCS shows (bought levels + bonuses)
+    const name = i.name + (level ? ' ' + level.toString() : '') || 'Trait'
     let a = new Advantage(name, i.levels)
 
     if (this.GCSVersion === 5) {
@@ -1629,10 +1649,9 @@ export class ActorImporter {
         (!!a.notes ? '<br>' + a.notes : '')
     }
 
-    if (i.modifiers?.length) {
-      for (let j of i.modifiers)
-        if (!j.disabled) a.notes += `${!!a.notes ? '; ' : ''}${j.name}${!!j.notes ? ' (' + j.notes + ')' : ''}`
-    }
+    // AGENCY: modifier notes are local_notes (resolved into calc) in GCS 5; also lists modifier levels and the
+    // enabled children of modifier containers
+    for (const m of AgencyImport.modifierSummaries(i.modifiers)) a.notes += `${!!a.notes ? '; ' : ''}${m}`
     // Not certain if this is needed, or is it a type-o (note vs. notes)
     // if (!!a.note) a.notes += (!!a.notes ? '\n' : '') + a.note
 
@@ -1640,10 +1659,12 @@ export class ActorImporter {
     a.pageRef(i.reference)
     a.uuid = i.id
     a.parentuuid = p
+    this._agencyMarkDisabled(a, i) // AGENCY
     a = this._substituteItemReplacements(a, i)
 
-    let old = this._findElementIn('ads', a.uuid)
+    let old = this._agencyFindOld('ads', a, () => this._findElementIn('ads', a.uuid)) // AGENCY
     this._migrateOtfsAndNotes(old, a, i.vtt_notes)
+    this._agencyMerge?.merge('ads', old, a) // AGENCY
     a = await this._processItemFrom(a, 'GCS')
 
     let ch = []
@@ -1679,6 +1700,7 @@ export class ActorImporter {
       })
     }
 
+    temp = temp.concat(this._agencyMerge?.userEntries('skills', temp) ?? []) // AGENCY: keep entries added in Foundry
     return {
       ...replaceValue('system.skills', this.foldList(temp)),
     }
@@ -1717,16 +1739,18 @@ export class ActorImporter {
       s.type = i.type.toUpperCase()
       s.import = !!i.calc ? i.calc.level : ''
       if (s.level == 0) s.level = ''
-      s.points = i.points
+      s.points = i.points ?? 0 // AGENCY: GCS omits 0 points
       s.relativelevel = i.calc?.rsl
       s.notes = this._resolveNotes(i)
     } else {
       // Usually containers
       s.level = ''
     }
+    this._agencyMarkDisabled(s, i) // AGENCY
     s = this._substituteItemReplacements(s, i)
-    let old = this._findElementIn('skills', s.uuid)
+    let old = this._agencyFindOld('skills', s, () => this._findElementIn('skills', s.uuid)) // AGENCY
     this._migrateOtfsAndNotes(old, s, i.vtt_notes)
+    this._agencyMerge?.merge('skills', old, s) // AGENCY
     s = await this._processItemFrom(s, 'GCS')
 
     let ch = []
@@ -1762,6 +1786,7 @@ export class ActorImporter {
       }
     })
 
+    temp = temp.concat(this._agencyMerge?.userEntries('spells', temp) ?? []) // AGENCY: keep entries added in Foundry
     return {
       ...replaceValue('system.spells', this.foldList(temp)),
     }
@@ -1779,22 +1804,24 @@ export class ActorImporter {
     s.pageRef(i.reference || '')
     if (['spell', 'ritual_magic_spell'].includes(i.type)) {
       s.class = i.spell_class || ''
-      s.college = i.college || ''
+      s.college = AgencyImport.gcsCollege(i.college) // AGENCY: an array in GCS 5; Foundry code expects a string
       s.cost = i.casting_cost || ''
       s.maintain = i.maintenance_cost || ''
-      s.difficulty = i.difficulty.toUpperCase()
+      s.difficulty = (i.difficulty || '').toUpperCase() // AGENCY: don't crash when GCS omits it
       s.relativelevel = i.calc?.rsl
       s.notes = this._resolveNotes(i)
       s.duration = i.duration || ''
-      s.points = i.points || ''
+      s.points = i.points || 0 // AGENCY: was '' (GCS omits 0 points)
       s.casttime = i.casting_time || ''
       s.import = i.calc?.level || 0
       s.level = s.import
     }
 
+    this._agencyMarkDisabled(s, i) // AGENCY
     s = this._substituteItemReplacements(s, i)
-    let old = this._findElementIn('spells', s.uuid)
+    let old = this._agencyFindOld('spells', s, () => this._findElementIn('spells', s.uuid)) // AGENCY
     this._migrateOtfsAndNotes(old, s, i.vtt_notes)
+    this._agencyMerge?.merge('spells', old, s) // AGENCY
     s = await this._processItemFrom(s, 'GCS')
 
     let ch = []
@@ -1818,22 +1845,32 @@ export class ActorImporter {
         temp = temp.concat(await this.importEq(i, '', false))
       }
 
-    await aRecurselist(this.actor.system.equipment?.carried, async t => {
-      t.carried = true
-      if (!!t.save) {
-        if (!(t instanceof Equipment)) t = Equipment.fromObject(t, this.actor)
-        t = await this._processItemFrom(t, 'GCS')
+    if (this._agencyMerge) {
+      // AGENCY: keep equipment added in Foundry ('save' or not from GCS) in its container, without duplicating
+      // GCS rows marked 'save'; rows backed by an Item keep their itemid so postImport doesn't add them twice.
+      for (let t of this._agencyMerge.userEntries('equipment', temp)) {
+        if (this.isUsingFoundryItems() && !t.itemid)
+          t = await this._processItemFrom(Equipment.fromObject(t, this.actor), 'GCS')
         temp.push(t)
       }
-    })
-    await aRecurselist(this.actor.system.equipment?.other, async t => {
-      t.carried = false
-      if (!!t.save) {
-        if (!(t instanceof Equipment)) t = Equipment.fromObject(t, this.actor)
-        t = await this._processItemFrom(t, 'GCS')
-        temp.push(t)
-      }
-    })
+    } else {
+      await aRecurselist(this.actor.system.equipment?.carried, async t => {
+        t.carried = true
+        if (!!t.save) {
+          if (!(t instanceof Equipment)) t = Equipment.fromObject(t, this.actor)
+          t = await this._processItemFrom(t, 'GCS')
+          temp.push(t)
+        }
+      })
+      await aRecurselist(this.actor.system.equipment?.other, async t => {
+        t.carried = false
+        if (!!t.save) {
+          if (!(t instanceof Equipment)) t = Equipment.fromObject(t, this.actor)
+          t = await this._processItemFrom(t, 'GCS')
+          temp.push(t)
+        }
+      })
+    }
 
     if (this.isUsingFoundryItems()) {
       // After retrieve all relevant data
@@ -1890,11 +1927,16 @@ export class ActorImporter {
     e.count = e.originalCount
     e.cost =
       (parseFloat(i.calc?.extended_value) / (i.type === 'equipment_container' ? 1 : i.quantity || 1)).toString() || ''
+    // AGENCY: GCS 5 writes the per-piece value and weight (contents excluded) as calc.value / calc.weight; the
+    // extended/quantity arithmetic here and below loses them at quantity 0, with contained-weight reductions and with
+    // thousands separators ("1,900 lb").
+    const piece = AgencyImport.equipmentPieceValues(i)
+    if (piece) e.cost = piece.cost
     e.carried = carried
-    e.equipped = i.equipped
+    e.equipped = !!i.equipped // AGENCY: GCS omits false
     e.techlevel = i.tech_level || ''
     e.legalityclass = i.legality_class || '4'
-    e.categories = i.categories?.join(', ') || ''
+    e.categories = AgencyImport.gcsTags(i) // AGENCY: 'tags' in GCS 5 ('categories' before)
     e.uses = i.uses || 0
     e.maxuses = i.max_uses || 0
     e.uuid = i.id
@@ -1902,19 +1944,24 @@ export class ActorImporter {
     e.notes = ''
     e.notes = this._resolveNotes(i)
 
-    if (i.modifiers?.length) {
-      for (let j of i.modifiers)
-        if (!j.disabled) e.notes += `${!!e.notes ? '; ' : ''}${j.name}${!!j.notes ? ' (' + j.notes + ')' : ''}`
-    }
+    // AGENCY: modifier notes are local_notes in GCS 5 (see importAd)
+    for (const m of AgencyImport.modifierSummaries(i.modifiers)) e.notes += `${!!e.notes ? '; ' : ''}${m}`
 
     e.weight =
       (parseFloat(i.calc?.extended_weight) / (i.type == 'equipment_container' ? 1 : i.quantity || 1)).toString() || '0'
+    if (piece) e.weight = piece.weight // AGENCY: see above
     e.pageRef(i.reference || '')
+    this._agencyMarkDisabled(e, i) // AGENCY
     e = this._substituteItemReplacements(e, i)
-    let old = this._findElementIn('equipment.carried', e.uuid)
-    if (!old) old = this._findElementIn('equipment.other', e.uuid)
+    // AGENCY: match by GCS id, then name (agency-import-preserve)
+    let old = this._agencyFindOld('equipment', e, () => {
+      let found = this._findElementIn('equipment.carried', e.uuid)
+      if (!found) found = this._findElementIn('equipment.other', e.uuid)
+      return found
+    })
     this._migrateOtfsAndNotes(old, e, i.vtt_notes)
-    if (!!old) {
+    this._agencyMerge?.merge('equipment', old, e) // AGENCY: replaces the block below
+    if (!!old && !this._agencyMerge) {
       e.name = old.name
       e.carried = old.carried
       e.equipped = old.equipped
@@ -1932,10 +1979,12 @@ export class ActorImporter {
     let ch = []
     if (i.children?.length) {
       for (let j of i.children) ch = ch.concat(await this.importEq(j, i.id, carried))
-      for (let j of ch) {
-        e.cost -= j.cost * j.count
-        e.weight -= j.weight * j.count
-      }
+      if (!piece)
+        // AGENCY: only for files without calc.value/weight
+        for (let j of ch) {
+          e.cost -= j.cost * j.count
+          e.weight -= j.weight * j.count
+        }
     }
 
     return [e].concat(ch)
@@ -1947,9 +1996,12 @@ export class ActorImporter {
     for (let i of notes) {
       temp = temp.concat(this.importNote(i, ''))
     }
-    recurselist(this.actor.system.notes, t => {
-      if (!!t.save) temp.push(t)
-    })
+    // AGENCY: with agency-import-preserve, keep notes added in Foundry (in their container) instead
+    if (this._agencyMerge) temp = temp.concat(this._agencyMerge.userEntries('notes', temp))
+    else
+      recurselist(this.actor.system.notes, t => {
+        if (!!t.save) temp.push(t)
+      })
     return {
       ...replaceValue('system.notes', this.foldList(temp)),
     }
@@ -1960,14 +2012,15 @@ export class ActorImporter {
     if (this.GCSVersion === 5) {
       i.type = i.id.startsWith('n') ? 'note' : 'note_container'
     }
-    n.notes = i.markdown ?? i.calc?.resolved_text ?? i.text ?? ''
+    n.notes = AgencyImport.gcsNoteText(i) // AGENCY: prefer calc.resolved_text (embedded scripts resolved)
 
     n.uuid = i.id
     n.parentuuid = p
     n.pageRef(i.reference || '')
     n = this._substituteItemReplacements(n, i)
-    let old = this._findElementIn('notes', n.uuid)
+    let old = this._agencyFindOld('notes', n, () => this._findElementIn('notes', n.uuid)) // AGENCY
     this._migrateOtfsAndNotes(old, n)
+    this._agencyMerge?.merge('notes', old, n) // AGENCY
     let ch = []
     if (i.children?.length) {
       for (let j of i.children) ch = ch.concat(this.importNote(j, i.id))
@@ -1976,7 +2029,7 @@ export class ActorImporter {
   }
 
   importSizeFromGCS(commit, profile, ads, skills, equipment) {
-    let ts = commit['system.traits']
+    let ts = this._agencyTraits ?? commit['system.traits'] // AGENCY: see importTraitsFromGCS
     let final = profile.SM || 0
     let temp = [].concat(ads, skills, equipment)
     let all = []
@@ -2008,7 +2061,8 @@ export class ActorImporter {
       l.import = i.calc?.dr.all?.toString() || '0'
       for (let [key, value] of Object.entries(i.calc?.dr))
         if (key != 'all') {
-          let damtype = GURPS.DamageTables.damageTypeMap[key]
+          // AGENCY: unmapped GCS specializations ("fire", "electrical") were all written to an 'undefined' key
+          let damtype = AgencyImport.drSplitKey(key, GURPS.DamageTables.damageTypeMap)
           if (!l.split) l.split = {}
           l.split[damtype] = +l.import + value
         }
@@ -2032,7 +2086,8 @@ export class ActorImporter {
     // Hit Locations MUST come from an existing bodyplan hit location table, or else ADD (and
     // potentially other features) will not work. Sometime in the future, we will look at
     // user-entered hit locations.
-    let bodyplan = hls.name.toLowerCase() // Was a body plan actually in the import?
+    // AGENCY: GCS names e.g. "Hexapod, Winged" / "Humanoid (Low-Tech)"; map them to the Foundry table keys
+    let bodyplan = AgencyImport.bodyPlanKey(hls.name, HitLocations.hitlocationDictionary) // Was a body plan actually in the import?
     if (bodyplan === 'snakemen') bodyplan = 'snakeman'
     let table = HitLocations.hitlocationDictionary[bodyplan] // If so, try to use it.
     let tableFromName = !!table // track whether the table was found by exact name match
@@ -2040,6 +2095,7 @@ export class ActorImporter {
     /** @type {HitLocations.HitLocation[]}  */
     let locs = []
     locations.forEach(e => {
+      if (!!table) e.where = AgencyImport.hitLocationTableKey(e.where, table) ?? e.where // AGENCY: "Midleg" -> "Mid Leg"
       if (!!table && !!table[e.where]) {
         // if e.where already exists in table, don't map
         locs.push(e)
@@ -2141,11 +2197,14 @@ export class ActorImporter {
     let p_unspent = total
     let p_total = total
     let p_race = 0
-    for (let i of atts) p_atts += i.calc?.points
-    for (let i of ads)
-      [p_ads, p_disads, p_quirks, p_race] = this.adPointCount(i, p_ads, p_disads, p_quirks, p_race, true)
-    for (let i of skills) p_skills = this.skPointCount(i, p_skills)
-    for (let i of spells) p_spells = this.skPointCount(i, p_spells)
+    for (let i of atts) p_atts += i.calc?.points ?? 0 // AGENCY: points are omitted when 0
+    // AGENCY: count traits, skills and spells as GCS does (ancestry containers were 'race' in older GCS;
+    // disabled rows count nothing; attribute containers count toward attributes)
+    const tp = AgencyImport.traitPoints(ads)
+    ;[p_ads, p_disads, p_quirks, p_race] = [tp.ads, tp.disads, tp.quirks, tp.race]
+    p_atts += tp.attributes
+    p_skills = AgencyImport.listPoints(skills)
+    p_spells = AgencyImport.listPoints(spells)
     p_unspent -= p_atts + p_ads + p_disads + p_quirks + p_skills + p_spells + p_race
     return {
       'system.totalpoints.attributes': p_atts,
@@ -2212,6 +2271,9 @@ export class ActorImporter {
       c.situation = i.situation
       GURPS.put(cs, { ...c }, index_c++)
     }
+    // AGENCY: mark imported rows, keep rows added in Foundry (agency-import-preserve)
+    this._agencyFinishFlat('reactions', rs, true)
+    this._agencyFinishFlat('conditionalmods', cs, true)
     return {
       ...replaceValue('system.reactions', rs),
       ...replaceValue('system.conditionalmods', cs),
@@ -2231,6 +2293,7 @@ export class ActorImporter {
     for (let i of all) {
       if (i.weapons?.length) {
         for (let w of i.weapons) {
+          if (w.hide) continue // AGENCY: GCS 5 can hide a weapon from the weapon lists
           if (this.GCSVersion === 5) {
             w.type = w.id.startsWith('w') ? 'melee_weapon' : 'ranged_weapon'
           }
@@ -2238,30 +2301,35 @@ export class ActorImporter {
             let m = new Melee()
             m.name = i.name || i.description || ''
             m.originalName = i.name
-            m.st = w.strength || ''
-            m.weight = i.weight || ''
+            // AGENCY: GCS writes resolved values to calc only when they differ from the raw ones (SM reach,
+            // skill-based parry/block...); weaponField prefers calc and falls back to raw.
+            m.st = AgencyImport.weaponField(w, 'strength')
+            m.weight = i.calc?.weight ?? i.weight ?? '' // AGENCY: GCS 5 equipment weight/value are in calc
             m.techlevel = i.tech_level || ''
-            m.cost = i.value || ''
+            m.cost = i.calc?.value ?? i.value ?? ''
             m.notes = i.notes || ''
             m.pageRef(i.reference || '')
             m.mode = w.usage || ''
             if (w.usage_notes) m.mode += ' [' + w.usage_notes + ']'
             m.import = w.calc?.level?.toString() || '0'
             m.damage = w.calc?.damage || ''
-            m.reach = w.reach || ''
-            m.parry = w.calc?.parry || ''
-            m.block = w.calc?.block || ''
+            m.reach = AgencyImport.weaponField(w, 'reach')
+            m.parry = AgencyImport.weaponField(w, 'parry')
+            m.block = AgencyImport.weaponField(w, 'block')
+            m.uuid = w.id || '' // AGENCY: the GCS weapon id, for matching on re-import
             m = this._substituteItemReplacements(m, i)
-            let old = this._findElementIn('melee', false, m.name, m.mode)
+            let old = this._agencyFindOld('melee', m, () => this._findElementIn('melee', false, m.name, m.mode)) // AGENCY
             this._migrateOtfsAndNotes(old, m, i.vtt_notes, w.usage_notes)
+            this._agencyMerge?.merge('melee', old, m) // AGENCY
 
             GURPS.put(melee, { ...m }, m_index++)
           } else if (w.type == 'ranged_weapon') {
             let r = new Ranged()
             r.name = i.name || i.description || ''
             r.originalName = i.name
-            r.st = w.strength || ''
-            r.bulk = w.bulk || ''
+            // AGENCY: resolved values from calc (scopes, accuracy/range bonuses...), see melee above
+            r.st = AgencyImport.weaponField(w, 'strength')
+            r.bulk = AgencyImport.weaponField(w, 'bulk')
             r.legalityclass = i.legality_class || '4'
             r.ammo = 0
             r.notes = i.notes || ''
@@ -2269,25 +2337,30 @@ export class ActorImporter {
             r.mode = w.usage || ''
             r.import = w.calc?.level || '0'
             r.damage = w.calc?.damage || ''
-            r.acc = w.accuracy || ''
+            r.acc = AgencyImport.weaponField(w, 'accuracy')
             let m = r.acc.trim().match(/(\d+)([+-]\d+)/)
             if (m) {
               r.acc = m[1]
               r.notes += ' [' + m[2] + ' ' + game.i18n.localize('GURPS.acc') + ']'
             }
-            r.rof = w.rate_of_fire || ''
-            r.shots = w.shots || ''
-            r.rcl = w.recoil || ''
-            r.range = w.calc?.range || w.range || ''
+            r.rof = AgencyImport.weaponField(w, 'rate_of_fire')
+            r.shots = AgencyImport.weaponField(w, 'shots')
+            r.rcl = AgencyImport.weaponField(w, 'recoil')
+            r.range = AgencyImport.weaponField(w, 'range')
+            r.uuid = w.id || '' // AGENCY: the GCS weapon id, for matching on re-import
             r = this._substituteItemReplacements(r, i)
-            let old = this._findElementIn('ranged', false, r.name, r.mode)
+            let old = this._agencyFindOld('ranged', r, () => this._findElementIn('ranged', false, r.name, r.mode)) // AGENCY
             this._migrateOtfsAndNotes(old, r, i.vtt_notes, w.usage_notes)
+            this._agencyMerge?.merge('ranged', old, r) // AGENCY
 
             GURPS.put(ranged, { ...r }, r_index++)
           }
         }
       }
     }
+    // AGENCY: keep attacks added in Foundry (agency-import-preserve)
+    this._agencyFinishFlat('melee', melee, false)
+    this._agencyFinishFlat('ranged', ranged, false)
     return {
       ...replaceValue('system.melee', melee),
       ...replaceValue('system.ranged', ranged),
@@ -2333,6 +2406,7 @@ export class ActorImporter {
     if (i.children?.length) for (let j of i.children) ch = ch.concat(this.recursiveGet(j))
     if (i.modifiers?.length) for (let j of i.modifiers) ch = ch.concat(this.recursiveGet(j))
     if (!!i.disabled || (i.equipped != null && i.equipped == false)) return []
+    if (i.description !== undefined && i.quantity !== undefined && i.quantity <= 0) return [] // AGENCY: none of it
     return [i].concat(ch)
   }
 
@@ -2414,10 +2488,13 @@ export class ActorImporter {
     this._updateOtf('during', oldobj, newobj)
     this._updateOtf('pass', oldobj, newobj)
     this._updateOtf('fail', oldobj, newobj)
-    if (typeof oldobj.notes === 'string' && oldobj.notes.startsWith(newobj.notes))
-      // Must be done AFTER OTFs have been stripped out
-      newobj.notes = oldobj.notes
-    if (oldobj.name?.startsWith(newobj.name)) newobj.name = oldobj.name
+    // AGENCY: with agency-import-preserve, ReimportMerger.merge() decides name and notes (three-way) instead
+    if (!this._agencyMerge) {
+      if (typeof oldobj.notes === 'string' && oldobj.notes.startsWith(newobj.notes))
+        // Must be done AFTER OTFs have been stripped out
+        newobj.notes = oldobj.notes
+      if (oldobj.name?.startsWith(newobj.name)) newobj.name = oldobj.name
+    }
     // If notes have `\n  ` fix it
     newobj.notes = newobj.notes.replace(/\n\s\s+/g, ' ')
     if (!newobj.itemModifiers) newobj.itemModifiers = (oldobj.itemModifiers || '').trim()
@@ -2555,6 +2632,28 @@ export class ActorImporter {
       }
     }
     return item
+  }
+
+  // AGENCY: one-to-one match against the actor's existing entries when agency-import-preserve is on, else upstream's
+  _agencyFindOld(list, comp, upstreamLookup) {
+    return this._agencyMerge ? this._agencyMerge.claim(list, comp) : upstreamLookup()
+  }
+
+  // AGENCY: GCS rows can be disabled (they add no points, features or weapons); keep them visible, labelled
+  _agencyMarkDisabled(comp, i) {
+    if (!i.disabled) return
+    comp.disabled = true
+    const label = game.i18n.localize('GURPS.agency.import.disabled')
+    comp.notes = `[${label}]` + (comp.notes ? ' ' + comp.notes : '')
+  }
+
+  // AGENCY: for flat lists (attacks, reactions): optionally match/merge rows, then append the user's own rows
+  _agencyFinishFlat(list, obj, mergeRows) {
+    if (!this._agencyMerge) return obj
+    const rows = Object.values(obj)
+    if (mergeRows) for (const row of rows) this._agencyMerge.merge(list, this._agencyMerge.claim(list, row), row)
+    for (const row of this._agencyMerge.userEntries(list, rows)) GURPS.put(obj, row)
+    return obj
   }
 
   async _processItemFrom(actorComp, fromProgram) {
