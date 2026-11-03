@@ -1,1 +1,185 @@
-{{!-- Agency: SAN / Breaking Point / Bonds panel --}}
+{{! Agency: SAN / Breaking Point / Bonds panel. Data comes from the agencySanityPanel helper (module/agency/sanity/sheet.ts). }}
+{{#with (agencySanityPanel actor) as |san|}}
+  {{#if san.enabled}}
+    <section class='agency-panel agency-sanity' data-agency-sanity>
+      <header class='agency-panel-header'>
+        <span class='agency-sanity-title'><i class='fa-solid fa-brain'></i>
+          {{localize 'GURPS.agency.sanity.title'}}</span>
+        {{#if san.permanentlyInsane}}
+          <span class='agency-stamp agency-sanity-stamp'>{{localize 'GURPS.agency.sanity.permanentlyInsane'}}</span>
+        {{else if san.atBreakingPoint}}
+          <span class='agency-stamp agency-sanity-stamp'>{{localize 'GURPS.agency.sanity.atBreakingPoint'}}</span>
+        {{/if}}
+        {{#if san.editable}}
+          <button
+            type='button'
+            class='agency-btn agency-sanity-check'
+            data-san-action='check'
+            title='{{localize "GURPS.agency.sanity.sanCheckHint" mode=san.rollModeLabel}}'
+          >
+            <i class='fa-solid fa-dice'></i>
+            {{localize 'GURPS.agency.sanity.sanCheck'}}
+          </button>
+        {{/if}}
+      </header>
+
+      <div class='agency-sanity-stats'>
+        <label class='agency-sanity-stat agency-sanity-san'>
+          <span class='agency-sanity-label'>{{localize 'GURPS.agency.sanity.san'}}</span>
+          <span class='agency-sanity-pair'>
+            <input
+              type='number'
+              data-san-field='value'
+              value='{{san.value}}'
+              min='0'
+              max='{{san.max}}'
+              {{disabled san.locked}}
+            />
+            <span class='agency-sanity-sep'>/</span>
+            <input
+              type='number'
+              data-san-field='max'
+              value='{{san.max}}'
+              min='0'
+              max='99'
+              title='{{localize "GURPS.agency.sanity.maxHint"}}'
+              {{disabled san.locked}}
+            />
+          </span>
+        </label>
+        <label class='agency-sanity-stat' title='{{localize "GURPS.agency.sanity.breakingPointHint"}}'>
+          <span class='agency-sanity-label'>{{localize 'GURPS.agency.sanity.breakingPoint'}}</span>
+          <input
+            type='number'
+            data-san-field='breakingPoint'
+            value='{{san.breakingPoint}}'
+            min='0'
+            max='99'
+            {{disabled san.locked}}
+          />
+        </label>
+        <label class='agency-sanity-stat' title='{{localize "GURPS.agency.sanity.unnaturalHint"}}'>
+          <span class='agency-sanity-label'>{{localize 'GURPS.agency.sanity.unnatural'}}</span>
+          <input
+            type='number'
+            data-san-field='unnatural'
+            value='{{san.unnatural}}'
+            min='0'
+            max='99'
+            {{disabled san.locked}}
+          />
+        </label>
+      </div>
+
+      {{#if san.atBreakingPoint}}{{#if san.editable}}
+          <div class='agency-sanity-alert'>
+            <span>{{localize 'GURPS.agency.sanity.breakingPointHelp'}}</span>
+            <button type='button' class='agency-btn' data-san-action='breaking-point'>
+              <i class='fa-solid fa-file-pen'></i>
+              {{localize 'GURPS.agency.sanity.recordDisorderResetBP'}}
+            </button>
+          </div>
+        {{/if}}{{/if}}
+
+      <div class='agency-sanity-columns'>
+        <div class='agency-sanity-section'>
+          <div class='agency-sanity-section-title'>
+            <span>{{localize 'GURPS.agency.sanity.bonds'}}</span>
+            {{#if san.editable}}
+              <button
+                type='button'
+                class='agency-btn agency-sanity-icon'
+                data-san-action='bond-add'
+                title='{{localize "GURPS.agency.sanity.addBond"}}'
+              ><i class='fa-solid fa-plus'></i></button>
+            {{/if}}
+          </div>
+          <table class='agency-table agency-sanity-bonds'>
+            <tbody>
+              {{#each san.bonds as |bond|}}
+                <tr data-bond-id='{{bond.id}}' class='{{bond.cssClass}}'>
+                  <td><input
+                      type='text'
+                      data-bond-field='name'
+                      value='{{bond.name}}'
+                      placeholder='{{localize "GURPS.agency.sanity.unnamedBond"}}'
+                      {{disabled san.locked}}
+                    /></td>
+                  <td class='agency-sanity-score'><input
+                      type='number'
+                      data-bond-field='score'
+                      value='{{bond.score}}'
+                      min='0'
+                      {{disabled san.locked}}
+                    /></td>
+                  <td class='agency-sanity-controls'>
+                    {{#if san.editable}}
+                      <button
+                        type='button'
+                        class='agency-btn agency-sanity-icon'
+                        data-san-action='bond-remove'
+                        title='{{localize "GURPS.agency.sanity.removeBond"}}'
+                      ><i class='fa-solid fa-trash'></i></button>
+                    {{/if}}
+                  </td>
+                </tr>
+              {{else}}
+                <tr><td colspan='3' class='agency-sanity-empty'>{{localize 'GURPS.agency.sanity.noBonds'}}</td></tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class='agency-sanity-section'>
+          <div class='agency-sanity-section-title'>
+            <span>{{localize 'GURPS.agency.sanity.disorders'}}</span>
+            {{#if san.editable}}
+              <button
+                type='button'
+                class='agency-btn agency-sanity-icon'
+                data-san-action='disorder-add'
+                title='{{localize "GURPS.agency.sanity.addDisorder"}}'
+              ><i class='fa-solid fa-plus'></i></button>
+            {{/if}}
+          </div>
+          <ul class='agency-sanity-disorders'>
+            {{#each san.disorders as |disorder|}}
+              <li data-disorder-id='{{disorder.id}}'>
+                <input type='text' data-disorder-field='name' value='{{disorder.name}}' {{disabled san.locked}} />
+                {{#if san.editable}}
+                  <button
+                    type='button'
+                    class='agency-btn agency-sanity-icon'
+                    data-san-action='disorder-remove'
+                    title='{{localize "GURPS.agency.sanity.removeDisorder"}}'
+                  ><i class='fa-solid fa-trash'></i></button>
+                {{/if}}
+              </li>
+            {{else}}
+              <li class='agency-sanity-empty'>{{localize 'GURPS.agency.sanity.noDisorders'}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+
+      <div class='agency-sanity-adaptation' title='{{localize "GURPS.agency.sanity.adaptationHint"}}'>
+        <span class='agency-sanity-label'>{{localize 'GURPS.agency.sanity.adaptation'}}</span>
+        {{#each san.adaptation as |row|}}
+          <span class='agency-sanity-adapt-row'>
+            <span>{{row.label}}</span>
+            {{#each row.boxes as |box|}}
+              <input
+                type='checkbox'
+                data-adapt-category='{{row.category}}'
+                data-adapt-index='{{box.index}}'
+                {{checked box.checked}}
+                {{disabled san.locked}}
+              />
+            {{/each}}
+            {{#if row.adapted}}<span class='agency-badge'>{{localize 'GURPS.agency.sanity.adapted'}}</span>{{/if}}
+          </span>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+{{/with}}

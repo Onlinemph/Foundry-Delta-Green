@@ -1,0 +1,14 @@
+{{! Agency: SAN loss fields in the Fright Check dialog (included from templates/frightcheck-macro.hbs). }}
+<hr />
+<h4 style='margin-top: 8px'><i class='fa-solid fa-brain'></i> {{localize 'GURPS.agency.sanity.dialog.header'}}</h4>
+<div class='gurps-2col no-bias agency-sanity-fc'>
+  <label for='agency-san-loss'>{{localize 'GURPS.agency.sanity.dialog.loss'}}:
+    <input id='agency-san-loss' type='text' value='{{loss}}' placeholder='0/1d6' style='width: 90px' />
+  </label>
+  <label for='agency-san-category'>{{localize 'GURPS.agency.sanity.dialog.category'}}:
+    <select id='agency-san-category'>
+      {{selectOptions categories selected=category}}
+    </select>
+  </label>
+  <div class='full-width aside' style='justify-self: start'>{{modeHint}}</div>
+</div>

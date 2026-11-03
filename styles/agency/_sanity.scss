@@ -1,1 +1,257 @@
 // Agency: sanity styles
+//
+// The theme kit (_theme.scss) owns .agency-panel, .agency-btn, .agency-stamp, … The fallbacks below
+// use :where() (zero specificity) so the theme's rules always win when both are present.
+
+:where(.agency-panel) {
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+  padding: 4px 6px;
+  margin: 4px 0;
+}
+
+:where(.agency-panel-header) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+:where(.agency-stamp) {
+  display: inline-block;
+  border: 2px solid #8b0000;
+  color: #8b0000;
+  padding: 0 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+}
+
+:where(.agency-btn) {
+  width: auto;
+  line-height: 1.4;
+  padding: 0 6px;
+  font-size: 0.9em;
+}
+
+:where(.agency-badge) {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 0.8em;
+}
+
+:where(.agency-table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.agency-sanity {
+  .agency-panel-header .agency-sanity-check {
+    margin-left: auto;
+  }
+
+  input[type='number'],
+  input[type='text'] {
+    height: 1.6em;
+    padding: 0 3px;
+  }
+
+  .agency-sanity-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: center;
+  }
+
+  .agency-sanity-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    input[type='number'] {
+      width: 3.2em;
+      text-align: center;
+    }
+  }
+
+  .agency-sanity-san input[type='number'] {
+    font-weight: bold;
+  }
+
+  .agency-sanity-pair {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .agency-sanity-label {
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+
+  .agency-sanity-alert {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+    padding: 2px 4px;
+    border-left: 3px solid #8b0000;
+    font-size: 0.9em;
+  }
+
+  .agency-sanity-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .agency-sanity-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    margin-bottom: 2px;
+  }
+
+  .agency-sanity-icon {
+    flex: 0 0 auto;
+    padding: 0 3px;
+    min-width: 1.6em;
+  }
+
+  .agency-sanity-bonds {
+    td {
+      padding: 1px 2px;
+    }
+
+    .agency-sanity-score {
+      width: 3.5em;
+
+      input {
+        width: 3em;
+        text-align: center;
+      }
+    }
+
+    .agency-sanity-controls {
+      width: 2em;
+      text-align: right;
+    }
+
+    tr.agency-sanity-broken input[type='text'] {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+  }
+
+  .agency-sanity-disorders {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin: 1px 0;
+    }
+
+    input[type='text'] {
+      flex: 1 1 auto;
+    }
+  }
+
+  .agency-sanity-empty {
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .agency-sanity-adaptation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-top: 4px;
+    font-size: 0.9em;
+  }
+
+  .agency-sanity-adapt-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    input[type='checkbox'] {
+      margin: 0;
+      width: 1em;
+      height: 1em;
+    }
+  }
+}
+
+.agency-sanity-card,
+.agency-sanity-note {
+  .agency-sanity-source {
+    font-style: italic;
+    margin-bottom: 2px;
+  }
+
+  .agency-sanity-line {
+    margin: 2px 0;
+  }
+
+  .agency-sanity-result {
+    margin: 4px 0;
+    font-size: 1.1em;
+  }
+
+  .agency-sanity-delta {
+    color: #8b0000;
+  }
+
+  .success {
+    color: #2e6b2e;
+  }
+
+  .failure {
+    color: #8b0000;
+  }
+
+  .agency-sanity-mods {
+    margin: 0;
+    padding-left: 1em;
+  }
+
+  .agency-sanity-flag {
+    margin: 4px 0;
+    padding: 2px 4px;
+    border-left: 3px solid rgba(0, 0, 0, 0.35);
+
+    ul {
+      margin: 2px 0 0;
+      padding-left: 1.2em;
+    }
+  }
+
+  .agency-sanity-alarm {
+    border-left-color: #8b0000;
+  }
+
+  .agency-sanity-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+
+    button {
+      flex: 1 1 auto;
+    }
+  }
+}

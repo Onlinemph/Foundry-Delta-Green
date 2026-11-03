@@ -4,6 +4,8 @@ import { Foundry } from '../utilities/foundry-compat.js'
 import * as Settings from '../../lib/miscellaneous-settings.js'
 import { makeRegexPatternFrom } from '../../lib/utilities.js'
 import ChatProcessor from './chat-processor.js'
+// AGENCY: SAN loss fields in the Fright Check dialog
+import { applyFrightCheckSanity, readSanityDialog, sanityDialogData } from '../agency/sanity/fright-check.ts'
 
 export class FrightCheckChatProcessor extends ChatProcessor {
   help() {
@@ -25,7 +27,11 @@ export class FrightCheckChatProcessor extends ChatProcessor {
       return
     }
 
-    let actor = GURPS.LastActor
+    return this.openDialog(GURPS.LastActor)
+  }
+
+  // AGENCY: split out of process() so the sanity panel's "SAN check" button opens the same dialog.
+  async openDialog(actor) {
     let tblname = game.settings.get(Settings.SYSTEM_NAME, Settings.SETTING_FRIGHT_CHECK_TABLE) || 'Fright Check'
 
     const data = {
@@ -67,6 +73,7 @@ export class FrightCheckChatProcessor extends ChatProcessor {
         4: `${game.i18n.localize('GURPS.traits.xenophilia')} CR:6`,
       },
       daredevil: actor.findAdvantage(game.i18n.localize('GURPS.traits.daredevil')) || null,
+      agencySanity: sanityDialogData(actor), // AGENCY
     }
 
     // TODO reskin frightcheck UI
@@ -135,6 +142,7 @@ export class FrightCheckChatProcessor extends ChatProcessor {
    * @param {*} html
    */
   async rollFrightCheckCallback(actor, html) {
+    const agencySanity = readSanityDialog(html) // AGENCY: read before the dialog closes
     let selectIds = [
       '#mod2',
       '#mod3',
@@ -220,6 +228,8 @@ export class FrightCheckChatProcessor extends ChatProcessor {
         table.draw({ roll: tableRoll }).then(() => GURPS.setLastTargetedRoll({ margin: margin }, actor)) // don't evaluate before passing
       }
     })
+
+    await applyFrightCheckSanity(actor, agencySanity, { failure, margin }) // AGENCY: success/failure SAN loss
   }
 
   _getMod(html, id) {
