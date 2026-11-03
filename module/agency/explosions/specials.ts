@@ -57,7 +57,7 @@ export const SPECIALS: SpecialDef[] = [
     label: 'stun',
     ref: 'HT193',
     match: {
-      name: /\b(stun|flash\s*-?\s*bang|stingball|stingmore|distraction device|nfdd|9-?banger)\b/i,
+      name: /\b(stun\s+grenade|flash\s*-?\s*bang|stingball|stingmore|distraction device|nfdd|9-?banger)\b/i,
       damage: /\bHT\s*-\s*5\s*aff/i,
     },
     afflictionRadius: 10,

@@ -84,7 +84,16 @@ export function rfhInjury(calculator: any): number {
       injury = Math.max(1, Math.floor(injury / reduction))
     if (injury > 0) return injury
   }
-  return Number(calculator.unmodifiedPointsToApply) || 0
+  const injury = Number(calculator.unmodifiedPointsToApply) || 0
+  // Hit-location injury cap (GUHL chest/abdomen, set by the hitloc feature): the excess is lost.
+  const cap = parent?.agencyInjuryCap
+  return typeof cap === 'number' ? Math.min(injury, Math.floor(cap)) : injury
+}
+
+/** The token whose cover applies: the calculator's defender token, else the actor's own or first active token. */
+function coverTokenOf(actor: any, calculator: any): any {
+  const token = calculator?._defenderToken ?? actor?.token ?? actor?.getActiveTokens?.()[0] ?? null
+  return token?.document ?? token
 }
 
 function woundInputs(calculator: any, actor: any, handoff: InjuryHandoff): WoundInput[] {
@@ -121,7 +130,12 @@ function woundInputs(calculator: any, actor: any, handoff: InjuryHandoff): Wound
   // Large-area injury: the damage is applied to every hit location, each protected by its own DR.
   if (calculator.hitLocation === 'Large-Area') {
     const entries: any[] = actor.hitLocationsWithDR ?? []
-    const locations = largeAreaLocations(entries.map(e => ({ where: e.where, roll: e.rollText })))
+    // Parts fully behind the token's cover (hit-location feature) take nothing from the blast.
+    const covered: string[] =
+      (GURPS as any).agency?.hitloc?.coveredLocations?.(actor, coverTokenOf(actor, calculator))?.locations ?? []
+    const locations = largeAreaLocations(entries.map(e => ({ where: e.where, roll: e.rollText }))).filter(
+      where => !covered.includes(where)
+    )
     const inputs: WoundInput[] = []
     const original = calculator.hitLocation
     try {

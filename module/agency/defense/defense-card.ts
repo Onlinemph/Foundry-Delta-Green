@@ -8,7 +8,7 @@ import * as Settings from '../../../lib/miscellaneous-settings.js'
 import Maneuvers from '../../combat/maneuver.js'
 import * as HitLocations from '../../hitlocation/hitlocation.js'
 import { postCard, submitCardEvent } from './cards.ts'
-import { initialDefenseState, isStunned } from './flow.ts'
+import { initialDefenseState, isIncapacitated, isStunned } from './flow.ts'
 import {
   activeGMId,
   canControl,
@@ -237,6 +237,7 @@ async function postDefenseCard(
     cantSee: hasStatus(defender, 'blind') || hasStatus(attacker, 'invisible'),
     hasParry: defenseWeapons(defender, 'parry').length > 0,
     hasBlock: defenseWeapons(defender, 'block').length > 0,
+    incapacitated: isIncapacitated(defender?.statuses ?? []),
   })
 
   const card: DefenseCardFlag = {
@@ -308,6 +309,7 @@ function controlsView(card: DefenseCardFlag, defender: AnyActor): Record<string,
     cantSee: hasStatus(defender, 'blind') || hasStatus(attacker, 'invisible'),
     hasParry: parries.length > 0,
     hasBlock: blocks.length > 0,
+    incapacitated: isIncapacitated(defender?.statuses ?? []),
   })
   const allowed = (type: DefenseType) => card.state.allowed.includes(type) && live[type]
   const toggles = availableToggles(card.attack.profile, isStunned(defender.statuses ?? []))

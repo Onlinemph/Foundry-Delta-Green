@@ -10,7 +10,7 @@ export type DefenseType = 'dodge' | 'parry' | 'block'
 export type DefenseChoice = DefenseType | 'none'
 
 /** Why a defender gets no active defense roll at all. */
-export type NoDefenseReason = 'critical' | 'maneuver' | 'cantSee'
+export type NoDefenseReason = 'critical' | 'maneuver' | 'cantSee' | 'incapacitated'
 
 /**
  * What a maneuver lets you defend with (B364-366). 'any', 'none' and 'dodge-block' are upstream's

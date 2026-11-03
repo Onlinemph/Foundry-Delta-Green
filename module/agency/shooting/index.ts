@@ -13,6 +13,9 @@ import { flattenList, isRangedWeapon, weaponId, weaponKey, type RangedLike } fro
 import { isTracked } from '../firearms/shots.ts'
 import { rangedWeapons, viewOf, type AmmoActor } from '../firearms/state.ts'
 import { hitLocationFromModifiers } from '../defense/defense-card.ts'
+import { parseHitLocation } from '../defense/rules.ts'
+import { missByOneName } from '../hitloc/engine.ts'
+import { hitLocationNames } from '../hitloc/picker.ts'
 import { getAgencySetting, registerAgencySetting } from '../settings.ts'
 import {
   carriedAcc,
@@ -184,7 +187,11 @@ export async function beforeRangedAttack(args: AttackArgs): Promise<false | { ha
 
   if (rules === 'prs' && rof > 1) {
     const loaded = roundsLoaded(actor, weapon)
-    if (loaded === 0) return undefined // let the ammo feature report the empty gun
+    if (loaded === 0) {
+      // Skip the RoF prompt: one shot is enough for the ammo feature to report the empty gun.
+      opt.shots = 1
+      return { handledRoF: true }
+    }
     const max = loaded === null ? rof : Math.max(1, Math.min(rof, loaded))
     const choice = await fireDialog({ weapon, max, braced, rcl, weaponClass, gunslinger, loaded })
     if (!choice) return false
@@ -339,7 +346,8 @@ async function onRollComplete(ctx: any): Promise<void> {
   // Single shot: remember Acc for next turn against the same target.
   if (!actor?.isOwner || !getAgencySetting<boolean>('aim-carryover')) return
   const targetId = mark.targetIds.length === 1 ? mark.targetIds[0] : null
-  const acc = targetId ? carriedAcc(1, aimSum, mark.braced) : 0
+  const fired = Number(ctx.optionalArgs?.shots) || 1
+  const acc = targetId ? carriedAcc(fired, aimSum, mark.braced) : 0
   if (acc > 0) {
     const carry: CarryOver = { weaponKey: mark.weaponId, targetId: targetId!, acc, round: mark.round }
     await actor.update({ [`${FLAG}.carry`]: carry }, { render: false })
@@ -348,8 +356,11 @@ async function onRollComplete(ctx: any): Promise<void> {
   }
 }
 
-async function resolveRestOfBurst(ctx: any, mark: ShootingMark, aimSum: number): Promise<void> {
+async function resolveRestOfBurst(ctx: any, planned: ShootingMark, aimSum: number): Promise<void> {
   const chatdata = ctx.chatdata
+  // The ammo feature may have fired fewer rounds than planned (it lowers optionalArgs.shots).
+  const allowed = Number(ctx.optionalArgs?.shots) || planned.shots
+  const mark: ShootingMark = { ...planned, shots: Math.max(1, Math.min(planned.shots, allowed)) }
   const finalTarget = Number(chatdata.finaltarget)
   // Bracing Acc is already inside finalTarget, so it isn't added again here.
   const plan = planBurst({
@@ -361,8 +372,8 @@ async function resolveRestOfBurst(ctx: any, mark: ShootingMark, aimSum: number):
     shots: mark.shots,
   })
   const extra = mark.shots - 1
-  const roll = await (Roll as any).create(Array.from({ length: extra }, () => '3d6').join(' + ')).evaluate()
-  const rest: number[] = roll.dice.map((d: any) => Number(d.total))
+  const roll = extra > 0 ? await (Roll as any).create(Array.from({ length: extra }, () => '3d6').join(' + ')).evaluate() : null
+  const rest: number[] = roll ? roll.dice.map((d: any) => Number(d.total)) : []
   const result: BurstResult = resolveBurst(plan, [Number(chatdata.rtotal), ...rest])
 
   const targets = mark.targetIds
@@ -387,16 +398,39 @@ async function resolveRestOfBurst(ctx: any, mark: ShootingMark, aimSum: number):
     criticalHits: result.criticalHits,
     target: targets.map((t: any) => t.name).join(', '),
   })
+  const blind = !!chatdata.isBlind
   const message = await (ChatMessage as any).create({
     speaker: ctx.speaker,
     content,
-    rolls: [roll],
+    rolls: roll ? [roll] : [],
+    ...(blind
+      ? { whisper: (ChatMessage as any).getWhisperRecipients('GM').map((u: any) => u.id), blind: true }
+      : {}),
     sound: (CONFIG as any).sounds?.dice,
     flags: { gurps: { agency: { burst: { ...mark, hits: result.hits, criticalHits: result.criticalHits } } } },
   })
 
+  const defenseApi = (GURPS as any).agency?.defense
+  const aimName = parseHitLocation(chatdata.targetmods, game.i18n!.localize('GURPS.modifierToHit'), hitLocationNames())
+  const fallback = result.shots
+    .filter(s => s.outcome === 'miss')
+    .map(s => missByOneName(s.margin, true, s.roll >= 17, aimName))
+    .filter((name): name is string => !!name)
+  if (fallback.length && targets.length && typeof defenseApi?.promptDefense === 'function') {
+    await defenseApi.promptDefense({
+      attacker: ctx.actor,
+      attackerToken: ctx.speaker?.token ? (canvas as any)?.tokens?.get(ctx.speaker.token) : undefined,
+      targets,
+      weapon: ctx.optionalArgs?.obj,
+      isRanged: true,
+      hits: fallback.length,
+      criticalHits: 0,
+      hitLocation: fallback[0],
+    })
+  }
+
   if (result.hits > 0 && targets.length > 0) {
-    const defense = (GURPS as any).agency?.defense
+    const defense = defenseApi
     if (typeof defense?.promptDefense === 'function') {
       await defense.promptDefense({
         attacker: ctx.actor,

@@ -76,6 +76,8 @@ export interface DefenseSituation {
   cantSee: boolean
   hasParry: boolean
   hasBlock: boolean
+  /** Unconscious or dead: no active defense at all. */
+  incapacitated?: boolean
 }
 
 export interface DefenseAvailability {
@@ -107,6 +109,7 @@ export function defenseAvailability(s: DefenseSituation): DefenseAvailability {
     notes: [],
   })
 
+  if (s.incapacitated) return none('incapacitated')
   if (s.isCritical) return none('critical')
   if (s.maneuverRule === 'none') return none('maneuver')
   if (s.attack.kind === 'ranged' && s.cantSee) return none('cantSee')

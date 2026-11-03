@@ -13,6 +13,7 @@
  * (GURPS.agency.shooting.beforeRangedAttack) is chained at runtime so no upstream file changes;
  * 'gurpsAgencyRollComplete' for the result.
  */
+import { isRangedWeapon } from '../firearms/ammo.ts'
 import { ChatProcessors } from '../../chat.js'
 import { AgencyHooks } from '../index.ts'
 import { beforeExplosiveAttack, onRollComplete } from './attack.ts'
@@ -36,6 +37,9 @@ function chainBeforeRangedAttack(): void {
   const previous = g.agency.shooting.beforeRangedAttack
   if (previous?.agencyExplosions) return
   const chained = async (args: any) => {
+    // Melee attacks (a stun baton, a rifle butt) are never thrown or fired as explosives.
+    const ranged = isRangedWeapon(args?.att) && !(args?.action?.isMelee && !args?.action?.isRanged)
+    if (!ranged) return typeof previous === 'function' ? previous(args) : undefined
     const ours = await beforeExplosiveAttack(args)
     if (ours === false) return false
     // An explosive with RoF 2+ (automatic grenade launchers) skips the shooting feature's per-shot

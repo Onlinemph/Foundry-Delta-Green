@@ -6,7 +6,7 @@
  *   the explosive off by the defender's margin of success (B414 Scatter); a failure means it struck him.
  * The rolls go through upstream's Dodge action (performAndCapture), with the defense feature's modifiers.
  */
-import { isStunned } from '../defense/flow.ts'
+import { isIncapacitated, isStunned } from '../defense/flow.ts'
 import {
   canControl,
   currentManeuver,
@@ -152,6 +152,7 @@ export async function postDivePrompts(message: any, flag: BlastCardFlag): Promis
   for (const row of flag.state.rows) {
     if (row.dive.status !== 'pending' || flag.meta[row.facts.id]?.npc) continue
     const tokenDoc = scene?.tokens?.get(row.facts.id)
+    if (isIncapacitated(tokenDoc?.actor?.statuses ?? [])) continue
     const owners = playerOwnerIds(tokenDoc?.actor)
     if (!owners.length) continue
     const d = deriveRow(flag.state, row)

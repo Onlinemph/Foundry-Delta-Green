@@ -208,6 +208,12 @@ export function stunRecoveryRolls(
   return rolls
 }
 
+/** Unconscious or dead (the wound feature sets 'unconscious'; upstream uses 'dead'): no defenses or choices. */
+export function isIncapacitated(statuses: Iterable<string>): boolean {
+  const set = new Set(statuses)
+  return set.has('unconscious') || set.has('dead')
+}
+
 export function isStunned(statuses: Iterable<string>): boolean {
   const set = new Set(statuses)
   return set.has('stun') || set.has('mentalstun')

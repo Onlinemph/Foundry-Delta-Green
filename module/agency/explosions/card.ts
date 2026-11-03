@@ -7,6 +7,7 @@
  *
  * The card lives in flags.gurps.agency.explosion; only the GM's client updates it (applyBlastEvent).
  */
+import { isRFH } from '../wounds/config.ts'
 import { gmIds, resolveActor } from '../defense/foundry-helpers.ts'
 import { formatComponent, formatSpec } from './parse.ts'
 import { deriveRow, radii, type DerivedRow, type RowState } from './resolve.ts'
@@ -342,6 +343,8 @@ interface Hit {
   dice: string
   ignoresDR?: boolean
   woundingModifier?: number | null
+  /** Large-area DR over the parts not behind the token's cover (B400), for the standard damage model. */
+  largeAreaDR?: number | null
 }
 
 /**
@@ -367,12 +370,15 @@ async function applyHit(actor: any, tokenDoc: any, attackerId: string | null, hi
     damageType: hit.type,
     damageModifier: hit.modifier,
     armorDivisor: hit.armorDivisor,
-    hitlocation: base,
+    // Large-Area up front, so the hit-location feature doesn't roll (and announce) a torso sub-location.
+    hitlocation: area ? 'Large-Area' : base,
     token: tokenDoc?.object ?? null,
   }
   const dialog: any = new ApplyDamageDialog(actor, [payload])
   const calc = dialog._calculator
   if (area) calc.hitLocation = 'Large-Area'
+  // Under RFH the wound feature takes each location's own DR (and skips covered ones), so leave DR alone.
+  if (area && typeof hit.largeAreaDR === 'number' && !isRFH()) calc.userEnteredDR = hit.largeAreaDR
   if (hit.ignoresDR) {
     // DR is ignored, so the location needn't be in the actor's table (its DR is never looked up).
     calc.userEnteredDR = 0
@@ -418,6 +424,7 @@ async function applyRow(flag: BlastCardFlag, row: RowState): Promise<boolean> {
       dice: formatComponent(spec.components[b.componentIndex]),
       ignoresDR: b.ignoresDR,
       woundingModifier: b.woundingModifier,
+      largeAreaDR: b.location === 'Large-Area' ? row.facts.largeAreaDR : null,
     })
   }
   for (const h of d.fragments?.hitList ?? []) {

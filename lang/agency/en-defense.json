@@ -81,7 +81,8 @@
         "reason": {
           "critical": "Critical hit: no active defense (B556).",
           "maneuver": "{maneuver}: no active defense (B366).",
-          "cantSee": "Can't see the ranged attack: no active defense (B390)."
+          "cantSee": "Can't see the ranged attack: no active defense (B390).",
+          "incapacitated": "Unconscious: no active defense."
         },
         "mod": {
           "parryThrown": "to Parry (thrown weapon)",

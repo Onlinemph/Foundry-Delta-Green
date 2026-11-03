@@ -275,7 +275,8 @@ async function applyAll(message: any): Promise<void> {
   const done: number[] = []
   for (const hit of pendingHits(card)) {
     const dialog: any = new (ApplyDamageDialog as any)(actor, [damageEntry(card, hit, actor)])
-    await dialog.resolveInjury(true, dialog._calculator.pointsToApply, false)
+    // A fourth argument marks this as the calculator path, so the wound feature reads uncapped injury.
+    await dialog.resolveInjury(true, dialog._calculator.pointsToApply, false, '')
     done.push(hit.index)
   }
   await recordApplied(message, done)

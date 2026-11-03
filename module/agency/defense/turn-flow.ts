@@ -5,6 +5,7 @@
  */
 import { postCard, submitCardEvent } from './cards.ts'
 import {
+  isIncapacitated,
   isStunned,
   maneuverDecision,
   pickAutomationRunner,
@@ -112,6 +113,8 @@ async function turnStart(
   const actor = combatant.actor
   if (!actor || combatant.isDefeated) return
   const statuses = Array.from<string>(actor.statuses ?? [])
+  // Unconscious or dead: nothing to choose or roll this turn.
+  if (isIncapacitated(statuses)) return
   const stunned = isStunned(statuses)
   const timing = stunRecoveryTiming()
 
@@ -141,6 +144,7 @@ async function turnEnd(combat: any, combatant: any, round: number): Promise<void
   endedWith.set(combatant.id, currentManeuver(actor))
   if (combatant.isDefeated) return
 
+  if (isIncapacitated(Array.from<string>(actor.statuses ?? []))) return
   const recoveryRolls = stunRecoveryRolls(Array.from<string>(actor.statuses ?? []), stunRecoveryTiming(), 'end')
   if (recoveryRolls.length)
     await postTurnCard(combat, combatant, round, 'end', { promptManeuver: false, stunned: true, recoveryRolls })
