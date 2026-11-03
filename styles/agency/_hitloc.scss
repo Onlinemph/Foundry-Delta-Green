@@ -1,0 +1,181 @@
+// Agency: hit-location card, Apply Damage banner, cover dialog and HUD button.
+//
+// The kit (.agency-chat-card, .agency-table, .agency-btn, .agency-badge, .agency-stamp) is defined by the
+// theme feature; this file only lays the feature's pieces out. Token values always carry a fallback, since the
+// --agency-* tokens exist only while the theme is on.
+
+$hitloc-red: #c0362c;
+$hitloc-green: #3f7d4e;
+
+.agency-hitloc-card {
+  &__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__attack {
+    margin-bottom: 2px;
+  }
+
+  &__damage-text {
+    color: var(--agency-ink-2, inherit);
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 10px;
+    margin-bottom: 4px;
+    color: var(--agency-ink-2, inherit);
+    font-size: 0.9em;
+  }
+
+  &__facing-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    select {
+      width: auto;
+      height: 1.6em;
+      padding: 0 2px;
+      font-size: 0.95em;
+    }
+  }
+
+  &__hits {
+    td {
+      vertical-align: top;
+    }
+
+    tr.is-stopped > * {
+      color: var(--agency-ink-3, inherit);
+    }
+  }
+
+  &__path {
+    font-weight: 700;
+  }
+
+  &__summary,
+  &__dice {
+    color: var(--agency-ink-2, inherit);
+    font-size: 0.9em;
+  }
+
+  &__invalid {
+    color: var(--agency-red-ink, #{$hitloc-red});
+    font-size: 0.9em;
+  }
+
+  &__notes {
+    margin: 1px 0;
+    padding-left: 1.1em;
+    font-size: 0.85em;
+
+    li {
+      margin: 0;
+    }
+  }
+
+  &__cover-result {
+    font-size: 0.9em;
+
+    &.is-stopped {
+      color: var(--agency-green-ink, #{$hitloc-green});
+    }
+
+    &.is-through {
+      color: var(--agency-red-ink, #{$hitloc-red});
+    }
+
+    &.is-exposed {
+      color: var(--agency-ink-2, inherit);
+    }
+  }
+
+  &__action {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.agency-hitloc-note {
+  &__summary,
+  &__dice {
+    color: var(--agency-ink-2, inherit);
+    font-size: 0.9em;
+  }
+
+  &__notes {
+    margin: 2px 0;
+    padding-left: 1.1em;
+    font-size: 0.9em;
+  }
+}
+
+// Above the Apply Damage dialog's contents.
+.agency-hitloc-banner {
+  margin: 0 0 6px;
+  padding: 4px 6px;
+  border: 1px solid var(--agency-rule-strong, rgba(128, 128, 128, 0.45));
+  border-left: 4px solid var(--agency-red, #{$hitloc-red});
+  border-radius: var(--agency-radius, 3px);
+  background: var(--agency-paper-2, rgba(128, 128, 128, 0.08));
+  color: var(--agency-ink, inherit);
+
+  &__path {
+    font-weight: 700;
+  }
+
+  &__summary {
+    font-size: 0.9em;
+  }
+
+  &__notes {
+    margin: 2px 0 0;
+    padding-left: 1.1em;
+    font-size: 0.85em;
+  }
+}
+
+.agency-hitloc-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__hp {
+    display: flex;
+    flex: 2;
+    align-items: center;
+    gap: 4px;
+
+    input {
+      flex: 1;
+    }
+  }
+
+  &__zones {
+    margin: 4px 0 0;
+    padding: 2px 6px 6px;
+
+    select {
+      width: 100%;
+    }
+  }
+
+  .hint {
+    margin: 0;
+    color: var(--agency-ink-2, inherit);
+    font-size: 0.85em;
+  }
+}
+
+// Token HUD button: lit while the token is in cover.
+.agency-cover-hud.active {
+  border-color: var(--agency-green, #{$hitloc-green});
+  box-shadow: 0 0 6px var(--agency-green, #{$hitloc-green});
+}

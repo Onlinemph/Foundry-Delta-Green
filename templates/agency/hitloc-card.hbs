@@ -1,0 +1,89 @@
+<div class='agency-chat-card agency-hitloc-card' data-agency-card='hitloc'>
+  <header class='agency-chat-card-header agency-hitloc-card__header'>
+    <span class='agency-hitloc-card__title'>{{title}}</span>
+    <span class='agency-badge agency-hitloc-card__system'><i class='fa-solid fa-crosshairs'></i> {{systemLabel}}</span>
+  </header>
+
+  <div class='agency-chat-card-body agency-hitloc-card__body'>
+    <div class='agency-hitloc-card__attack'>
+      {{#if weapon}}<strong>{{weapon}}</strong>{{/if}}
+      {{#if damageText}} <span class='agency-hitloc-card__damage-text'>{{damageText}}</span>{{/if}}
+    </div>
+    <div class='agency-hitloc-card__meta'>
+      <span>{{aimText}}</span>
+      <span class='agency-hitloc-card__facing'>
+        {{facingText}}{{#if facingOverridden}} <i class='fa-solid fa-user-pen' title='GM'></i>{{/if}}
+      </span>
+      {{#if canEditFacing}}
+        <label class='agency-hitloc-card__facing-edit' data-agency-role='gm'>
+          {{labels.facingLabel}}
+          <select name='agency-facing'>
+            {{#each facingOptions}}
+              <option value='{{value}}' {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </label>
+      {{/if}}
+      {{#if coverText}}<span class='agency-hitloc-card__cover'><i class='fa-solid fa-shield-halved'></i> {{coverText}}</span>{{/if}}
+    </div>
+
+    <table class='agency-table agency-hitloc-card__hits'>
+      <thead>
+        <tr>
+          <th class='num'>{{labels.number}}</th>
+          <th>{{labels.location}}</th>
+          <th>{{labels.cover}}</th>
+          <th class='num'>{{labels.damage}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each hits}}
+          <tr class='{{#if applied}}is-good{{/if}}{{#if stopped}} is-stopped{{/if}}'>
+            <td class='num'>{{number}}</td>
+            <td class='agency-hitloc-card__location'>
+              <div class='agency-hitloc-card__path'>{{path}}</div>
+              {{#if invalid}}<div class='agency-hitloc-card__invalid'>{{invalid}}</div>{{/if}}
+              {{#if summary}}<div class='agency-hitloc-card__summary'>{{summary}}</div>{{/if}}
+              {{#if noBody}}<div class='agency-hitloc-card__invalid'>{{noBody}}</div>{{/if}}
+              {{#if notes.length}}
+                <ul class='agency-hitloc-card__notes'>
+                  {{#each notes}}<li>{{this}}</li>{{/each}}
+                </ul>
+              {{/if}}
+              {{#if dice}}<div class='agency-hitloc-card__dice agency-num'><i class='fa-solid fa-dice'></i> {{dice}}</div>{{/if}}
+            </td>
+            <td class='agency-hitloc-card__cover-result {{coverCls}}'>{{cover}}</td>
+            <td class='num agency-num'>
+              {{#if reduced}}<s>{{damage}}</s> {{finalDamage}}{{else}}{{damage}}{{/if}}
+            </td>
+            <td class='agency-hitloc-card__action'>
+              {{#if applied}}
+                <span class='agency-badge agency-badge--green'>{{../labels.applied}}</span>
+              {{else if stopped}}
+                <span class='agency-badge agency-badge--outline'>{{../labels.stopped}}</span>
+              {{else if canApply}}
+                <button type='button' class='agency-btn agency-btn--small' data-agency-role='apply'
+                  data-agency-action='apply' data-hit='{{index}}'>
+                  <i class='fa-solid fa-heart-crack'></i> {{../labels.apply}}
+                </button>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{#if allDone}}
+    <footer class='agency-chat-card-footer agency-hitloc-card__footer'>
+      <span class='agency-stamp agency-stamp--green'>{{labels.done}}</span>
+    </footer>
+  {{else if canApplyAll}}
+    <footer class='agency-chat-card-footer agency-hitloc-card__footer' data-agency-role='apply'>
+      <button type='button' class='agency-btn agency-btn--primary' data-agency-action='apply-all'>
+        <i class='fa-solid fa-burst'></i> {{labels.applyAll}}
+      </button>
+    </footer>
+  {{/if}}
+</div>

@@ -1,0 +1,286 @@
+{
+  "GURPS": {
+    "agency": {
+      "hitloc": {
+        "settings": {
+          "system": {
+            "name": "Hit locations",
+            "hint": "Grand Unified Hit Locations (v2.4): sub-tables, called shots, armor gaps and wounding by location, with one location per hit on the hit-location card. Standard: upstream's table for the target's body plan (still one location per hit, and cover). Non-humanoid body plans always use their own table.",
+            "guhl": "Grand Unified Hit Locations",
+            "standard": "Standard (the body plan's table)"
+          },
+          "torsoCap": {
+            "name": "Torso injury cap",
+            "hint": "GUHL: injury from one chest or abdomen hit can't exceed 2×HP (1×HP when using bleeding rules); any excess is lost.",
+            "two": "2×HP",
+            "one": "1×HP (bleeding rules)",
+            "none": "No cap"
+          },
+          "facing": {
+            "name": "Token facing at rotation 0",
+            "hint": "Which way token art faces when not rotated. Used to tell whether an attack comes from the target's front, side or rear arc (spine and skull/face from behind, nose and jaw only from the front). The GM can override it on each hit-location card.",
+            "down": "Down (Foundry's vision cone)",
+            "up": "Up",
+            "left": "Left",
+            "right": "Right",
+            "off": "Don't use token facing (always front)"
+          }
+        },
+        "withSide": "{part} ({side})",
+        "side": {
+          "left": "Left",
+          "right": "Right"
+        },
+        "facing": {
+          "front": "front",
+          "side": "side",
+          "rear": "rear"
+        },
+        "loc": {
+          "skull": "Skull",
+          "face": "Face",
+          "neck": "Neck",
+          "chest": "Chest",
+          "abdomen": "Abdomen",
+          "arm": "Arm",
+          "leg": "Leg",
+          "hand": "Hand",
+          "foot": "Foot",
+          "jaw": "Jaw",
+          "nose": "Nose",
+          "ear": "Ear",
+          "cheek": "Cheek",
+          "eyes": "Eye",
+          "shin": "Shin",
+          "knee": "Knee",
+          "thigh": "Thigh",
+          "forearm": "Forearm",
+          "elbow": "Elbow",
+          "upperArm": "Upper Arm",
+          "shoulder": "Shoulder",
+          "joint": "Joint",
+          "veinArtery": "Vein/Artery",
+          "vitals": "Vitals",
+          "heart": "Vitals (Heart)",
+          "spine": "Spine",
+          "digestive": "Digestive Tract",
+          "pelvis": "Pelvis",
+          "groin": "Groin",
+          "target": {
+            "chinksTorso": "Chinks (Torso)",
+            "chinksOther": "Chinks (Other)",
+            "eye": "Eye",
+            "ear": "Ear",
+            "nose": "Nose",
+            "jaw": "Jaw",
+            "spine": "Spine",
+            "neckVein": "Neck Vein/Artery",
+            "limbVein": "Limb Vein/Artery",
+            "limbJoint": "Limb Joint",
+            "extremityJoint": "Extremity Joint",
+            "vitals": "Vitals",
+            "heart": "Vitals (Heart)",
+            "digestive": "Digestive Tract",
+            "pelvis": "Pelvis",
+            "groin": "Groin",
+            "armpit": "Armpit",
+            "backOfKnee": "Back of Knee",
+            "eyeslits": "Eyeslits",
+            "codpiece": "Codpiece",
+            "insideElbow": "Inside Elbow",
+            "insideThigh": "Inside Thigh",
+            "neckGap": "Neck (armor gap)",
+            "openPalm": "Open Palm",
+            "limb": "Limb",
+            "extremity": "Extremity"
+          }
+        },
+        "picker": {
+          "abdomen": "Abdomen",
+          "ear": "Ear",
+          "eyeHelmet": "Eye, in helmet",
+          "handShield": "Hand, holding shield",
+          "spine": "Spine",
+          "limbJoint": "Limb Joint",
+          "extremityJoint": "Extremity Joint",
+          "digestive": "Digestive Tract",
+          "pelvis": "Pelvis",
+          "armpit": "Armpit (gap)",
+          "backOfKnee": "Back of Knee (gap)",
+          "eyeslits": "Eyeslits (gap)",
+          "codpiece": "Codpiece (gap)",
+          "insideElbow": "Inside Elbow (gap)",
+          "insideThigh": "Inside Thigh (gap)",
+          "insideThighBehind": "Inside Thigh, from behind (gap)",
+          "neckGap": "Neck (armor gap)",
+          "openPalm": "Open Palm (gap)",
+          "openPalmUnarmed": "Open Palm, unarmed (gap)",
+          "limb": "Limb"
+        },
+        "desc": {
+          "cuttingElseFace": "cutting, else face",
+          "impPiTb": "imp, pi, tb burn only",
+          "behindOnly": "from behind only",
+          "crCutImpPiTb": "cr, cut, imp, pi, tb burn only",
+          "crCutPiTb": "cr, cut, pi, tb burn only",
+          "missExtremity": "*hit extremity",
+          "impOnly": "imp only",
+          "gap": "armor gap"
+        },
+        "note": {
+          "armorCheekGuards": "Covered by cheek guards.",
+          "armorBroadCheekGuards": "Covered by broad cheek guards.",
+          "armorNasal": "Covered by a nasal.",
+          "armorVisor": "Covered by spectacles, a visor or a full helm.",
+          "noseToSkull": "Impaling, piercing and tight-beam burning go through the nose: a skull hit.",
+          "earAsFace": "Only cutting attacks count as an ear hit: treated as a face hit.",
+          "eyesAsFace": "Only impaling, piercing and tight-beam burning reach the eye: treated as a face hit.",
+          "invalidType": "That called shot isn't allowed for this damage type.",
+          "invalidFacing": "That called shot isn't possible from this side.",
+          "armorGap": "Armor gap: the armor's DR doesn't count (innate DR does).",
+          "chinks": "Chinks in armor: DR halved.",
+          "armpitCritical": "On a critical hit: also cripples the arm, instead of rolling on the critical hit table.",
+          "insideThighVein": "Optional rule in use: cutting, impaling, piercing and tight-beam burning hit the vein/artery.",
+          "skullShock": "Any injury that causes shock: knockdown/stun roll. Major wound: knockdown roll at -10.",
+          "skullDR": "The skull's +2 DR is assumed to be in the body plan's skull DR (GCS includes it).",
+          "eyeCripple": "Cripple over HP/10.",
+          "eyeSkull": "Otherwise a skull hit, without the skull's DR.",
+          "eyeTox": "Toxic: no special effect beyond crippling.",
+          "faceShock": "Any injury that causes shock: knockdown/stun roll. Major wound: knockdown roll at -5.",
+          "jawShock": "Any injury that causes shock: knockdown/stun roll at -1. Major wound: at -6.",
+          "noseCripple": "Cripple over HP/4.",
+          "noseCut": "Cutting: crippling costs Appearance (crippling threshold doubled).",
+          "noseCrush": "Crippled: No Sense of Smell/Taste. Major wound: knockdown roll at -5.",
+          "earCripple": "Cripple over HP/4; no -5 to knockdown; major wound only if severed; a lost ear costs Appearance.",
+          "neckWindpipe": "Optional: crushing injury over HP/2 crushes the windpipe (crippled, choking).",
+          "spineShock": "Enough injury for a shock penalty (even with High Pain Threshold): knockdown/stun roll, at -5 for a major wound.",
+          "spineCripple": "Cripple over HP: Bad Back (Severe) and Lame (Paraplegic) until healed.",
+          "spineDR": "The spine has +3 DR.",
+          "torsoCap": "Injury can't exceed {cap}×HP; any excess is lost.",
+          "digestiveMajor": "Major wound: HT-3 to avoid special effects.",
+          "pelvisMajor": "Major wound: falls down and can't stand; Lame (Missing Legs) until healed.",
+          "groinShock": "Double shock. Major wound: knockdown roll at -5.",
+          "vitalsCrush": "Crushing: shock-force HT roll for knockdown.",
+          "vitalsMajor": "Major wound: knockdown roll at -5.",
+          "heartSpecial": "The heart may be special for some characters (vampires).",
+          "limbCripple": "Cripple over HP/2.",
+          "extremityCripple": "Cripple over HP/3.",
+          "jointLimb": "Joint: cripple over HP/3; dismember as a limb; recover from crippling at -2.",
+          "jointExtremity": "Joint: cripple over HP/4; dismember as an extremity; recover from crippling at -2.",
+          "veinLimb": "Vein/artery: no crippling and no injury limit.",
+          "bleedFast": "Bleeding rolls every 30 seconds, not every minute."
+        },
+        "roll": {
+          "title": "Hit location: {name}"
+        },
+        "card": {
+          "title": "{attacker} hits {target}",
+          "system": {
+            "guhl": "GUHL",
+            "standard": "Hit location"
+          },
+          "called": "Called shot: {location}",
+          "randomLocation": "Random hit location",
+          "defaultLocation": "Default location: torso",
+          "facing": "Attack from the {facing}",
+          "facingAuto": "Auto ({facing})",
+          "facingLabel": "Facing",
+          "multiplier": "×{multiplier} {type}",
+          "armorGap": "armor gap",
+          "halfDR": "½ DR",
+          "extraDR": "+{dr} DR",
+          "bleed": "bleeding {modifier}",
+          "bleedFast": "bleeding {modifier}, every 30 s",
+          "coverMissed": "Half covered: 1d6 {roll}, the exposed half is hit.",
+          "coverAimed": "Aimed at the exposed half.",
+          "coverHit": "Hits cover: DR {dr} stops {absorbed}, {through} through.",
+          "coverHp": "Cover HP {before} → {after}.",
+          "coverDestroyed": "Cover destroyed.",
+          "coverDR": "DR {dr}",
+          "coverHpNow": "HP {hp}/{max}",
+          "invalid": {
+            "type": "{target} can't be targeted with this damage type: resolved as shown.",
+            "facing": "{target} can't be targeted from this side: resolved as shown."
+          },
+          "noBodyLocation": "Not on the target's body plan: uses the torso.",
+          "col": {
+            "number": "#",
+            "location": "Location",
+            "cover": "Cover",
+            "damage": "Dmg"
+          },
+          "apply": "Apply",
+          "applyAll": "Apply all",
+          "applied": "Applied",
+          "stopped": "Stopped",
+          "done": "Resolved"
+        },
+        "cover": {
+          "status": "In cover",
+          "hud": "Cover",
+          "preset": {
+            "none": "No cover",
+            "lowWall": "Low wall",
+            "chestHigh": "Chest-high",
+            "overCover": "Firing over cover",
+            "cornerLeft": "Corner (left side behind)",
+            "cornerRight": "Corner (right side behind)",
+            "full": "Full cover",
+            "custom": "Custom"
+          },
+          "zone": {
+            "skull": "Skull",
+            "face": "Face",
+            "neck": "Neck",
+            "chest": "Chest",
+            "abdomen": "Abdomen and groin",
+            "armL": "Left arm",
+            "armR": "Right arm",
+            "handL": "Left hand",
+            "handR": "Right hand",
+            "legL": "Left leg",
+            "legR": "Right leg",
+            "footL": "Left foot",
+            "footR": "Right foot"
+          },
+          "state": {
+            "exposed": "Exposed",
+            "covered": "Covered",
+            "half": "Half (1d6: 1-3 covered)"
+          },
+          "material": {
+            "brick": "Brick",
+            "concrete": "Concrete",
+            "wood": "Wood",
+            "sandbags": "Sandbags",
+            "earth": "Earth",
+            "carDoor": "Car door",
+            "engineBlock": "Engine block",
+            "steel": "Steel plate",
+            "treeTrunk": "Tree trunk"
+          },
+          "dialog": {
+            "title": "Cover: {name}",
+            "preset": "Cover",
+            "dr": "Cover DR",
+            "hp": "Cover HP (current / max)",
+            "hpHint": "Leave blank to not track HP. Damage that gets through the cover's DR also comes off its HP; at 0 HP it no longer protects.",
+            "material": "Material",
+            "custom": "Custom body parts",
+            "customHint": "Used when Cover is Custom. Low wall: legs, feet, abdomen. Chest-high: everything below the neck. Firing over cover: only the head, neck, arms and hands are exposed. Corner: that side's limbs and half the torso. Half-covered parts: each random hit there rolls 1d6, 1-3 hits the cover; a called shot hits the exposed half.",
+            "save": "Save",
+            "clear": "Remove cover",
+            "cancel": "Cancel"
+          }
+        },
+        "warn": {
+          "coverHpNoGM": "No GM is online to update the cover's HP.",
+          "noTarget": "Can't find the target of this hit."
+        },
+        "info": {
+          "missByOne": "Missed the {from} by 1: hits the {to} instead."
+        }
+      }
+    }
+  }
+}

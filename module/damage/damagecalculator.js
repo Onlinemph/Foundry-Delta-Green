@@ -829,6 +829,8 @@ export class CompositeDamageCalculator {
   }
 
   get cripplingThreshold() {
+    // AGENCY: hit-location override in HP (GUHL joints and veins; Infinity = can't be crippled).
+    if (typeof this.agencyCripplingThreshold === 'number') return this.agencyCripplingThreshold
     if (this.hitLocationRole === hitlocation.LIMB) return this.HP.max / 2
     if (this.hitLocationRole === hitlocation.EXTREMITY) return this.HP.max / 3
     if (this._useBodyHits) {
@@ -1222,6 +1224,9 @@ class DamageCalculator {
    */
   get pointsToApply() {
     let pointsToApply = this.unmodifiedPointsToApply
+    // AGENCY: hit-location injury cap in HP (GUHL chest/abdomen); the excess is lost.
+    const agencyCap = this._parent.agencyInjuryCap
+    if (typeof agencyCap === 'number') pointsToApply = Math.min(pointsToApply, Math.floor(agencyCap))
     if (this._parent.useLocationModifiers) {
       if ([hitlocation.EXTREMITY, hitlocation.LIMB].includes(this._parent.hitLocationRole)) {
         return Math.min(pointsToApply, Math.floor(this._parent.locationMaxHP))

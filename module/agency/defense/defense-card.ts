@@ -14,6 +14,7 @@ import {
   canControl,
   currentManeuver,
   DEFENSE_WEAPONS_HOOK,
+  DAMAGE_ROLLED_HOOK,
   gmIds,
   inActiveCombat,
   localize,
@@ -553,7 +554,11 @@ async function onRollDamage(message: any, card: DefenseCardFlag, event: Event): 
 
     const payload = await capture.wait(5000)
     await submitCardEvent(message, { kind: 'damage', hits })
-    if (payload && autoDamageEnabled()) openApplyDamage(card.target, payload)
+    if (!payload) return
+    // A feature that resolves the hits itself (hit locations: a location per hit, cover) returns false.
+    const handled =
+      Hooks.call(DAMAGE_ROLLED_HOOK as any, { attack: card.attack, target: card.target, payload }) === false
+    if (!handled && autoDamageEnabled()) openApplyDamage(card.target, payload)
   } finally {
     busy.delete(message.id)
   }

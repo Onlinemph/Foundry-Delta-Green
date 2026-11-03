@@ -67,6 +67,7 @@ export default class ApplyDamageDialog extends Application {
     let trackers = objectToArray(actor._additionalResources.tracker)
     this._resourceLabels = trackers.filter(it => !!it.isDamageType).filter(it => !!it.alias)
 
+    GURPS.agency?.hitloc?.configureDialog?.(this, damageData) // AGENCY: hit locations (GUHL) set up the calculator
     this._adjustHitLocationIfNecessary()
   }
 
@@ -461,6 +462,8 @@ export default class ApplyDamageDialog extends Application {
    * Ask the calculator to randomly select a hit location, and return the roll used.
    */
   async _randomizeHitLocation() {
+    // AGENCY: Grand Unified Hit Locations rolls the location for humanoid body plans.
+    if (GURPS.agency?.hitloc?.randomizeHitLocation?.(this)) return this.updateUI()
     this._sendDiceMessage(await this._calculator.randomizeHitLocation(), {
       chatMessage: 'Rolling for Hit Location.',
     })

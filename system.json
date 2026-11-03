@@ -127,6 +127,12 @@
       "name": "English",
       "path": "lang/agency/en-readiness.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-hitloc.json",
+      "flags": {}
     }
   ],
   "grid": {

@@ -1,0 +1,54 @@
+<div class='agency-hitloc-cover'>
+  <div class='form-group'>
+    <label for='agency-cover-preset'>{{labels.preset}}</label>
+    <select id='agency-cover-preset' name='preset'>
+      {{#each presets}}
+        <option value='{{value}}' {{#if selected}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class='form-group'>
+    <label for='agency-cover-dr'>{{labels.dr}}</label>
+    <input id='agency-cover-dr' type='number' name='dr' min='0' step='1' value='{{dr}}'>
+  </div>
+
+  <div class='form-group'>
+    <label for='agency-cover-hp'>{{labels.hp}}</label>
+    <div class='agency-hitloc-cover__hp'>
+      <input id='agency-cover-hp' type='number' name='hp' step='1' value='{{hp}}'>
+      <span>/</span>
+      <input type='number' name='hpMax' min='0' step='1' value='{{hpMax}}' aria-label='{{labels.hp}}'>
+    </div>
+  </div>
+  <p class='hint'>{{labels.hpHint}}</p>
+
+  <div class='form-group'>
+    <label for='agency-cover-material'>{{labels.material}}</label>
+    <input id='agency-cover-material' type='text' name='material' value='{{material}}' list='agency-cover-materials'>
+    <datalist id='agency-cover-materials'>
+      {{#each materials}}<option value='{{this}}'></option>{{/each}}
+    </datalist>
+  </div>
+
+  <fieldset class='agency-hitloc-cover__zones'>
+    <legend>{{labels.custom}}</legend>
+    <p class='hint'>{{labels.customHint}}</p>
+    <table class='agency-table'>
+      <tbody>
+        {{#each zones}}
+          <tr>
+            <td>{{label}}</td>
+            <td>
+              <select name='zone.{{id}}' aria-label='{{label}}'>
+                {{#each states}}
+                  <option value='{{value}}' {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </fieldset>
+</div>
