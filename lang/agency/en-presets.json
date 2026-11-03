@@ -1,1 +1,33 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "presets": {
+        "defaultTL": {
+          "name": "Default tech level",
+          "hint": "Tech level given to new actors that don't set one (GCS imports keep their own). Leave blank to turn off."
+        },
+        "menu": {
+          "name": "Campaign preset",
+          "label": "Modern agent preset",
+          "hint": "Re-apply the modern conspiracy-horror preset: house-rule wounds, SAN, ammo tracking, TL8, agent NPC template."
+        },
+        "dialog": {
+          "title": "Apply the Modern Agent preset?",
+          "intro": "This sets up the world for a present-day agency campaign:",
+          "tl": "New actors default to TL8",
+          "mook": "The NPC generator's example becomes a field agent",
+          "outro": "You can change any of these later in Configure Settings, or re-run this from the Campaign preset button."
+        },
+        "change": {
+          "noCI": "Turn off Conditional Injury (replaced by the house wound rules)",
+          "rfh": "Damage creates wounds (Revised Fractional Health)",
+          "sanity": "Turn on SAN, Breaking Points and Bonds",
+          "sanRoll": "SAN checks use the Fright Check roll",
+          "ammo": "Track rounds in every firearm",
+          "ammoEmpty": "Block attacks with an empty weapon"
+        },
+        "applied": "Modern Agent preset applied."
+      }
+    }
+  }
+}
