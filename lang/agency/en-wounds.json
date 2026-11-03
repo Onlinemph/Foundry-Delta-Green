@@ -1,1 +1,274 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "wounds": {
+        "noGM": "A GM must be logged in to apply this result.",
+        "settings": {
+          "model": {
+            "name": "Damage model",
+            "hint": "Revised Fractional Health records wounds by severity (a fraction of max HP) instead of subtracting HP, with shock, stunning, impairment, limb trauma, bleeding and weekly recovery. Standard leaves the Game Aid's own HP rules untouched.",
+            "rfh": "Revised Fractional Health",
+            "standard": "Standard (subtract HP)"
+          },
+          "minorBleeding": {
+            "name": "Track bleeding from Minor wounds and Scratches",
+            "hint": "Revised Fractional Health lets you ignore bleeding from Minor wounds and Scratches for simplicity (hemophiliacs always bleed). Turn this on to track it anyway."
+          }
+        },
+        "severity": {
+          "scratch": "Scratch",
+          "minor": "Minor",
+          "moderate": "Moderate",
+          "major": "Major",
+          "critical": "Critical",
+          "massive": "Massive",
+          "gawdawful": "Gawdawful",
+          "destroyed": "Destroyed"
+        },
+        "pain": {
+          "moderate": "Moderate Pain",
+          "severe": "Severe Pain",
+          "terrible": "Terrible Pain",
+          "agony": "Agony"
+        },
+        "status": {
+          "shock": "Shock {n}",
+          "shockModifier": "-{n} to IQ/DX checks (Shock {n})",
+          "halfMove": "Wounded: half Move and Dodge",
+          "gawdawful": "Gawdawful wounds (-{n} DX)",
+          "gawdawfulModifier": "to DX (Gawdawful wounds)"
+        },
+        "mod": {
+          "stun": "wound",
+          "stunHeadVitals": "head/vitals",
+          "impairment": "wound",
+          "notEmergency": "no emergency",
+          "highPainThreshold": "High Pain Threshold",
+          "hardToSubdue": "Hard to Subdue",
+          "hardToKill": "Hard to Kill",
+          "limbMajor": "Major wound",
+          "limbCritical": "Critical wound",
+          "previousLimbWounds": "earlier wounds to this limb",
+          "alreadyCrippled": "already crippled",
+          "vitals": "vitals",
+          "brain": "brain",
+          "neck": "neck",
+          "neckVein": "neck veins",
+          "break": "wound",
+          "bleeding": "bleeding",
+          "noRest": "without rest, food and water",
+          "underCare": "under a competent healer's care",
+          "rapidHealing": "Rapid Healing",
+          "beyondFP": "beyond -1 x FP"
+        },
+        "check": {
+          "stun": "Stun",
+          "knockdown": "Knockdown & stun",
+          "impairment": "Impairment",
+          "limbMajor": "Limb trauma: {limb}",
+          "limbCritical": "Dismemberment: {limb}",
+          "vitals": "Vitals",
+          "brain": "Brain",
+          "neck": "Neck",
+          "break": "Break",
+          "fatigue": "Exhaustion at -{multiple} x FP",
+          "act": "Act at 0 FP"
+        },
+        "result": {
+          "passed": "No effect",
+          "stunResisted": "Not stunned",
+          "stunned": "Stunned",
+          "knockedDown": "Stunned and knocked down",
+          "knockedOut": "Knocked unconscious",
+          "noPain": "Too juiced up to feel the pain",
+          "pain": {
+            "moderate": "Moderate Pain for {minutes} min",
+            "severe": "Severe Pain for {minutes} min, half Move and Dodge",
+            "terrible": "Terrible Pain for {minutes} min, half Move and Dodge",
+            "agony": "Agony for {minutes} min"
+          },
+          "limbHolds": "{limb} holds, at -1 to tasks with it until healed",
+          "crippled": "{limb} is crippled",
+          "crippledNotLost": "{limb} stays on, but is crippled",
+          "dismembered": "{limb} is destroyed (bleeds as a Massive wound)",
+          "vitalsBleeding": "Losing 2 FP per second to bleeding",
+          "neckBleeding": "Losing 1 FP per second to bleeding",
+          "paralysis": "Permanently paralyzed",
+          "dead": "Dead",
+          "broken": "Broken: incapacitated, losing 2 FP per second",
+          "collapses": "Falls unconscious",
+          "staysUp": "Stays conscious",
+          "acts": "Can act normally",
+          "doNothing": "Must Do Nothing this turn"
+        },
+        "dead": {
+          "destroyed": "Body destroyed: dead",
+          "headDestroyed": "Head destroyed: dead",
+          "decapitated": "Third Critical cutting wound to the neck: decapitated",
+          "brain": "Fatal brain damage: dead",
+          "fragile": "Fragile (Unnatural): dead at the first Critical wound to the head or torso",
+          "fatigue": "Dead from exhaustion"
+        },
+        "bleed": {
+          "2fp-per-second": "2 FP per second",
+          "1fp-per-second": "1 FP per second",
+          "every": {
+            "scratch": "1 FP per day",
+            "minor": "1 FP per 6 hours",
+            "moderate": "1 FP per hour",
+            "major": "1 FP per 10 minutes",
+            "critical": "1 FP per 2 minutes",
+            "massive": "1 FP per 30 seconds",
+            "gawdawful": "1 FP per 5 seconds"
+          },
+          "check": "Bleeding: {location}",
+          "stopped": "the bleeding stops",
+          "slowed": "the bleeding slows to {severity}",
+          "lost": "loses 1 FP",
+          "held": "no FP lost this interval"
+        },
+        "card": {
+          "woundTitle": "is wounded",
+          "fatigueTitle": "takes fatigue-type damage",
+          "fpTitle": "is at {fp}/{max} FP",
+          "roll": "Roll",
+          "rolled": "Rolled {total} vs {target}",
+          "success": "success by {margin}",
+          "critSuccess": "critical success",
+          "failure": "failed by {margin}",
+          "critFailure": "critical failure",
+          "wound": "{severity} wound: {location} ({type}, {injury} injury)",
+          "ignored": "{location}: {injury} injury is under 1/16 HP and is ignored",
+          "reducedAway": "{location}: large-area injury reduces {injury} injury below a Scratch",
+          "limbGone": "{location} is already destroyed and takes no further damage",
+          "crushingScratch": "Crushing Scratch: not recorded",
+          "crushingMinor": "Minor wound from a blunt attack: bruised, not recorded",
+          "largeArea": "Large-area injury: {n} level(s) less severe here",
+          "largeAreaUnhurt": "{n} other location(s) unhurt",
+          "diffuse": "Injury Tolerance (Diffuse): no worse than a Minor wound from a single blow",
+          "bleeding": "Bleeding: {rate}",
+          "organBleeding": "Vital organ destroyed: bleeding {rate}",
+          "organParalysis": "Vital organ destroyed: permanently paralyzed",
+          "shockNext": "Shock -{n} to DX and IQ on the next turn",
+          "shockNextPain": "Shock -{n} on the next turn (only -{effective} more than the current pain)",
+          "shockNow": "Shock -{n} to DX and IQ (applied now)",
+          "shockNowPain": "Shock -{n} (applied now; only -{effective} more than the current pain)",
+          "shockAbsorbed": "Shock -{n}: the current pain is as bad, and they don't stack",
+          "shockNoTurn": "Shock -{n} on the next turn (not in combat, so not applied)",
+          "fatigueHit": "{severity}: {injury} injury costs {fp} FP",
+          "fatigueTotal": "Total: {fp} FP lost",
+          "none": "No wound",
+          "zeroFP": "At 0 or less FP: an HT roll (Hard to Subdue adds) to do anything but talk or rest; failure means Do Nothing.",
+          "fpCheckHelp": "Failure means unconsciousness (Hard to Subdue helps); failure by 5 or more means death (Hard to Kill helps).",
+          "actHelp": "At 0 or less FP: HT roll to do anything but talk or rest this turn."
+        },
+        "note": {
+          "injuryTolerance": "Injury Tolerance: no shock, stunning or impairment",
+          "noNewImpairment": "No new impairment roll: not worse than a wound already rolled for",
+          "gawdawful": "Gawdawful: half Move and Dodge, and -1 DX per Gawdawful wound"
+        },
+        "panel": {
+          "title": "Wounds",
+          "noWounds": "No recorded wounds.",
+          "severity": "Severity",
+          "location": "Location",
+          "type": "Type",
+          "bleeding": "Bleeding",
+          "bleedCheck": "Bleeding check (HT to avoid losing FP this interval)",
+          "halfMove": "Half Move & Dodge",
+          "shock": "Shock -{n}",
+          "gawdawful": "-{n} DX",
+          "bleedingFP": "{n} FP lost to bleeding",
+          "was": "was {severity}",
+          "bandaged": "Bandaged",
+          "bandageFailed": "Bandage failed",
+          "stabilized": "Stabilized",
+          "limbPenalty": "-1 with limb",
+          "paralysis": "Paralysis",
+          "minutesLeft": "{minutes} min left",
+          "untilCleared": "until cleared",
+          "adrenaline": "Adrenaline wears off",
+          "adrenalineHint": "Out of combat for a minute: the pain of the worst wound sets in until cleared",
+          "adrenalineChat": "{name}'s adrenaline wears off: {pain}",
+          "noLingeringPain": "No wound bad enough to cause pain (Moderate or worse).",
+          "clearPain": "Clear pain"
+        },
+        "summary": {
+          "title": "Wounds",
+          "unhurt": "Unhurt",
+          "count": "{n} wound(s)",
+          "bleeding": "bleeding",
+          "maxHP": "HP"
+        },
+        "limb": {
+          "title": "Limb status",
+          "limb": "Limb",
+          "status": "Status",
+          "functional": "Functional",
+          "crippled": "Crippled",
+          "dismembered": "Destroyed",
+          "penalty": "-{n} to tasks",
+          "trauma": "next trauma check -{n} wound(s)"
+        },
+        "treat": {
+          "bandage": "Bandage",
+          "stabilize": "Stabilize",
+          "surgery": "Surgery",
+          "skill": "Healer's {skill} skill",
+          "penalty": "{penalty} for a {severity} wound",
+          "help": {
+            "bandage": "One minute of First Aid on {location}: success makes it bleed one level less. One attempt per wound.",
+            "stabilize": "A second First Aid roll, taking extra time (B424), on {location}: success stops the bleeding. One attempt per wound.",
+            "surgery": "One hour of Surgery on {location}: success stops the bleeding."
+          },
+          "label": {
+            "bandage": "Bandage: {location}",
+            "stabilize": "Stabilize: {location}",
+            "surgery": "Surgery: {location}"
+          },
+          "done": {
+            "bandage": "bleeds one level less",
+            "stabilize": "bleeding stopped",
+            "surgery": "bleeding stopped"
+          },
+          "failed": "no effect"
+        },
+        "recovery": {
+          "title": "Weekly recovery",
+          "help": "One HT roll per wound; each success lowers that wound one severity level.",
+          "improved": "now {severity}",
+          "healed": "healed",
+          "unchanged": "no change"
+        },
+        "blood": {
+          "title": "Daily blood recovery",
+          "recovered": "recovers {n} FP lost to bleeding"
+        },
+        "fp": {
+          "actRoll": "HT to act",
+          "check": "HT check",
+          "checks": "HT checks"
+        },
+        "edit": {
+          "title": "Edit wound",
+          "addTitle": "Add wound",
+          "removeTitle": "Remove wound",
+          "removeConfirm": "Remove the {severity} wound to {location}?",
+          "resetTitle": "Clear all wounds",
+          "resetConfirm": "Remove every wound, limb status and pain from this character?",
+          "severity": "Severity",
+          "location": "Location",
+          "damageType": "Damage type",
+          "bleeding": "Bleeding as",
+          "special": "Fixed-rate bleeding",
+          "none": "None",
+          "note": "Note",
+          "consequences": "Roll the consequences (shock, stun, impairment, limb and location checks)"
+        },
+        "dialog": {
+          "ok": "OK"
+        }
+      }
+    }
+  }
+}

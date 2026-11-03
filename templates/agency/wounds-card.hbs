@@ -1,0 +1,44 @@
+{{!-- Agency: Revised Fractional Health chat card (module/agency/wounds/chat.ts). --}}
+<div class='agency-chat-card agency-wounds-card'>
+  <header class='agency-chat-card-header'>
+    <strong>{{actorName}}</strong>
+    <span class='agency-wounds-title'>{{title}}</span>
+    {{#if worst}}<span class='agency-badge agency-sev agency-sev-{{worst.key}}'>{{worst.label}}</span>{{/if}}
+  </header>
+
+  {{#each entries as |entry|}}
+  <div class='agency-wounds-entry'>
+    <div class='agency-wounds-line'>
+      {{#if entry.severityLabel}}<span class='agency-badge agency-sev agency-sev-{{entry.severity}}'>{{entry.severityLabel}}</span>{{/if}}
+      <span>{{entry.text}}</span>
+    </div>
+    {{#each entry.details as |detail|}}
+      <div class='agency-wounds-detail'>{{detail}}</div>
+    {{/each}}
+  </div>
+  {{/each}}
+
+  {{#each lines as |line|}}
+  <div class='agency-wounds-detail'>{{line}}</div>
+  {{/each}}
+
+  {{#if checks.length}}
+  <table class='agency-table agency-wounds-checks'>
+    <tbody>
+      {{#each checks as |check|}}
+      <tr>
+        <td class='agency-wounds-check-label'>{{check.label}}</td>
+        <td>
+          <div class='agency-wounds-target'>{{check.targetText}}</div>
+          {{#if check.resolved}}
+            <div class='agency-wounds-result {{#if check.success}}success{{else}}failure{{/if}}'>{{check.resultText}}</div>
+          {{else}}
+            <button type='button' class='agency-btn' data-agency-wounds-check='{{check.id}}'><i class='fa-solid fa-dice'></i> {{../rollLabel}}</button>
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{/if}}
+</div>

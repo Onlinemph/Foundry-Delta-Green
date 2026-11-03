@@ -1,1 +1,118 @@
-{{!-- Agency: wounds panel (Revised Fractional Health) --}}
+{{!-- Agency: wounds panel (Revised Fractional Health). Data comes from the agencyWounds helper (module/agency/wounds/sheet.ts). --}}
+{{#with (agencyWounds this) as |w|}}
+{{#if w.enabled}}
+<section class='agency-panel agency-wounds-panel' data-agency-wounds-panel data-actor-uuid='{{w.actorUuid}}'>
+  <header class='agency-panel-header'>
+    <span class='agency-stamp'>{{localize 'GURPS.agency.wounds.panel.title'}}</span>
+    {{#if w.worst}}
+      <span class='agency-badge agency-sev agency-sev-{{w.worst.key}}'>{{w.worst.label}}</span>
+    {{/if}}
+    <span class='agency-wounds-conditions'>
+      {{#if w.pain}}<span class='agency-badge agency-wounds-pain' title='{{w.pain.title}}'>{{w.pain.label}}</span>{{/if}}
+      {{#if w.shock}}<span class='agency-badge agency-wounds-shock'>{{w.shock}}</span>{{/if}}
+      {{#if w.halfMove}}<span class='agency-badge'>{{localize 'GURPS.agency.wounds.panel.halfMove'}}</span>{{/if}}
+      {{#if w.gawdawful}}<span class='agency-badge'>{{w.gawdawful}}</span>{{/if}}
+      {{#if w.bleedingFPText}}<span class='agency-badge'>{{w.bleedingFPText}}</span>{{/if}}
+    </span>
+  </header>
+
+  {{#if w.wounds.length}}
+  <table class='agency-table agency-wounds-table'>
+    <thead>
+      <tr>
+        <th>{{localize 'GURPS.agency.wounds.panel.severity'}}</th>
+        <th>{{localize 'GURPS.agency.wounds.panel.location'}}</th>
+        <th>{{localize 'GURPS.agency.wounds.panel.type'}}</th>
+        <th>{{localize 'GURPS.agency.wounds.panel.bleeding'}}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each w.wounds as |wound|}}
+      <tr data-wound-id='{{wound.id}}'>
+        <td><span class='agency-badge agency-sev agency-sev-{{wound.severity}}'>{{wound.severityLabel}}</span></td>
+        <td>
+          {{wound.location}}
+          {{#each wound.flags as |flag|}}<span class='agency-wounds-flag'>{{flag}}</span>{{/each}}
+        </td>
+        <td>{{wound.damageType}}</td>
+        <td class='{{#if wound.bleeding}}agency-wounds-bleeding{{/if}}'>{{wound.bleedingText}}</td>
+        <td class='agency-wounds-actions'>
+          {{#if w.canAct}}
+            {{#if wound.canBleed}}
+              <button type='button' class='agency-btn' data-wounds-action='bleed' title='{{localize "GURPS.agency.wounds.panel.bleedCheck"}}'><i class='fa-solid fa-droplet'></i></button>
+            {{/if}}
+            {{#if wound.canBandage}}
+              <button type='button' class='agency-btn' data-wounds-action='bandage' title='{{localize "GURPS.agency.wounds.treat.bandage"}}'><i class='fa-solid fa-bandage'></i></button>
+            {{/if}}
+            {{#if wound.canStabilize}}
+              <button type='button' class='agency-btn' data-wounds-action='stabilize' title='{{localize "GURPS.agency.wounds.treat.stabilize"}}'><i class='fa-solid fa-kit-medical'></i></button>
+            {{/if}}
+            {{#if wound.canSurgery}}
+              <button type='button' class='agency-btn' data-wounds-action='surgery' title='{{localize "GURPS.agency.wounds.treat.surgery"}}'><i class='fa-solid fa-user-doctor'></i></button>
+            {{/if}}
+          {{/if}}
+          {{#if w.isGM}}
+            <button type='button' class='agency-btn' data-wounds-action='edit' title='{{localize "GURPS.agency.wounds.edit.title"}}'><i class='fa-solid fa-pen'></i></button>
+            <button type='button' class='agency-btn' data-wounds-action='remove' title='{{localize "GURPS.agency.wounds.edit.removeTitle"}}'><i class='fa-solid fa-trash'></i></button>
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class='agency-wounds-empty'>{{localize 'GURPS.agency.wounds.panel.noWounds'}}</p>
+  {{/if}}
+
+  {{#if w.limbs.length}}
+  <table class='agency-table agency-wounds-limbs'>
+    <thead>
+      <tr>
+        <th>{{localize 'GURPS.agency.wounds.limb.limb'}}</th>
+        <th>{{localize 'GURPS.agency.wounds.limb.status'}}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each w.limbs as |limb|}}
+      <tr>
+        <td>{{limb.key}}</td>
+        <td class='{{#if limb.dismembered}}agency-wounds-lost{{else if limb.crippled}}agency-wounds-crippled{{/if}}'>
+          {{limb.status}}
+          {{#if limb.penalty}}<span class='agency-wounds-flag'>{{limb.penalty}}</span>{{/if}}
+          {{#if limb.trauma}}<span class='agency-wounds-flag'>{{limb.trauma}}</span>{{/if}}
+        </td>
+        <td class='agency-wounds-actions'>
+          {{#if w.isGM}}
+            <button type='button' class='agency-btn' data-wounds-action='limb' data-limb='{{limb.key}}' title='{{localize "GURPS.agency.wounds.limb.title"}}'><i class='fa-solid fa-pen'></i></button>
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{/if}}
+
+  {{#if w.canAct}}
+  <footer class='agency-wounds-footer'>
+    {{#if w.wounds.length}}
+      <button type='button' class='agency-btn' data-wounds-action='recovery'><i class='fa-solid fa-calendar-week'></i> {{localize 'GURPS.agency.wounds.recovery.title'}}</button>
+    {{/if}}
+    {{#if w.bleedingFP}}
+      <button type='button' class='agency-btn' data-wounds-action='blood'><i class='fa-solid fa-heart-pulse'></i> {{localize 'GURPS.agency.wounds.blood.title'}}</button>
+    {{/if}}
+    {{#if w.isGM}}
+      <button type='button' class='agency-btn' data-wounds-action='add'><i class='fa-solid fa-plus'></i> {{localize 'GURPS.agency.wounds.edit.addTitle'}}</button>
+      <button type='button' class='agency-btn' data-wounds-action='limb'><i class='fa-solid fa-bone'></i> {{localize 'GURPS.agency.wounds.limb.title'}}</button>
+      <button type='button' class='agency-btn' data-wounds-action='adrenaline' title='{{localize "GURPS.agency.wounds.panel.adrenalineHint"}}'><i class='fa-solid fa-bolt'></i> {{localize 'GURPS.agency.wounds.panel.adrenaline'}}</button>
+      {{#if w.pain}}
+        <button type='button' class='agency-btn' data-wounds-action='clear-pain'><i class='fa-solid fa-face-smile'></i> {{localize 'GURPS.agency.wounds.panel.clearPain'}}</button>
+      {{/if}}
+      <button type='button' class='agency-btn' data-wounds-action='reset' title='{{localize "GURPS.agency.wounds.edit.resetTitle"}}'><i class='fa-solid fa-rotate-left'></i></button>
+    {{/if}}
+  </footer>
+  {{/if}}
+</section>
+{{/if}}
+{{/with}}

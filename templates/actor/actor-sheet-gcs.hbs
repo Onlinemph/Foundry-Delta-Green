@@ -17,7 +17,9 @@
       {{>lifting}}
       {{>locations parent=../data}}
       <div id='hp-fp'>
-        {{#if useCI}}
+        {{#if (agencyRfh)}} {{!-- AGENCY: Revised Fractional Health shows the worst wound instead of HP --}}
+          {{> agency-wounds-summary}}
+        {{else if useCI}}
           {{>conditional-injury}}
         {{else}}
           {{>hpfp-tracker
