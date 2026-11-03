@@ -1,0 +1,244 @@
+// Dossier theme: the modifier bucket (templates/modifier-bucket/*) and its pop-up editor.
+//
+// The bucket becomes a file tag pinned under the hotbar: paper (or night file), a typed total, green/red sign.
+// The pop-up is a ruled worksheet: green bands for the reference lists, a stamp-red band for the live modifiers.
+@use 'tokens' as *;
+
+body.agency-theme {
+  .modifierbucket #modifierbucket {
+    @include paper;
+    border: 2px solid var(--agency-rule-strong);
+    border-radius: 3px;
+    box-shadow:
+      inset 4px 0 0 var(--agency-red),
+      2px 3px 10px rgba(0, 0, 0, 0.55);
+    color: var(--agency-ink);
+  }
+
+  .modifierbucket #globalmodifier {
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+    font-size: 24px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+
+    &.plus {
+      color: var(--agency-green-ink);
+    }
+
+    &.minus {
+      color: var(--agency-red-ink);
+    }
+  }
+
+  .modifierbucket :is(#trash, #magnet) {
+    color: var(--agency-ink-3);
+  }
+
+  .modifierbucket #magnet.enabled {
+    color: var(--agency-red-ink);
+  }
+
+  .modifierbucket #modifierbucket hr {
+    background-color: var(--agency-rule) !important;
+  }
+
+  // Name of the active character: a typed label strip.
+  .modifierbucket #current-actor > span {
+    padding: 0 6px;
+    border: 1px solid var(--agency-rule-strong);
+    background: var(--agency-paper);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-type);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .modifierbucket #damage-accumulator {
+    border: 2px solid var(--agency-red);
+    border-radius: 2px;
+    background: var(--agency-paper);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+
+    .accumulator-control:hover {
+      background: var(--agency-paper-3);
+      box-shadow: none;
+    }
+
+    .accumulator-control[data-action='cancel'] {
+      color: var(--agency-red-ink);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------
+  // Pop-up editor
+  // ---------------------------------------------------------------------------------------------------------------------
+  .modttt .modtooltip {
+    @include paper;
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.3),
+      4px 6px 18px rgba(0, 0, 0, 0.55);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+  }
+
+  .modtooltip {
+    #modtooltipbucket {
+      border-right-color: var(--agency-rule-strong) !important;
+    }
+
+    :is(#modtooltipleftcenter, #modtooltipleftbottom) {
+      color: var(--agency-ink);
+    }
+
+    :is(#modtooltiplefttop, #modtooltipleftcenter) h4 {
+      background-color: var(--agency-header-bg);
+    }
+
+    #modtooltipleftbottom {
+      border: 2px solid var(--agency-red);
+      border-radius: 2px;
+
+      > h4 {
+        background-color: var(--agency-red);
+        color: #fff;
+      }
+    }
+
+    .actorname {
+      font-family: var(--agency-font-stencil);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    aside {
+      color: var(--agency-ink-3);
+    }
+
+    .shaded-group > div:nth-child(odd),
+    .gga-group .shaded {
+      background-color: var(--agency-band);
+    }
+
+    .tabbed :is(.back, .forward) {
+      color: var(--agency-header-ink);
+    }
+
+    // Reference lists: each modifier reads like a line on a checklist.
+    .glinkmod,
+    .glinkmodplus,
+    .glinkmodminus {
+      font-family: var(--agency-font-body);
+      font-weight: 400;
+    }
+
+    .glinkmodplus {
+      color: var(--agency-green-ink);
+    }
+
+    .glinkmodminus {
+      color: var(--agency-red-ink);
+    }
+
+    :is(.glinkmod, .glinkmodplus, .glinkmodminus):hover {
+      background-color: var(--agency-highlight) !important;
+      color: var(--agency-highlight-ink);
+    }
+
+    .plus,
+    .removemod.plus {
+      color: var(--agency-green-ink);
+    }
+
+    .minus,
+    .removemod.minus {
+      color: var(--agency-red-ink);
+    }
+
+    .removemod:hover {
+      text-decoration: line-through 2px var(--agency-red);
+      text-shadow: none;
+    }
+
+    .removemod:hover::after {
+      color: var(--agency-red-ink);
+    }
+
+    .collapsible-wrapper .label-toggle,
+    .collapsible-wrapper > label {
+      border: 1px solid var(--agency-rule-strong);
+      border-radius: 2px;
+      background: var(--agency-paper-2);
+      color: var(--agency-ink);
+      font-family: var(--agency-font-type);
+      letter-spacing: 0.02em;
+    }
+
+    .collapsible-wrapper .collapsible-content {
+      border-color: var(--agency-rule-strong);
+      background: var(--agency-paper);
+    }
+
+    .collapsible-wrapper .content-inner .selectable:hover {
+      background: var(--agency-highlight);
+      color: var(--agency-highlight-ink);
+      text-shadow: none;
+    }
+
+    .subtitle {
+      color: var(--agency-ink-2);
+    }
+
+    #modmanualentry {
+      border: 0;
+      border-bottom: 1px solid var(--agency-rule-strong);
+      border-radius: 0;
+      background: transparent;
+    }
+  }
+
+  // Running total: a stamped figure.
+  .modttlabel {
+    font-family: var(--agency-font-type);
+
+    > div {
+      border: 2px solid var(--agency-rule-strong);
+      border-radius: 2px;
+      background-color: var(--agency-ink);
+      color: var(--agency-on-ink);
+      font-family: var(--agency-font-body);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+
+      &.minus {
+        border-color: var(--agency-red);
+        background-color: var(--agency-red);
+        color: #fff;
+      }
+
+      &.plus {
+        border-color: var(--agency-green);
+        background-color: var(--agency-green);
+        color: var(--agency-on-green);
+      }
+    }
+  }
+
+  .gmbutton {
+    border: 1px solid var(--agency-ink-2);
+    border-radius: 2px;
+    background: var(--agency-paper-3);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-type);
+
+    &:hover {
+      background: var(--agency-green);
+      color: var(--agency-on-green);
+    }
+  }
+}

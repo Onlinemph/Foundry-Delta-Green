@@ -1,0 +1,648 @@
+// Dossier theme: GURPS actor sheets that share the GCS markup (Full (GCS), Editor, Tabbed, Reduced, Combat, NPC,
+// Simple), item sheets and the small GURPS editor windows. The Modern sheet is in _modern.scss.
+//
+// Upstream styles live in styles/simple.css and styles/apps.css and hard-code many colours (black header bars,
+// #e8ffe8 row banding, white boxes, inline yellow parry/block cells). Each is re-pointed at the dossier tokens here.
+@use 'sass:list';
+@use 'tokens' as *;
+
+// The alternate-row banding selectors from styles/simple.css, verbatim, so the override matches the same cells.
+$banded:
+  '#encumbrance .encmarker:nth-child(10n + 7):not(.header)', '#encumbrance .enc:nth-child(10n + 8):not(.header)',
+  '#encumbrance .load:nth-child(10n + 9):not(.header)', '#encumbrance .move:nth-child(10n + 10):not(.header)',
+  '#encumbrance .dodge:nth-child(10n + 11):not(.header)', '#lifting .liftdesc:nth-last-child(4n + 1)',
+  '#lifting .lift:nth-last-child(4n + 2)', '#location .itemmenu:nth-last-child(10n + 5)',
+  '#location .roll:nth-last-child(10n + 4)', '#location .where:nth-last-child(10n + 3)',
+  '#location .penalty:nth-last-child(10n + 2)', '#location .dr:nth-last-child(10n + 1)',
+  '#conditionalmods .itemmenu:nth-child(6n + 4)', '#conditionalmods .modifier:nth-child(6n + 5)',
+  '#conditionalmods .situation:nth-child(6n + 6)', '#reactions .itemmenu:nth-child(6n + 4)',
+  '#reactions .modifier:nth-child(6n + 5)', '#reactions .situation:nth-child(6n + 6)',
+  '#melee .itemmenu:nth-child(18n + 10)', '#melee .meleedraggable:nth-child(18n + 11)',
+  '#melee .usage:nth-child(18n + 12)', '#melee .level:nth-child(18n + 13)', '#melee .parry:nth-child(18n + 14)',
+  '#melee .block:nth-child(18n + 15)', '#melee .damage:nth-child(18n + 16)', '#melee .reach:nth-child(18n + 17)',
+  '#melee .st:nth-child(18n + 18)', '#ranged .itemmenu:nth-child(24n + 13)',
+  '#ranged .rangeddraggable:nth-child(24n + 14)', '#ranged .usage:nth-child(24n + 15)',
+  '#ranged .level:nth-child(24n + 16)', '#ranged .acc:nth-child(24n + 17)', '#ranged .damage:nth-child(24n + 18)',
+  '#ranged .range:nth-child(24n + 19)', '#ranged .rof:nth-child(24n + 20)', '#ranged .shots:nth-child(24n + 21)',
+  '#ranged .bulk:nth-child(24n + 22)', '#ranged .rcl:nth-child(24n + 23)', '#ranged .st:nth-child(24n + 24)',
+  '#advantages .itemmenu:nth-child(8n + 5)', '#advantages .adsdraggable:nth-child(8n + 6)',
+  '#advantages .pts:nth-child(8n + 7)', '#advantages .ref:nth-of-type(8n + 8)', '#skills .itemmenu:nth-child(12n + 7)',
+  '#skills .skldraggable:nth-child(12n + 8)', '#skills .sl:nth-child(12n + 9)', '#skills .rsl:nth-child(12n + 10)',
+  '#skills .pts:nth-child(12n + 11)', '#skills .ref:nth-child(12n + 12)', '#spells .itemmenu:nth-child(24n + 13)',
+  '#spells .spldraggable:nth-child(24n + 14)', '#spells .cls:nth-child(24n + 15)',
+  '#spells .college:nth-child(24n + 16)', '#spells .mana:nth-child(24n + 17)',
+  '#spells .mana_maintain:nth-child(24n + 18)', '#spells .time:nth-child(24n + 19)',
+  '#spells .duration:nth-child(24n + 20)', '#spells .sl:nth-child(24n + 21)', '#spells .rsl:nth-child(24n + 22)',
+  '#spells .pts:nth-child(24n + 23)', '#spells .ref:nth-child(24n + 24)',
+  '.equipmentlist .itemmenu:nth-child(20n + 11)', '.equipmentlist .equipped:nth-child(20n + 12)',
+  '.equipmentlist .qty:nth-child(20n + 13)', '.equipmentlist .eqtdraggable:nth-child(20n + 14)',
+  '.equipmentlist .uses:nth-child(20n + 15)', '.equipmentlist .cost:nth-child(20n + 16)',
+  '.equipmentlist .weight:nth-child(20n + 17)', '.equipmentlist .sum_cost:nth-child(20n + 18)',
+  '.equipmentlist .sum_weight:nth-child(20n + 19)', '.equipmentlist .ref:nth-child(20n + 20)',
+  '#notes .notedraggable:nth-child(4n + 3)', '#notes .ref:nth-child(4n + 4)', '#range-table .label:nth-child(odd)',
+  '#combat-location .dr:nth-last-child(8n + 1)';
+
+// Upstream bands header cells too when they fall on the pattern (hiding their light text); skip them.
+$banded-cells: ();
+$banded-headers: ();
+@each $s in $banded {
+  $banded-cells: list.append($banded-cells, '#{$s}:not(.header)', $separator: comma);
+  $banded-headers: list.append($banded-headers, '#{$s}.header', $separator: comma);
+}
+
+body.agency-theme {
+  // -------------------------------------------------------------------------------------------------------------------
+  // Sheet surfaces
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(.gurps, .boilerplate) .window-content,
+  .gurps .sheet-body,
+  .gurpsactorsheet {
+    background: transparent;
+    color: var(--agency-ink);
+  }
+
+  :is(.gurps.sheet, .gurpsactorsheet, .gga-app, #sheet, #sheet-tab, #combat-sheet, #editorsheet, .npc-sheet) {
+    font-family: var(--agency-font-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Courier is wider than upstream's Roboto: 12px keeps the dense GCS layouts inside their default window widths.
+  .gurps.sheet.actor:not(.modern-sheet) {
+    font-size: 12px;
+  }
+
+  // Section header bars (black in upstream).
+  :is(.gurps, .gurpsactorsheet, .gga-app, .boilerplate) .header,
+  .tracked-resource .header,
+  .resource-editor .header,
+  .table .label,
+  .gga-group h4 {
+    @include header-band;
+    border-color: var(--agency-rule-strong);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    line-height: 1.35;
+  }
+
+  .header :is(.label, label) {
+    color: inherit;
+  }
+
+  :is(.gurps, .gurpsactorsheet, .gga-app) .header :is(i, a, button),
+  .headermenu i,
+  :is(#combat-trackers .trackerhead, #conditionalmods .condmodhead, #reactions .reacthead, #location .hlhead) i {
+    color: var(--agency-header-ink);
+  }
+
+  // Column headers inside tables sit on the same band; the separators between them are paper-coloured hairlines.
+  .gga-table .header,
+  .gga-tableheader .header:not(.header:first-child) {
+    border-right-color: color-mix(in srgb, var(--agency-header-ink) 25%, transparent);
+    border-top-color: color-mix(in srgb, var(--agency-header-ink) 25%, transparent);
+  }
+
+  .header.minor-heading,
+  #tracker-scroller .header {
+    background-color: var(--agency-green) !important;
+  }
+
+  .tracked-resource.inactive .header {
+    background-color: var(--agency-ink-3);
+    color: var(--agency-paper);
+  }
+
+  // Boxes, rules and fields.
+  #identity,
+  #miscellaneous,
+  #points,
+  #portrait,
+  #description,
+  #basic-attributes,
+  #secondary-attributes,
+  #hitpoints,
+  #condition,
+  #notes,
+  #combat-identity,
+  #combat-condition,
+  #combat-hit,
+  #combat-location,
+  #speed-range-table,
+  .gga-table,
+  .gga-tableheader {
+    border-color: var(--agency-rule-strong);
+  }
+
+  .gga-table > div:not(.header),
+  .gga-tableheader > div:not(.header),
+  #range-table,
+  #range-table .label {
+    border-color: var(--agency-rule);
+  }
+
+  :is(.fieldblock, .fieldblock3, .gurps .fieldblock) hr {
+    background-color: var(--agency-rule-strong);
+  }
+
+  :is(.gurps, .gurpsactorsheet, .gga-app) .field,
+  .gurps .fieldblock .field {
+    border-bottom-color: var(--agency-rule);
+  }
+
+  #description .fieldblock:nth-child(1n + 3) {
+    border-left-color: var(--agency-rule-strong);
+  }
+
+  // Labels are typed (Special Elite is also ~15% narrower than Courier, which the dense blocks need).
+  .label,
+  .liftdesc {
+    color: var(--agency-ink-2);
+  }
+
+  :is(.gurpsactorsheet, #sheet, #sheet-tab, #combat-sheet, #editorsheet, .npc-sheet, .gga-app)
+    :is(.label, .liftdesc, #encumbrance .enc:not(.header), #location .where:not(.header)) {
+    font-family: var(--agency-font-type);
+    letter-spacing: -0.01em;
+  }
+
+  // Point costs ([10]) are marginal notes: typed, and narrow enough for the attribute blocks.
+  :is(.gurpsactorsheet, #sheet, #sheet-tab, #combat-sheet, #editorsheet, .npc-sheet) :is(.points, .points-fp) {
+    font-family: var(--agency-font-type);
+    letter-spacing: -0.02em;
+  }
+
+  // Icons in tracker buttons stay at upstream size (the 12px floor is for text).
+  .tracked-resource button i {
+    font-size: 10px;
+  }
+
+  .points,
+  .points-fp {
+    color: var(--agency-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Alternate-row banding (#e8ffe8 upstream).
+  #{$banded-cells} {
+    background-color: var(--agency-band);
+  }
+
+  #{$banded-headers} {
+    background-color: var(--agency-header-bg);
+  }
+
+  // "Current" rows (encumbrance level, etc.) are highlighted like a marker pen.
+  .current,
+  #combat-encumber .current:nth-last-child(10n + 1) {
+    background-color: var(--agency-highlight) !important;
+    color: var(--agency-highlight-ink);
+  }
+
+  // Parry / block cells carry an inline yellow background in the templates.
+  :is(#melee, #combat-weapons) :is(.parry, .block)[style] {
+    background-color: transparent !important;
+  }
+
+  #tracker-scroller {
+    background-color: var(--agency-band);
+  }
+
+  .tracked-resource,
+  #combat-trackers .tracked-resource,
+  #combat-sheet .tracked-resource,
+  details .popup,
+  .dropdown-content {
+    border-color: var(--agency-rule-strong);
+    background-color: var(--agency-paper);
+    color: var(--agency-ink);
+  }
+
+  .dropdown-content div,
+  .pagination div {
+    color: var(--agency-ink);
+  }
+
+  .tracked-resource .spinner :is(button, input),
+  .resource-editor input {
+    border-color: var(--agency-ink-3);
+    background-color: var(--agency-input-bg);
+    color: var(--agency-ink);
+  }
+
+  .tracked-resource .spinner button:hover {
+    background-color: var(--agency-green);
+    color: var(--agency-on-green);
+  }
+
+  .tracked-resource .condition.normal {
+    background-color: var(--agency-green-wash);
+    color: var(--agency-green-ink);
+  }
+
+  .tracked-resource .condition.below {
+    background-color: var(--agency-red-wash);
+    color: var(--agency-red-ink);
+  }
+
+  .tracked-resource .condition.above {
+    background-color: var(--agency-band);
+  }
+
+  // HP/FP threshold states (styles/simple.css): red-wash for hurt, stamp-red for the bad end.
+  #hitpoints .selected,
+  .resource-spinner .depleted,
+  .gurps .condition-block .check {
+    background-color: var(--agency-red-wash);
+    color: var(--agency-red-ink);
+  }
+
+  .gurps .condition-block .reeling {
+    background-color: var(--agency-highlight);
+    color: var(--agency-highlight-ink);
+  }
+
+  .gurps .condition-block :is(.dead, .destroyed),
+  .simple_container :is(.dead, .destroyed) {
+    background-color: var(--agency-red);
+    color: #fff;
+  }
+
+  // Simple sheet (templates/simplified.hbs, styles/simplified.css).
+  .simple_container {
+    .normal {
+      background-color: var(--agency-green-wash);
+    }
+
+    :is(.tired, .reeling) {
+      background-color: var(--agency-highlight);
+      color: var(--agency-highlight-ink);
+    }
+
+    :is(.collapse, .check) {
+      background-color: var(--agency-red-wash);
+      color: var(--agency-red-ink);
+    }
+
+    .unconscious {
+      background-color: var(--agency-ink);
+      color: var(--agency-on-ink);
+    }
+  }
+
+  .simple_Defend {
+    background-color: var(--agency-green);
+    color: var(--agency-on-green);
+  }
+
+  .simple_Armor {
+    background-color: #7a5a1e;
+    color: #f6efdc;
+  }
+
+  .simple_HP {
+    background-color: var(--agency-red);
+    color: #fff;
+  }
+
+  :is(.simple_Attacks, .simple_Skills) {
+    background-color: var(--agency-band);
+  }
+
+  // Item origin markers.
+  :is(.gga-usercreated, .gga-ignoreimport) {
+    color: var(--agency-green-ink);
+  }
+
+  .gga-item,
+  .gga-inactive {
+    color: var(--agency-ink-3);
+  }
+
+  .gga-child-item {
+    color: #8c6a1d;
+  }
+
+  .gga-global-item {
+    color: var(--agency-green-ink);
+  }
+
+  .list_note {
+    color: var(--agency-ink-2);
+    font-size: 12px;
+  }
+
+  .desc .list_note textarea,
+  .desc input:last-child {
+    background-color: var(--agency-band);
+  }
+
+  // Drag handles and row menus.
+  :is(
+    .notedraggable,
+    .eqtdraggable,
+    .spldraggable,
+    .skldraggable,
+    .adsdraggable,
+    .rangeddraggable,
+    .meleedraggable,
+    .condmoddraggable,
+    .reactdraggable
+  )::before {
+    color: var(--agency-ink-3);
+    opacity: 0.6;
+  }
+
+  :is(
+    #editorsheet .equipmentlist .equipmenucarried,
+    #editorsheet .equipmentlist .equipmenuother,
+    #spells .spellmenu,
+    #skills .skillmenu,
+    #ranged .rangedmenu,
+    #melee .meleemenu,
+    #advantages .adsmenu,
+    #conditionalmods .condmodmenu,
+    #reactions .reactmenu,
+    #location .hlmenu
+  ) {
+    color: var(--agency-ink-3);
+
+    &:hover {
+      color: var(--agency-red-ink);
+    }
+  }
+
+  .dblclkedit:hover {
+    box-shadow: inset 0 0 0 1px var(--agency-green-ink);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Rollables and OtF links: a highlighter pen over the number you can click.
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(.npc-sheet, .gurpsactorsheet) {
+    .rollable {
+      color: var(--agency-ink);
+      font-weight: 700;
+    }
+
+    .rollable:is(:hover, .test) {
+      color: var(--agency-highlight-ink);
+      border-radius: 1px;
+      box-shadow: 0 0 0 1px var(--agency-rule-strong);
+    }
+
+    .rollable:active {
+      color: var(--agency-ink);
+    }
+
+    .gmod,
+    .gmod:is(:hover, .test, :active) {
+      color: var(--agency-ink);
+    }
+  }
+
+  .rollable:is(:hover, :focus) {
+    color: var(--agency-highlight-ink);
+  }
+
+  .pdflink {
+    color: var(--gga-pdflink-color);
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: var(--agency-red-ink);
+      text-shadow: none;
+    }
+  }
+
+  .gurpslink > b {
+    color: var(--agency-ink);
+  }
+
+  .glinkmod {
+    color: var(--agency-ink);
+  }
+
+  :is(.gurpslink, .glinkmod, .glinkmodplus, .glinkmodminus) {
+    border-radius: 2px;
+    font-family: var(--agency-font-body);
+    font-weight: 700;
+  }
+
+  :is(.gurpslink, .glinkmod, .glinkmodplus, .glinkmodminus):active {
+    filter: none;
+    background-color: var(--agency-highlight);
+  }
+
+  .blue {
+    color: var(--agency-green-ink);
+  }
+
+  // Disabled inputs on locked sheets read as typed text, not greyed-out controls.
+  .gurpsactorsheet :is(select, textarea):disabled,
+  :is(.gurpsactorsheet, .gga-app) input:disabled {
+    background: transparent;
+    color: var(--agency-ink);
+    opacity: 1;
+  }
+
+  :is(.gcs-input, .gcs-input-ta, [class^='gcs-input-']) {
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+  }
+
+  #encumbrance .header :is(select#move-mode, button#edit-move-modes),
+  #sheet .field select,
+  #sheet-tab .field select,
+  #npc-sheet .field select,
+  #combat-sheet .field select {
+    border-color: var(--agency-rule-strong);
+    background: var(--agency-input-bg);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+  }
+
+  #encumbrance .header :is(select#move-mode, button#edit-move-modes) {
+    background: var(--agency-paper);
+  }
+
+  #portrait {
+    background: var(--agency-paper-2);
+
+    .sharebutton {
+      border-color: var(--agency-rule-strong);
+      background: var(--agency-paper-3);
+      color: var(--agency-ink);
+      font-family: var(--agency-font-type);
+      text-transform: uppercase;
+    }
+  }
+
+  #qnotes {
+    color: var(--agency-ink-2);
+
+    .qnotes-content {
+      font-style: italic;
+    }
+  }
+
+  #footer {
+    color: var(--agency-ink-3);
+    font-size: 12px;
+
+    a {
+      color: var(--agency-green-ink);
+    }
+  }
+
+  // Hover tooltips on the sheet (HP/FP thresholds, item origins).
+  .tooltip {
+    border-bottom-color: var(--agency-ink-3);
+  }
+
+  .tooltip .tooltiptext,
+  :is(#notes, #ranged, #melee, #advantages, #skills, #spells, .equipmentlist) .tooltiptext.gga-manual {
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 2px;
+    background-color: var(--agency-ink);
+    color: var(--agency-on-ink);
+    font-family: var(--agency-font-body);
+    font-size: 13px;
+  }
+
+  .tooltip .tooltiptext::after {
+    border-bottom-color: var(--agency-ink);
+  }
+
+  .tooltip .tooltiptext.gga-manual::after {
+    border-top-color: var(--agency-ink);
+    border-bottom-color: transparent;
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Sheet tabs (Tabbed sheet and others using .gurps-sheet-tabs) as manila folder tabs.
+  // -------------------------------------------------------------------------------------------------------------------
+  .gurpsactorsheet .gurps-sheet-tabs::after {
+    bottom: 0;
+    height: 1px;
+    background-color: var(--agency-rule-strong);
+  }
+
+  .gurps-sheet-tabs .tab-item,
+  .gurps .tabs:not(.gurps-tabs) .item {
+    position: relative;
+    z-index: 2;
+    margin: 0 1px 0 0;
+    padding: 2px 14px 1px;
+    border: 1px solid var(--agency-rule-strong);
+    border-bottom: 0;
+    border-radius: var(--agency-tab-radius) var(--agency-tab-radius) 0 0;
+    background: var(--agency-paper-3);
+    color: var(--agency-ink-2);
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-shadow: none;
+    text-transform: uppercase;
+
+    &:hover {
+      color: var(--agency-ink);
+    }
+
+    &.active {
+      background: var(--agency-paper);
+      box-shadow: inset 0 3px 0 var(--agency-green);
+      color: var(--agency-ink);
+      text-decoration: none;
+    }
+  }
+
+  .gurps .tabs {
+    border-top: 0;
+    border-bottom-color: var(--agency-rule-strong);
+  }
+
+  // Tabbed sheet: icon tabs in a row of folder tabs standing on a rule.
+  .gurpsactorsheet .gurps-sheet-tabs {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    margin-bottom: 4px;
+    padding: 4px 8px 0;
+
+    li {
+      margin: 0;
+    }
+
+    .tab-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 30px;
+      padding: 0 12px;
+      font-size: 16px;
+      line-height: 1;
+
+      &.active {
+        height: 34px;
+        margin-bottom: -1px;
+        font-size: 17px;
+        border-radius: var(--agency-tab-radius) var(--agency-tab-radius) 0 0;
+      }
+    }
+  }
+
+  .gurps-sheet-tabs li.label {
+    top: 0;
+    align-self: center;
+    margin-right: 6px;
+    color: var(--agency-ink-2);
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .tab-item.active > span {
+    background: transparent;
+  }
+
+  // Navigation bar on the Full sheet (folder-index strip).
+  .navigation-link {
+    @include header-band;
+    font-size: 12px;
+  }
+
+  .navigation-view > span::before,
+  .navigate-area input:checked + .navigate-bar > .navigation-view > span::before {
+    color: var(--agency-header-ink);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Item sheets (templates/item/item-sheet.hbs) and GURPS editor popups
+  // -------------------------------------------------------------------------------------------------------------------
+  .gga-app {
+    color: var(--agency-ink);
+
+    button:not(.agency-btn) {
+      color: var(--agency-ink);
+    }
+  }
+
+  .gga-item-sheet-title {
+    @include header-band;
+    font-family: var(--agency-font-stencil);
+    font-size: 18px;
+    letter-spacing: 0.1em;
+  }
+
+  // Upstream colours the item title bar by item type (.color-equipment etc.). Keep the hue as a thin tab edge.
+  .gga-item-sheet-title[class*='color-'] {
+    background-color: var(--agency-header-bg) !important;
+    box-shadow: inset 0 -3px 0 var(--agency-red);
+  }
+
+  .gga-group {
+    border-color: var(--agency-rule);
+  }
+}

@@ -1,1 +1,507 @@
-// Agency: theme styles
+// =====================================================================================================================
+// Agency: dossier theme + shared component kit
+// =====================================================================================================================
+//
+// The theme is switched by the client setting 'agency-theme', which toggles `body.agency-theme`. Every themed rule is
+// scoped under that class, so turning the setting off restores the stock look. Palettes: "manila" (light) and
+// "night file" (dark), chosen by Foundry's .theme-light / .theme-dark classes (see dossier/_tokens.scss).
+//
+// COMPONENT KIT -- for fork features (wounds, sanity, defense, firearms, ...). These classes always work: with the
+// theme off they fall back to a neutral look that sits on stock light or dark sheets; with it on they are fully themed.
+// Tokens for feature styles (they exist only while the theme is on, so always give a fallback: var(--agency-ink, inherit)):
+//   surfaces  --agency-paper, -paper-2, -paper-3, -band (zebra rows), -rule, -rule-strong, -header-bg, -header-ink
+//   ink       --agency-ink, -ink-2, -ink-3, -on-ink
+//   accents   --agency-green, -green-deep, -green-ink (text), -green-wash, -on-green,
+//             --agency-red, -red-ink (text), -red-wash, --agency-highlight, -highlight-ink
+//   type      --agency-font-type (Special Elite), -font-body (Courier Prime), -font-stencil (Stardos Stencil)
+//
+//   .agency-sheet-panels   Wrapper for feature panels on actor sheets (templates/agency/sheet-panels.hbs). A
+//                          responsive grid that spans the full row when placed in a grid parent, hides when empty.
+//   .agency-panel          A ruled box (a form section). Children: .agency-panel-header, .agency-panel-body.
+//                          Modifiers: --alert (red rule, for "bad state" panels), --compact (tighter padding).
+//   .agency-panel-header   Title bar of a panel: typewritten caps over a double rule. Flex row; put buttons, badges
+//                          or stamps after the title and they go to the right. Use <h3 class="agency-panel-title">
+//                          (or any first child) for the title text.
+//   .agency-stamp          Red rotated rubber-stamp label (inline). Modifiers: --green (approved / success),
+//                          --ink (black), --large, --flat (no rotation). Keep the text short: "CRITICAL", "BROKEN".
+//   .agency-redacted       Black redaction bar over inline text; reveals on hover / keyboard focus (add tabindex="0").
+//                          Modifier --permanent never reveals (give the real text to screen readers some other way).
+//   .agency-btn            Typewriter button (<button> or <a>). Modifiers: --primary (green), --danger (red), --small,
+//                          --icon (square, icon only: put the icon in an <i>). Works with [disabled] / .disabled.
+//   .agency-table          Ruled form table (<table class="agency-table">). Numbers: add .num (or .agency-num) to
+//                          cells for right-aligned tabular figures. Rows can take .is-bad / .is-good / .is-current.
+//   .agency-badge          Small boxed label or counter. Modifiers: --green, --red, --ink (solid), --outline.
+//   .agency-chat-card      Chat card wrapper. Children: .agency-chat-card-header (or <header>), .agency-chat-card-body,
+//                          .agency-chat-card-footer (or <footer>). Modifiers: --success, --failure, --critical
+//                          (tints the header rule; pair with an .agency-stamp for the verdict).
+//   .agency-num            Utility: tabular figures in the data font.
+//   .agency-label          Utility: typewritten caps label.
+// =====================================================================================================================
+
+@use 'dossier/fonts';
+@use 'dossier/tokens' as *;
+@use 'dossier/foundry';
+@use 'dossier/sheets';
+@use 'dossier/modern';
+@use 'dossier/chat';
+@use 'dossier/bucket';
+@use 'dossier/apps';
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Kit. Every value is var(--agency-x, <neutral fallback>): the --agency-* tokens only exist while the theme is on.
+// ---------------------------------------------------------------------------------------------------------------------
+$n-rule: rgba(128, 128, 128, 0.45);
+$n-wash: rgba(128, 128, 128, 0.08);
+$n-red: #c0362c;
+$n-green: #3f7d4e;
+
+.agency-sheet-panels {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px;
+  align-items: start;
+  margin: 2px 0;
+
+  &:not(:has(*)) {
+    display: none;
+  }
+}
+
+.agency-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--agency-rule-strong, #{$n-rule});
+  border-radius: var(--agency-radius, 3px);
+  background: var(--agency-paper, #{$n-wash});
+  color: var(--agency-ink, inherit);
+  font-family: var(--agency-font-body, inherit);
+  font-size: max(12px, 1em);
+
+  &--alert {
+    border-color: var(--agency-red, #{$n-red});
+    box-shadow: inset 3px 0 0 var(--agency-red, #{$n-red});
+  }
+}
+
+.agency-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 1.9em;
+  margin: 0;
+  padding: 3px 6px 2px;
+  border-bottom: 3px double var(--agency-rule-strong, #{$n-rule});
+  font-family: var(--agency-font-type, inherit);
+  font-size: 13px;
+  font-weight: var(--agency-header-weight, 600);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+
+  > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    border: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .agency-panel--alert > & {
+    border-bottom-color: var(--agency-red, #{$n-red});
+    color: var(--agency-red-ink, inherit);
+  }
+}
+
+.agency-panel-body {
+  padding: 4px 6px 6px;
+
+  .agency-panel--compact > & {
+    padding: 2px 4px 3px;
+  }
+}
+
+.agency-stamp {
+  --_stamp: var(--agency-red, #{$n-red});
+  display: inline-block;
+  padding: 0.12em 0.45em 0.05em;
+  border: 2px solid var(--_stamp);
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--_stamp);
+  color: var(--_stamp);
+  font-family: var(--agency-font-stencil, inherit);
+  font-size: max(12px, 0.95em);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+  transform: rotate(-4deg);
+  opacity: 0.92;
+  user-select: none;
+
+  &--green {
+    --_stamp: var(--agency-green-ink, #{$n-green});
+  }
+
+  &--ink {
+    --_stamp: var(--agency-ink, currentColor);
+  }
+
+  &--large {
+    padding: 0.15em 0.6em 0.08em;
+    border-width: 3px;
+    font-size: max(16px, 1.5em);
+  }
+
+  &--flat {
+    transform: none;
+  }
+}
+
+.agency-redacted {
+  // The bar is the text colour unless the theme supplies one, so it shows on light and dark sheets alike.
+  // Glyphs are hidden with text-fill (not color) so currentColor still means the text colour.
+  border-radius: 1px;
+  background-color: var(--agency-redaction, currentColor);
+  box-shadow: 0 0 0 1px var(--agency-redaction-edge, transparent);
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-color 0.15s ease;
+  cursor: help;
+
+  * {
+    visibility: hidden;
+  }
+
+  &:not(.agency-redacted--permanent):is(:hover, :focus, :focus-visible) {
+    background-color: var(--agency-highlight, rgba(255, 220, 80, 0.3));
+    box-shadow: 0 0 0 1px var(--agency-rule-strong, #{$n-rule});
+    color: var(--agency-highlight-ink, inherit);
+    -webkit-text-fill-color: currentColor;
+    outline: none;
+
+    * {
+      visibility: visible;
+    }
+  }
+
+  &--permanent {
+    cursor: not-allowed;
+  }
+}
+
+.agency-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  width: auto;
+  min-height: 26px;
+  margin: 0;
+  padding: 2px 10px;
+  border: 1px solid var(--agency-ink-2, #{$n-rule});
+  border-radius: var(--agency-radius, 3px);
+  background: var(--agency-paper-3, #{$n-wash});
+  box-shadow: 1px 1px 0 var(--agency-rule, rgba(0, 0, 0, 0.15));
+  color: var(--agency-ink, inherit);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  // Icon-only buttons may carry Font Awesome classes themselves; don't override their font.
+  &:not([class*='fa-']) {
+    font-family: var(--agency-font-type, inherit);
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--agency-ink, currentColor);
+    background: var(--agency-green, #{$n-green});
+    color: var(--agency-on-green, #fff);
+    text-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--agency-red, #{$n-red});
+    outline-offset: 1px;
+  }
+
+  &:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+  }
+
+  &--primary {
+    border-color: var(--agency-green-deep, #{$n-green});
+    background: var(--agency-green, #{$n-green});
+    color: var(--agency-on-green, #fff);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--agency-green-deep, #2c5a37);
+    }
+  }
+
+  &--danger {
+    border-color: var(--agency-red, #{$n-red});
+    background: transparent;
+    color: var(--agency-red-ink, #{$n-red});
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--agency-red, #{$n-red});
+      background: var(--agency-red, #{$n-red});
+      color: var(--agency-on-green, #fff);
+    }
+  }
+
+  &--small {
+    min-height: 22px;
+    padding: 1px 6px;
+    font-size: 12px;
+  }
+
+  &--icon {
+    width: 26px;
+    padding: 0;
+  }
+
+  &[disabled],
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.agency-table {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-collapse: collapse;
+  background: transparent;
+  color: var(--agency-ink, inherit);
+  font-family: var(--agency-font-body, inherit);
+  font-size: max(12px, 1em);
+  font-variant-numeric: tabular-nums;
+
+  :is(th, td) {
+    padding: 2px 5px;
+    border: 0;
+    border-bottom: 1px solid var(--agency-rule, #{$n-rule});
+    background: transparent;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th,
+  thead td {
+    border-bottom: 2px solid var(--agency-rule-strong, #{$n-rule});
+    font-family: var(--agency-font-type, inherit);
+    font-size: 12px;
+    font-weight: var(--agency-header-weight, 600);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  tbody tr:hover > * {
+    background: var(--agency-green-wash, #{$n-wash});
+  }
+
+  :is(.num, .agency-num) {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  tr.is-current > * {
+    background: var(--agency-highlight, rgba(255, 220, 80, 0.25));
+    color: var(--agency-highlight-ink, inherit);
+  }
+
+  tr.is-bad > * {
+    color: var(--agency-red-ink, #{$n-red});
+  }
+
+  tr.is-good > * {
+    color: var(--agency-green-ink, #{$n-green});
+  }
+}
+
+.agency-badge {
+  --_badge: var(--agency-ink-2, currentColor);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 1.5em;
+  padding: 0 0.45em;
+  border: 1px solid var(--_badge);
+  border-radius: 2px;
+  background: var(--agency-paper-2, #{$n-wash});
+  color: var(--_badge);
+  font-family: var(--agency-font-body, inherit);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  &--green {
+    --_badge: var(--agency-green-ink, #{$n-green});
+    background: var(--agency-green-wash, #{$n-wash});
+  }
+
+  &--red {
+    --_badge: var(--agency-red-ink, #{$n-red});
+    background: var(--agency-red-wash, #{$n-wash});
+  }
+
+  &--ink {
+    border-color: var(--agency-ink, currentColor);
+    background: var(--agency-ink, #444);
+    color: var(--agency-on-ink, #fff);
+  }
+
+  &--outline {
+    background: transparent;
+  }
+}
+
+.agency-chat-card {
+  --_verdict: var(--agency-rule-strong, #{$n-rule});
+  overflow: hidden;
+  border: 1px solid var(--agency-rule-strong, #{$n-rule});
+  border-radius: var(--agency-radius, 3px);
+  background: var(--agency-paper, transparent);
+  color: var(--agency-ink, inherit);
+  font-family: var(--agency-font-body, inherit);
+  font-size: max(12px, 1em);
+
+  > :is(header, .agency-chat-card-header, .agency-chat-card__header) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 3px 6px;
+    border-bottom: 3px double var(--_verdict);
+    font-family: var(--agency-font-type, inherit);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    > :first-child {
+      flex: 1 1 auto;
+      margin: 0;
+      border: 0;
+      font: inherit;
+    }
+  }
+
+  > :is(.agency-chat-card-body, .agency-chat-card__body) {
+    padding: 5px 6px;
+  }
+
+  > :is(footer, .agency-chat-card-footer, .agency-chat-card__footer) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 3px 6px 4px;
+    border-top: 1px solid var(--agency-rule, #{$n-rule});
+    color: var(--agency-ink-2, inherit);
+    font-size: 12px;
+  }
+
+  &--success {
+    --_verdict: var(--agency-green-ink, #{$n-green});
+  }
+
+  &--failure,
+  &--critical {
+    --_verdict: var(--agency-red, #{$n-red});
+  }
+
+  &--critical {
+    box-shadow: inset 4px 0 0 var(--agency-red, #{$n-red});
+  }
+}
+
+.agency-num {
+  font-family: var(--agency-font-body, inherit);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.agency-label {
+  font-family: var(--agency-font-type, inherit);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+// Themed extras for the kit (only with the theme on).
+body.agency-theme {
+  --agency-header-weight: 400; // Special Elite has a single weight; don't fake-bold it.
+  --agency-redaction: #141310;
+
+  &.theme-dark,
+  .theme-dark {
+    --agency-redaction: #050604;
+    --agency-redaction-edge: var(--agency-paper-edge);
+  }
+
+  .theme-light {
+    --agency-redaction: #141310;
+    --agency-redaction-edge: transparent;
+  }
+
+  .agency-panel {
+    @include paper;
+    box-shadow: 1px 1px 0 var(--agency-rule);
+  }
+
+  .agency-panel-header {
+    background: var(--agency-paper-2);
+  }
+
+  :is(.agency-panel-header, .agency-chat-card > header, .agency-chat-card-header) .agency-stamp {
+    margin: 1px 2px;
+    font-size: 12px;
+  }
+
+  .agency-chat-card {
+    @include paper;
+  }
+
+  .agency-stamp {
+    // Uneven ink: knock the paper grain out of the stamp.
+    -webkit-mask-image: linear-gradient(#000 0 0), var(--agency-grain);
+    -webkit-mask-composite: source-out;
+    mask-image: linear-gradient(#000 0 0), var(--agency-grain);
+    mask-composite: subtract;
+    mask-size:
+      auto,
+      120px 120px;
+  }
+}

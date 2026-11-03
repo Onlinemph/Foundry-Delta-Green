@@ -1,0 +1,427 @@
+// Dossier theme: Foundry core chrome (v13/v14).
+//
+// Most of the recolouring happens through Foundry's own theme variables (dossier/_tokens.scss). The rules below
+// add what variables can't: paper texture, typewriter type, header bands, folder tabs, stamp-red accents.
+//
+// Foundry v13 puts its CSS in cascade layers and this file is unlayered, so these rules win regardless of
+// specificity. Two consequences:
+//  - never set font-family on elements that may carry Font Awesome classes (icon buttons): use :not([class*='fa-']);
+//  - keep selectors tolerant (v12 and v13 ids side by side) and prefer colours over layout.
+@use 'tokens' as *;
+
+body.agency-theme {
+  font-family: var(--agency-font-body);
+  scrollbar-color: var(--agency-paper-edge) transparent;
+
+  ::selection {
+    background: var(--agency-green);
+    color: var(--agency-on-green);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Window frames (Application v1 and v2)
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(.app.window-app, .application:has(> .window-header)) {
+    @include paper;
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.25),
+      3px 5px 16px var(--agency-shadow);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+  }
+
+  :is(.app.window-app, .application) > .window-header {
+    @include header-band;
+    border-bottom: 1px solid #000;
+    // A thin stamp-red rule under every title bar, like the colour band on a classified cover sheet.
+    box-shadow: inset 0 -2px 0 var(--agency-red);
+
+    .window-title {
+      color: inherit;
+      font-family: var(--agency-font-type);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: none;
+    }
+
+    :is(a, button, .header-control, .header-button, .window-icon) {
+      color: var(--agency-header-ink);
+      text-shadow: none;
+    }
+
+    :is(a, button, .header-control, .header-button):hover {
+      color: #fff;
+      text-shadow: 0 0 4px var(--agency-highlight);
+    }
+  }
+
+  :is(.app.window-app, .application) > .window-content {
+    background: transparent;
+    color: var(--agency-ink);
+  }
+
+  // Minimised windows keep the header band only.
+  :is(.app.window-app, .application).minimized {
+    background: var(--agency-header-bg);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Type inside windows
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(.window-content, .journal-page-content, .editor-content, #sidebar, #chat-popout, #tooltip, .locked-tooltip) {
+    font-family: var(--agency-font-body);
+  }
+
+  .journal-page-content {
+    font-family: var(--agency-font-body);
+    font-size: 14px;
+  }
+
+  .window-content :is(h1, h2, h3):not([class*='fa-']) {
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .window-content :is(h2):not([class*='fa-']) {
+    border-bottom: 1px solid var(--agency-rule-strong);
+  }
+
+  :is(input, select, textarea) {
+    font-family: var(--agency-font-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :is(legend, label.section-title) {
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  fieldset {
+    border-color: var(--agency-rule);
+  }
+
+  // Text buttons get typewriter caps; icon buttons are left alone.
+  :is(.window-content, .dialog, .form-footer, .dialog-buttons, #sidebar)
+    button:not(.icon, .ui-control, [class*='fa-'], .gurpslink, .glinkmod, .glinkmodplus, .glinkmodminus) {
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.04em;
+  }
+
+  :is(.form-footer, .dialog-buttons) button {
+    text-transform: uppercase;
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Folder tabs on app navigation (v13 nav.tabs; v12 nav.sheet-tabs)
+  // -------------------------------------------------------------------------------------------------------------------
+  .window-content
+    nav:is(.tabs, .sheet-tabs):not(.gurps-tabs, .gurps-sheet-tabs, .ms-tabs)
+    > :is(a, button)[data-tab]:not([class*='fa-']) {
+    font-family: var(--agency-font-type);
+    text-shadow: none;
+
+    &.active {
+      color: var(--agency-green-ink);
+      text-decoration: underline 2px var(--agency-red);
+      text-underline-offset: 4px;
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Sidebar
+  // -------------------------------------------------------------------------------------------------------------------
+  #sidebar-content,
+  #sidebar > .sidebar-tab,
+  .sidebar-popout .window-content {
+    @include paper;
+    color: var(--agency-ink);
+  }
+
+  #sidebar :is(.directory-header, .header-actions, .header-search) {
+    border-color: var(--agency-rule);
+  }
+
+  #sidebar :is(.directory-item, .directory-list .folder > header, .document) {
+    border-color: var(--agency-rule);
+  }
+
+  #sidebar :is(.directory-item .entry-name, .document-name, .entry-name) {
+    font-family: var(--agency-font-body);
+  }
+
+  #sidebar .folder > :is(header, .folder-header) {
+    @include header-band;
+    font-size: 13px;
+  }
+
+  #sidebar :is(.directory-item, .document):hover {
+    background-color: var(--agency-green-wash);
+  }
+
+  // Sidebar tab strip: the active tab becomes a green folder tab.
+  #sidebar-tabs :is([data-tab], .item) {
+    border-color: var(--agency-paper-edge);
+    color: var(--agency-ink-2);
+
+    &:is(.active, [aria-pressed='true']) {
+      background: var(--agency-green);
+      border-color: var(--agency-ink);
+      color: var(--agency-on-green);
+      box-shadow: inset 0 -2px 0 var(--agency-red);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Chat log: every message is a typed memo slip
+  // -------------------------------------------------------------------------------------------------------------------
+  .chat-message {
+    @include paper;
+    position: relative;
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 2px;
+    box-shadow: 1px 2px 0 var(--agency-shadow);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+    font-size: 13px;
+
+    .message-header {
+      align-items: baseline;
+      margin-bottom: 3px;
+      padding-bottom: 2px;
+      border-bottom: 1px dashed var(--agency-rule);
+      color: var(--agency-ink-2);
+    }
+
+    .message-sender {
+      color: var(--agency-ink);
+      font-family: var(--agency-font-type);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    :is(.message-metadata, .message-timestamp, .whisper-to, .flavor-text) {
+      color: var(--agency-ink-3);
+      font-family: var(--agency-font-body);
+      font-size: 12px;
+    }
+
+    .message-content {
+      color: var(--agency-ink);
+    }
+
+    // Whispers get a green margin, blind/GM-only rolls a red one.
+    &.whisper {
+      box-shadow:
+        inset 4px 0 0 var(--agency-green),
+        1px 2px 0 var(--agency-shadow);
+    }
+
+    &.blind {
+      box-shadow:
+        inset 4px 0 0 var(--agency-red),
+        1px 2px 0 var(--agency-shadow);
+    }
+
+    .dice-roll {
+      .dice-formula,
+      .dice-total {
+        border-color: var(--agency-rule-strong);
+        background: var(--agency-paper-2);
+        color: var(--agency-ink);
+        font-family: var(--agency-font-body);
+        font-variant-numeric: tabular-nums;
+      }
+    }
+  }
+
+  :is(#chat-message, #chat-form textarea, .chat-form textarea, .chat-input) {
+    @include paper(var(--agency-paper-2));
+    border-color: var(--agency-rule-strong);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Combat tracker
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(#combat, #combat-popout, .combat-sidebar) {
+    .combatant {
+      border-color: var(--agency-rule);
+
+      :is(.token-name, .name, h4) {
+        font-family: var(--agency-font-type);
+        font-weight: 400;
+        letter-spacing: 0.03em;
+      }
+
+      :is(.token-initiative, .initiative) {
+        font-family: var(--agency-font-body);
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+      }
+
+      &.active {
+        background: var(--agency-green-wash);
+        box-shadow: inset 4px 0 0 var(--agency-green-ink);
+      }
+
+      &.defeated :is(.token-name, .name, h4) {
+        text-decoration: line-through 2px var(--agency-red);
+      }
+    }
+
+    :is(.encounter-title, .encounter-controls h3, .combat-tracker-header h3) {
+      font-family: var(--agency-font-type);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Scene controls (v13 #scene-controls, v12 #controls), hotbar, players, navigation
+  // -------------------------------------------------------------------------------------------------------------------
+  :is(#scene-controls, #controls) :is(.ui-control, .scene-control, .control-tool) {
+    border-color: var(--agency-paper-edge);
+    background-color: var(--agency-paper-2);
+    color: var(--agency-ink-2);
+
+    &:hover {
+      background-color: var(--agency-paper-3);
+      color: var(--agency-ink);
+    }
+
+    &:is(.active, [aria-pressed='true']) {
+      border-color: var(--agency-ink);
+      background-color: var(--agency-green);
+      color: var(--agency-on-green);
+      box-shadow: inset 0 -2px 0 var(--agency-red);
+    }
+  }
+
+  #hotbar :is(.slot, .macro) {
+    border-color: var(--agency-paper-edge);
+    background-color: var(--agency-paper-2);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+
+    &.active,
+    &:hover {
+      border-color: var(--agency-green-ink);
+    }
+  }
+
+  #hotbar :is(.page-number, .bar-controls, #hotbar-page) {
+    font-family: var(--agency-font-body);
+  }
+
+  :is(#players, #players-active, #players-inactive) {
+    font-family: var(--agency-font-body);
+  }
+
+  :is(#navigation, #scene-navigation) :is(.scene, .scene-name, li):not([class*='fa-']) {
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.03em;
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Tooltips, context menus, notifications
+  // -------------------------------------------------------------------------------------------------------------------
+  #tooltip,
+  .locked-tooltip {
+    border: 1px solid var(--agency-rule-strong);
+    background: var(--agency-ink);
+    color: var(--agency-on-ink);
+    font-family: var(--agency-font-body);
+    font-size: 13px;
+  }
+
+  :is(#context-menu, .context-menu) {
+    border: 1px solid var(--agency-rule-strong);
+    background: var(--agency-paper-2);
+    box-shadow: 2px 3px 10px var(--agency-shadow);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+
+    :is(.context-item, li):hover {
+      background: var(--agency-green);
+      color: var(--agency-on-green);
+    }
+  }
+
+  #notifications .notification {
+    border: 1px solid var(--agency-rule-strong);
+    background: var(--agency-paper-2);
+    box-shadow:
+      inset 5px 0 0 var(--agency-ink-3),
+      2px 3px 10px var(--agency-shadow);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+    font-size: 14px;
+
+    &.info {
+      box-shadow:
+        inset 5px 0 0 var(--agency-green-ink),
+        2px 3px 10px var(--agency-shadow);
+    }
+
+    &.warning {
+      box-shadow:
+        inset 5px 0 0 #b8892a,
+        2px 3px 10px var(--agency-shadow);
+    }
+
+    &.error {
+      box-shadow:
+        inset 5px 0 0 var(--agency-red),
+        2px 3px 10px var(--agency-shadow);
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Pause: the system's logo becomes an original rubber stamp (assets/agency/pause-stamp.svg, swapped in by
+  // module/agency/theme). The caption stays for screen readers.
+  // -------------------------------------------------------------------------------------------------------------------
+  #pause img.agency-pause-stamp {
+    width: 360px !important;
+    height: auto !important;
+    max-width: 70vw;
+    opacity: 0.95 !important;
+    animation: agency-stamp-in 0.32s cubic-bezier(0.2, 1.6, 0.4, 1) both !important;
+    filter: drop-shadow(0 0 18px rgba(0, 0, 0, 0.55));
+  }
+
+  #pause:has(img.agency-pause-stamp) figcaption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@keyframes agency-stamp-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.35) rotate(3deg);
+  }
+
+  100% {
+    opacity: 0.95;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.agency-theme #pause img.agency-pause-stamp {
+    animation: none !important;
+  }
+}
