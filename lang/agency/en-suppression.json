@@ -1,0 +1,31 @@
+{
+  "GURPS": {
+    "agency": {
+      "suppression": {
+        "status": "Pinned",
+        "settings": {
+          "enabled": {
+            "name": "Pinned by fire (Tactical Shooting)",
+            "hint": "NPCs shot at since their last turn roll Will-2 at the start of their turn (Combat Reflexes and Unfazeable are immune). Failure: they stay behind cover this turn."
+          },
+          "radius": {
+            "name": "Near-miss radius (yards)",
+            "hint": "On a missed shot, tokens this close to the target are under fire too. 0 counts only the target."
+          },
+          "pcs": {
+            "name": "Pinned by fire: PCs roll too",
+            "hint": "PCs roll Will-2 as well. On a failure they may still leave cover, at minus the margin of failure on every roll that turn."
+          }
+        },
+        "card": {
+          "title": "Under fire",
+          "stamp": "Pinned",
+          "roll": "Will-2 ({target}): rolled {roll}.",
+          "steady": "{name} keeps their nerve (by {margin}).",
+          "pinned": "{name} stays behind cover this turn (failed by {margin}). They may only act in ways that don't expose them: move further behind cover, communicate, reload.",
+          "pcPinned": "{name} wants to stay behind cover. Leaving cover this turn means {penalty} to every roll."
+        }
+      }
+    }
+  }
+}

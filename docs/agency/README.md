@@ -33,6 +33,7 @@ actor/token flags and a `system.sanity` field; the official system ignores both.
 | Hit locations | Every hit rolls on the Grand Unified Hit Locations chart, sub-tables included; special called shots in the hit-location picker. | [hit-locations.md](hit-locations.md) |
 | Cover | GM token HUD button: cover presets or per body part, DR, HP, material. Covered hits strike the cover first. | [hit-locations.md](hit-locations.md) |
 | Explosions | Explosive weapons: target a token or a point, scatter on a miss, templates, blast falloff, fragments, walls as cover, dive for cover, one GM card with Apply all. `/explode 4d cr ex [2d]`, `/explode 2lb c4`, `/explode flashbang`. | [explosions.md](explosions.md) |
+| Pinned by fire | NPCs shot at (or near-missed) since their last turn roll Will-2 at turn start; failure keeps them behind cover that turn (Pinned status). Combat Reflexes and Unfazeable are immune. Optional for PCs. | Tactical Shooting p. 21 |
 | GCS import | Current GCS 5 files import cleanly; re-import keeps edits made in Foundry. | |
 | Sheet sync | Fixes upstream bugs that left other players' sheets showing stale data. | |
 | Campaign preset | Modern Agent: house rules on, TL8 default, field-agent NPC template. | |
