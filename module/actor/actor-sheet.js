@@ -53,9 +53,26 @@ export class GurpsActorSheet extends ActorSheet {
   }
 
   // Hack to keep sheet from flashing during multiple DB updates
+  // AGENCY: Foundry drops a render requested while one is already running, and upstream dropped
+  // renders requested while ignoreRender was set. Both lost other players' changes until the next
+  // update. Now suppressed renders are deferred and mid-render requests trigger one more render.
   async _render(...args) {
-    if (!!this.object?.ignoreRender) return
-    await super._render(...args)
+    if (!!this.object?.ignoreRender) {
+      this.object._agencyRenderGate?.markPending()
+      return
+    }
+    if (this._state === this.constructor.RENDER_STATES.RENDERING) {
+      this._agencyRerenderQueued = true
+      return
+    }
+    try {
+      await super._render(...args)
+    } finally {
+      if (this._agencyRerenderQueued) {
+        this._agencyRerenderQueued = false
+        this.render(false)
+      }
+    }
   }
 
   update(data, options) {
@@ -69,7 +86,9 @@ export class GurpsActorSheet extends ActorSheet {
     let actions = {}
     if (!this.actor.system.conditions.actions?.maxActions) actions['maxActions'] = 1
     if (!this.actor.system.conditions.actions?.maxBlocks) actions['maxBlocks'] = 1
-    if (Object.keys(actions).length > 0) this.actor.internalUpdate({ 'system.conditions.actions': actions })
+    // AGENCY: only owners may write; observers rendering the sheet used to throw permission errors here.
+    if (Object.keys(actions).length > 0 && this.actor.isOwner)
+      this.actor.internalUpdate({ 'system.conditions.actions': actions })
     sheetData.data = this.actor.system
     sheetData.system = this.actor.system
     sheetData.ranges = GURPS.rangeObject.ranges
@@ -1478,6 +1497,16 @@ export class GurpsActorSheet extends ActorSheet {
   /** @override */
   async _onDrop(event) {
     this.actor.ignoreRender = true
+    // AGENCY: several branches below return early, which used to leave ignoreRender set and froze
+    // this sheet on this client. The finally block always clears it.
+    try {
+      await this._agencyOnDropBody(event)
+    } finally {
+      this.actor.ignoreRender = false
+    }
+  }
+
+  async _agencyOnDropBody(event) {
     let dragData = JSON.parse(event.dataTransfer.getData('text/plain'))
 
     if (dragData.type === DragDropType.DAMAGE) this.actor.handleDamageDrop(dragData.payload)

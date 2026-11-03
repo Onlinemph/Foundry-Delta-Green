@@ -1,5 +1,7 @@
 'use strict'
 
+// AGENCY: render suppression that defers instead of dropping renders
+import { RenderSuppression, STALE_SUPPRESSION_MS } from '../agency/sync/render-suppression.ts'
 import * as Settings from '../../lib/miscellaneous-settings.js'
 import { COSTS_REGEX, parselink } from '../../lib/parselink.js'
 import {
@@ -198,6 +200,32 @@ export class GurpsActor extends Actor {
       delete changed.flags.core.sheetClass
     }
     super._onUpdate(changed, options, userId)
+    // AGENCY: internalUpdate() sends render:false to every client, so other players' open sheets
+    // kept showing old data. The originating client re-renders itself; everyone else does it here.
+    if (options?.render === false && userId !== game.user.id) this.render(false)
+  }
+
+  // AGENCY: ignoreRender is backed by RenderSuppression (module/agency/sync/render-suppression.ts):
+  // renders requested while it is set run when it is cleared, and a flag left set by an early
+  // return or exception lapses after STALE_SUPPRESSION_MS instead of freezing the sheet.
+  get _agencyRenderGate() {
+    if (!this.__agencyRenderGate) {
+      this.__agencyRenderGate = new RenderSuppression(
+        () => setTimeout(() => this.render(false), 0),
+        Date.now,
+        STALE_SUPPRESSION_MS,
+        () => console.warn(`GURPS | Render suppression on ${this.name} was left on; resuming sheet updates`)
+      )
+    }
+    return this.__agencyRenderGate
+  }
+
+  get ignoreRender() {
+    return this._agencyRenderGate.active
+  }
+
+  set ignoreRender(value) {
+    this._agencyRenderGate.set(!!value)
   }
 
   prepareBaseData() {
