@@ -141,6 +141,7 @@
     </div>
   </div>
 
+  {{#if agencySanity}}{{> agency-sanity-fc-fields agencySanity}}{{/if}} {{!-- AGENCY: SAN loss fields --}}
   <hr />
   <label for='tblname' style='margin-bottom: 8px'>{{localize 'GURPS.rollableTableName'}}:&nbsp;<input
       id='tblname'

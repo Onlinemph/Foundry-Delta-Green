@@ -1,0 +1,108 @@
+{{! Agency: SAN check result card (module/agency/sanity/roll.ts). Buttons are wired in chat-card.ts. }}
+<div class='agency-chat-card agency-sanity-card' data-actor-uuid='{{actorUuid}}' data-loss-id='{{lossId}}'>
+  <header class='agency-panel-header'>
+    <span><i class='fa-solid fa-brain'></i> {{localize 'GURPS.agency.sanity.card.title' name=actorName}}</span>
+    {{#if categoryLabel}}<span class='agency-badge'>{{categoryLabel}}</span>{{/if}}
+  </header>
+
+  {{#if source}}<div class='agency-sanity-source'>{{source}}</div>{{/if}}
+  <div class='agency-sanity-line'>{{localize 'GURPS.agency.sanity.card.loss'}}: <strong>{{notation}}</strong></div>
+
+  {{#if check}}
+    <div class='agency-sanity-line'>
+      {{check.label}}:
+      {{#if check.fromDialog}}
+        <strong class='{{check.resultClass}}'>{{check.resultLabel}}</strong>
+        <span class='aside'>({{localize 'GURPS.agency.sanity.card.fromDialog'}})</span>
+      {{else}}
+        {{localize 'GURPS.agency.sanity.card.rolled' total=check.total target=check.target}}
+        <strong class='{{check.resultClass}}'>{{check.resultLabel}}</strong>
+      {{/if}}
+    </div>
+    {{#if check.mods.length}}
+      <ul class='modifier-list agency-sanity-mods'>
+        {{#each check.mods}}<li>[{{{displayNumber mod}}}{{#if desc}} : {{desc}}{{/if}}]</li>{{/each}}
+      </ul>
+    {{/if}}
+    {{#if check.ruleOf14}}<div class='aside'>{{localize 'GURPS.agency.sanity.card.ruleOf14'}}</div>{{/if}}
+  {{/if}}
+
+  {{#if outcome.adaptedImmune}}
+    <div class='agency-sanity-flag'>{{localize 'GURPS.agency.sanity.card.adaptedImmune' category=categoryLabel}}</div>
+  {{else}}
+    <div class='agency-sanity-line'>{{localize 'GURPS.agency.sanity.card.lossRoll'}}:
+      {{lossFormula}}
+      =
+      <strong>{{rolled}}</strong></div>
+    <div class='agency-sanity-result'>
+      {{localize 'GURPS.agency.sanity.san'}}
+      {{outcome.before}}
+      &rarr;
+      <strong>{{outcome.after}}</strong>
+      /
+      {{max}}
+      {{#if outcome.lost}}<span class='agency-sanity-delta'>(&minus;{{outcome.lost}})</span>{{/if}}
+    </div>
+  {{/if}}
+
+  {{#if adaptation}}
+    <div class='agency-sanity-line'>
+      {{localize 'GURPS.agency.sanity.card.adaptationProgress' category=adaptation.label}}
+      {{#each adaptation.boxes}}<i class='{{this}}'></i>{{/each}}
+    </div>
+    {{#if adaptation.becameAdapted}}
+      <div class='agency-sanity-flag'>
+        {{localize 'GURPS.agency.sanity.card.becameAdapted' category=adaptation.label}}
+        {{#if outcome.bondsReduced.length}}
+          <ul>{{#each outcome.bondsReduced}}<li>{{name}}: {{before}} &rarr; {{after}}</li>{{/each}}</ul>
+        {{/if}}
+      </div>
+    {{/if}}
+  {{/if}}
+
+  {{#if outcome.temporaryInsanity}}
+    <div class='agency-sanity-flag agency-sanity-alarm'>
+      <span class='agency-stamp'>{{localize 'GURPS.agency.sanity.card.temporaryInsanityStamp'}}</span>
+      {{localize 'GURPS.agency.sanity.card.temporaryInsanity' lost=outcome.lost}}
+    </div>
+  {{/if}}
+  {{#if outcome.breakingPoint}}
+    <div class='agency-sanity-flag agency-sanity-alarm'>
+      <span class='agency-stamp'>{{localize 'GURPS.agency.sanity.atBreakingPoint'}}</span>
+      {{localize 'GURPS.agency.sanity.card.breakingPoint' bp=outcome.bpBefore}}
+      {{localize 'GURPS.agency.sanity.card.bpReset' bp=outcome.bpAfter}}
+    </div>
+  {{/if}}
+  {{#if outcome.permanentInsanity}}
+    <div class='agency-sanity-flag agency-sanity-alarm'>{{localize 'GURPS.agency.sanity.card.permanentInsanity'}}</div>
+  {{/if}}
+
+  {{#if (or showProject showDisorder showUnnatural)}}
+    <div class='agency-sanity-buttons'>
+      {{#if showProject}}
+        <button type='button' class='agency-btn' data-san-action='project'>
+          <i class='fa-solid fa-dice-d4'></i>
+          {{localize 'GURPS.agency.sanity.card.project'}}
+        </button>
+      {{/if}}
+      {{#if showDisorder}}
+        <button type='button' class='agency-btn' data-san-action='disorder'>
+          <i class='fa-solid fa-file-pen'></i>
+          {{localize 'GURPS.agency.sanity.card.recordDisorder'}}
+        </button>
+      {{/if}}
+      {{#if showUnnatural}}
+        <button
+          type='button'
+          class='agency-btn'
+          data-san-action='unnatural'
+          data-amount='{{outcome.lost}}'
+          title='{{localize "GURPS.agency.sanity.card.addUnnaturalHint"}}'
+        >
+          <i class='fa-solid fa-eye'></i>
+          {{localize 'GURPS.agency.sanity.card.addUnnatural' amount=outcome.lost}}
+        </button>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>

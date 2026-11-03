@@ -1,1 +1,139 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "sanity": {
+        "title": "Sanity",
+        "san": "SAN",
+        "maxHint": "Maximum SAN (99 − Unnatural). Raising Unnatural lowers it by the same amount.",
+        "breakingPoint": "Breaking Point",
+        "breakingPointHint": "When SAN falls to or below this, the character gains a disorder and the Breaking Point resets to SAN − Will.",
+        "unnatural": "Unnatural",
+        "unnaturalHint": "Unnatural knowledge. Max SAN is 99 − Unnatural; raising it lowers max SAN (and current SAN if needed).",
+        "bonds": "Bonds",
+        "newBond": "New Bond",
+        "unnamedBond": "Bond",
+        "noBonds": "No Bonds",
+        "addBond": "Add a Bond",
+        "removeBond": "Remove this Bond",
+        "disorders": "Disorders",
+        "newDisorder": "New disorder",
+        "noDisorders": "No disorders",
+        "addDisorder": "Add a disorder",
+        "removeDisorder": "Remove this disorder",
+        "adaptation": "Adapted to",
+        "adaptationHint": "Each SAN loss from violence or helplessness checks a box. With all three checked the character is adapted and loses no more SAN from it.",
+        "adapted": "Adapted",
+        "sanCheck": "SAN check",
+        "sanCheckHint": "Roll a SAN check ({mode})",
+        "atBreakingPoint": "Breaking point",
+        "permanentlyInsane": "Permanently insane",
+        "breakingPointHelp": "SAN is at or below the Breaking Point: record a disorder.",
+        "recordDisorderResetBP": "Record disorder & reset BP",
+        "category": {
+          "none": "None",
+          "violence": "Violence",
+          "helplessness": "Helplessness",
+          "unnatural": "Unnatural"
+        },
+        "settings": {
+          "enabled": {
+            "name": "Agency: SAN and Breaking Points",
+            "hint": "Delta Green-style sanity: SAN panel on actor sheets, SAN loss in the Fright Check dialog, /san chat command and [SAN 0/1d4] OtFs."
+          },
+          "roll": {
+            "name": "Agency: SAN roll",
+            "hint": "What decides between the success and failure side of a SAN loss such as 0/1d6.",
+            "fright": "Fright Check (3d6 vs Fright Check, same modifiers)",
+            "percentile": "Delta Green (d100 ≤ current SAN)"
+          },
+          "multiplier": {
+            "name": "Agency: starting SAN multiplier",
+            "hint": "Starting SAN = Will × this (Delta Green: POW × 5). Breaking Point starts at SAN − Will."
+          },
+          "bondStart": {
+            "name": "Agency: starting Bond score",
+            "hint": "Score of a new Bond. 0 = the character's Will."
+          }
+        },
+        "dialog": {
+          "header": "Sanity",
+          "loss": "SAN loss (success/failure)",
+          "category": "Source",
+          "hintFright": "Success on the Fright Check costs the left value, failure the right. Leave blank for no SAN loss.",
+          "hintPercentile": "A separate d100 ≤ SAN roll picks the left (success) or right (failure) value. Leave blank for no SAN loss.",
+          "title": "SAN check: {name}",
+          "roll": "Roll SAN check"
+        },
+        "card": {
+          "title": "SAN check: {name}",
+          "loss": "SAN loss",
+          "success": "Success",
+          "failure": "Failure",
+          "fromDialog": "Fright Check above",
+          "frightCheckDialog": "Fright Check",
+          "frightCheck": "Fright Check ({base})",
+          "percentile": "SAN roll (d100)",
+          "rolled": "rolled {total} vs {target}:",
+          "ruleOf14": "(Fright Check cannot be greater than 13. See The Rule of 14, B360.)",
+          "lossRoll": "SAN lost",
+          "adaptedImmune": "Adapted to {category}: no SAN loss.",
+          "adaptationProgress": "{category} adaptation:",
+          "becameAdapted": "Now adapted to {category}. Every Bond loses 1:",
+          "temporaryInsanityStamp": "Temporary insanity",
+          "temporaryInsanity": "Lost {lost} SAN from one roll: temporary insanity (GM: flee, struggle or submit).",
+          "breakingPoint": "SAN fell to or below the Breaking Point ({bp}): record a disorder.",
+          "bpReset": "New Breaking Point: {bp}.",
+          "permanentInsanity": "SAN 0: permanently insane.",
+          "project": "Project onto a Bond",
+          "recordDisorder": "Record disorder",
+          "addUnnatural": "Add {amount} to Unnatural",
+          "addUnnaturalHint": "GM: Delta Green raises Unnatural by the SAN lost the first time a character meets an unnatural phenomenon."
+        },
+        "note": {
+          "projectTitle": "Projected onto a Bond",
+          "projected": "<strong>{name}</strong> projects onto <strong>{bond}</strong>: rolled {roll}, {refund} SAN restored, Bond {before} → {after}.",
+          "sanNow": "SAN now {value} / {max}.",
+          "bondBroken": "The Bond with {bond} is broken.",
+          "bpReverted": "SAN is back above the old Breaking Point: Breaking Point restored to {bp} (no disorder).",
+          "insanityAverted": "Loss reduced to {remaining}: no temporary insanity.",
+          "disorderTitle": "Disorder",
+          "disorder": "<strong>{name}</strong> gains a disorder: <strong>{disorder}</strong>.",
+          "bpReset": "Breaking Point {before} → {after}.",
+          "unnaturalTitle": "Unnatural",
+          "unnatural": "<strong>{name}</strong>: Unnatural {before} → {after}, max SAN now {max}."
+        },
+        "disorderPrompt": {
+          "title": "Disorder: {name}",
+          "text": "Record the disorder gained at the Breaking Point.",
+          "placeholder": "e.g. Nightmares, Paranoia",
+          "ok": "Record"
+        },
+        "project": {
+          "title": "Project onto a Bond: {name}",
+          "text": "Roll 1d4: the SAN loss is reduced by the roll and the chosen Bond loses the roll.",
+          "ok": "Project"
+        },
+        "unnaturalPrompt": {
+          "title": "Raise Unnatural",
+          "text": "Raise {name}'s Unnatural by {amount} ({before} → {after})? Max SAN becomes {max}."
+        },
+        "chat": {
+          "usage": "/san &lt;success/failure&gt; [violence|helplessness|unnatural] [description]\nRolls a SAN check for the selected character, e.g. /san 0/1d6 violence or /san 1/1d4+1 unnatural Sees the thing."
+        },
+        "errors": {
+          "disabled": "SAN is turned off in the system settings.",
+          "noActor": "Select a character first.",
+          "notOwner": "You do not own {name}.",
+          "badNotation": "Not a SAN loss: '{text}'. Use success/failure, e.g. 0/1d6 or 1/1d4+1.",
+          "noBonds": "This character has no Bond left to project onto.",
+          "notLatest": "Only the character's most recent SAN loss can be projected onto a Bond.",
+          "alreadyProjected": "This SAN loss has already been projected onto a Bond.",
+          "nothing-to-project": "There is no SAN loss to project.",
+          "already-projected": "This SAN loss has already been projected onto a Bond.",
+          "no-bond": "That Bond no longer exists.",
+          "bond-broken": "That Bond is broken (score 0)."
+        }
+      }
+    }
+  }
+}

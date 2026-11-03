@@ -82,6 +82,19 @@
         "thrust": "",
         "swing": "",
         "frightcheck": 0,
+        "sanity": {
+          "value": 0,
+          "max": 99,
+          "breakingPoint": 0,
+          "unnatural": 0,
+          "initialized": false,
+          "bonds": [],
+          "disorders": [],
+          "adaptation": {
+            "violence": 0,
+            "helplessness": 0
+          }
+        },
         "hearing": 0,
         "tastesmell": 0,
         "vision": 0,
