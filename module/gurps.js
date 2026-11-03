@@ -1040,7 +1040,12 @@ if (!globalThis.GURPS) {
 
       const parsedRateOfFire = parseInt(att.rof)
 
-      if (parsedRateOfFire > 1) {
+      // AGENCY: shooting house rules may replace the RoF prompt (Progressive Recoil fire dialog)
+      // and add aim-type modifiers. false cancels the attack.
+      const agencyShooting = await GURPS.agency?.shooting?.beforeRangedAttack?.({ actor, action, att, opt, targetmods, event })
+      if (agencyShooting === false) return false
+
+      if (parsedRateOfFire > 1 && !agencyShooting?.handledRoF) {
         const shots = await GetNumberInput({
           title: game.i18n.localize('GURPS.combat.rof.numberOfShotsTitle'),
           headerText: action.orig,

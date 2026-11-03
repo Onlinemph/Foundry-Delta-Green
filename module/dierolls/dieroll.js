@@ -574,7 +574,8 @@ async function _doRoll({
     chatdata['followon'] = optionalArgs.followon
 
     // If the attached obj (see handleRoll()) has Recoil information, do the additional math.
-    if (margin > 0 && !!optionalArgs.obj && !!optionalArgs.obj.rcl) {
+    if (margin > 0 && !!optionalArgs.obj && !!optionalArgs.obj.rcl && !optionalArgs.agencyShooting?.burst) {
+      // AGENCY: Progressive Recoil bursts count hits per shot, so skip the Basic Set potential-hits line
       /** @type {import('./compute-potential-hits.js').WeaponDescriptor} */
       const weapon = { recoil: optionalArgs.obj.rcl, rateOfFire: optionalArgs.obj.rof }
       const potentialHits = computePotentialHits(weapon, optionalArgs.shots, margin)

@@ -109,6 +109,12 @@
       "name": "English",
       "path": "lang/agency/en-presets.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-shooting.json",
+      "flags": {}
     }
   ],
   "grid": {

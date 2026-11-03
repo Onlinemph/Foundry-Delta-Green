@@ -1,0 +1,43 @@
+// Agency: Progressive Recoil fire dialog and burst card
+.agency-fire-form {
+  .agency-fire-preview {
+    font-family: var(--agency-font-data, monospace);
+    font-variant-numeric: tabular-nums;
+    white-space: pre-wrap;
+  }
+}
+
+.agency-burst-card {
+  .agency-burst-meta {
+    font-size: 0.9em;
+    margin: 0.25em 0;
+  }
+  .agency-burst-table {
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+    td,
+    th {
+      text-align: center;
+      padding: 1px 4px;
+    }
+  }
+  .agency-burst-crit td {
+    font-weight: bold;
+    color: var(--agency-stamp-red, #a32020);
+  }
+  .agency-burst-hit td {
+    font-weight: bold;
+  }
+  .agency-burst-miss td,
+  .agency-burst-fumble td {
+    opacity: 0.6;
+  }
+  .agency-burst-fumble td:last-child {
+    color: var(--agency-stamp-red, #a32020);
+    opacity: 1;
+  }
+  .agency-burst-total {
+    margin-top: 0.25em;
+    text-align: right;
+  }
+}

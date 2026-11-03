@@ -1,0 +1,68 @@
+{
+  "GURPS": {
+    "agency": {
+      "shooting": {
+        "settings": {
+          "rapidFire": {
+            "name": "Rapid fire rules",
+            "hint": "Progressive Recoil rolls each shot separately with a cumulative Rcl penalty and no RoF bonus. Standard uses the Basic Set rules.",
+            "prs": "Progressive Recoil (house rule)",
+            "standard": "Standard (Basic Set)"
+          },
+          "braceAcc": {
+            "name": "Bracing Acc bonus",
+            "hint": "Added to every shot of a braced Progressive Recoil burst."
+          },
+          "carryover": {
+            "name": "Aim carry-over (EUFC)",
+            "hint": "A single shot keeps half its Acc bonus (all of it when braced) for the shooter's next turn against the same target."
+          },
+          "gunslinger": {
+            "name": "Gunslinger advantage (EUFC)",
+            "hint": "Characters with a trait named Gunslinger get Acc without aiming and ignore the Move and Attack penalty."
+          }
+        },
+        "dialog": {
+          "title": "Fire {weapon}",
+          "fire": "Fire",
+          "shots": "Shots",
+          "braced": "Braced (bipod, wall, vehicle)",
+          "rcl": "Rcl",
+          "class": "Gunslinger: weapon type",
+          "preview": "Recoil per shot",
+          "loaded": "loaded",
+          "hint": "Aim helps the first shot only. Bracing halves Rcl and adds its Acc to every shot."
+        },
+        "class": {
+          "pistol": "Pistol (full Acc)",
+          "autopistol": "Auto-pistol (half Acc)",
+          "longarm": "Long arm (half Acc)"
+        },
+        "mod": {
+          "braced": "Braced (all shots)",
+          "carried": "Acc carried over",
+          "gunslinger": "Gunslinger Acc",
+          "gunslingerMove": "Gunslinger: no Move and Attack penalty"
+        },
+        "card": {
+          "title": "Burst",
+          "critical": "Critical",
+          "shots": "shots",
+          "braced": "braced",
+          "natural1": "flat -1 (natural Rcl 1)",
+          "at": "at",
+          "target": "Target",
+          "roll": "Roll",
+          "hits": "hits",
+          "undodgeable": "critical, can't be dodged"
+        },
+        "outcome": {
+          "critical": "Critical hit",
+          "hit": "Hit",
+          "miss": "Miss",
+          "fumble": "Critical miss"
+        }
+      }
+    }
+  }
+}

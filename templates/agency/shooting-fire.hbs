@@ -1,0 +1,31 @@
+{{!-- Agency: Progressive Recoil fire dialog --}}
+<form class='agency-fire-form'>
+  <p class='agency-fire-weapon'>
+    <strong>{{weapon}}</strong>{{#if mode}} ({{mode}}){{/if}} &middot; RoF {{rof}}
+    {{#if loadedKnown}} &middot; {{localize 'GURPS.agency.shooting.dialog.loaded'}} {{loaded}}{{/if}}
+  </p>
+  <div class='form-group'>
+    <label>{{localize 'GURPS.agency.shooting.dialog.shots'}}</label>
+    <input type='number' name='shots' min='1' max='{{max}}' value='{{shots}}' autofocus />
+    <span class='hint'>1–{{max}}</span>
+  </div>
+  <div class='form-group'>
+    <label>{{localize 'GURPS.agency.shooting.dialog.braced'}}</label>
+    <input type='checkbox' name='braced' {{checked braced}} />
+  </div>
+  <div class='form-group'>
+    <label>{{localize 'GURPS.agency.shooting.dialog.rcl'}}</label>
+    <input type='text' name='rcl' value='{{rcl}}' size='5' />
+  </div>
+  {{#if gunslinger}}
+    <div class='form-group'>
+      <label>{{localize 'GURPS.agency.shooting.dialog.class'}}</label>
+      <select name='weaponClass'>{{selectOptions classes selected=weaponClass}}</select>
+    </div>
+  {{/if}}
+  <div class='form-group agency-fire-preview-row'>
+    <label>{{localize 'GURPS.agency.shooting.dialog.preview'}}</label>
+    <span class='agency-fire-preview'></span>
+  </div>
+  <p class='hint'>{{localize 'GURPS.agency.shooting.dialog.hint'}}</p>
+</form>

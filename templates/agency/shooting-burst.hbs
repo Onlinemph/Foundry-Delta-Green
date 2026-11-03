@@ -1,0 +1,35 @@
+{{!-- Agency: Progressive Recoil burst result --}}
+<div class='agency-chat-card agency-burst-card'>
+  <header class='agency-panel-header'>
+    <span>{{localize 'GURPS.agency.shooting.card.title' }}: {{weapon}}</span>
+    {{#if criticalHits}}<span class='agency-stamp'>{{localize 'GURPS.agency.shooting.card.critical'}}</span>{{/if}}
+  </header>
+  <div class='agency-burst-meta'>
+    {{shots}} {{localize 'GURPS.agency.shooting.card.shots'}} &middot; Rcl {{rcl}}{{#if braced}} &middot; {{localize 'GURPS.agency.shooting.card.braced'}}{{/if}}
+    {{#if natural1}} &middot; {{localize 'GURPS.agency.shooting.card.natural1'}}{{/if}}
+    {{#if target}}<br />{{localize 'GURPS.agency.shooting.card.at'}} {{target}}{{/if}}
+  </div>
+  <table class='agency-table agency-burst-table'>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>{{localize 'GURPS.agency.shooting.card.target'}}</th>
+        <th>{{localize 'GURPS.agency.shooting.card.roll'}}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr class='{{#if isCrit}}agency-burst-crit{{else if isHit}}agency-burst-hit{{else if isFumble}}agency-burst-fumble{{else}}agency-burst-miss{{/if}}'>
+          <td>{{shot}}</td>
+          <td>{{target}}{{#if recoilText}} <small>({{recoilText}})</small>{{/if}}</td>
+          <td>{{roll}}</td>
+          <td>{{outcomeLabel}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <footer class='agency-burst-total'>
+    <strong>{{hits}}</strong> {{localize 'GURPS.agency.shooting.card.hits'}}{{#if criticalHits}} ({{criticalHits}} {{localize 'GURPS.agency.shooting.card.undodgeable'}}){{/if}}
+  </footer>
+</div>
