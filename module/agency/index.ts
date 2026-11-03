@@ -13,6 +13,7 @@ import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
 import * as shooting from './shooting/index.ts'
 import * as gcsImport from './import/index.ts'
+import * as explosions from './explosions/index.ts'
 import { registerAgencySettingsMenu } from './settings-app.ts'
 
 // One feature per line keeps parallel branches from conflicting here.
@@ -25,6 +26,7 @@ const features = [
   shooting,
   gcsImport,
   presets,
+  explosions,
 ]
 
 /** Sheet partials shared by all features. Features add their own via registerAgencyPartials(). */

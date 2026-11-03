@@ -1,0 +1,224 @@
+// Agency: explosion GM card, dive-for-cover and incoming prompts (module/agency/explosions).
+//
+// Built on the theme kit (.agency-chat-card, .agency-btn, .agency-badge, .agency-stamp, .agency-label,
+// .agency-num). Tokens only exist while the theme is on, so every use has a neutral fallback.
+
+$n-rule: rgba(128, 128, 128, 0.45);
+$n-wash: rgba(128, 128, 128, 0.08);
+$n-red: #c0362c;
+$n-green: #3f7d4e;
+
+.agency-boom-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__title {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.9em;
+  }
+
+  &__damage {
+    font-weight: bold;
+  }
+
+  &__where {
+    color: var(--agency-red-ink, inherit);
+  }
+
+  &__special {
+    font-size: 0.9em;
+    color: var(--agency-ink-2, inherit);
+  }
+
+  &__enclosed {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+
+    select {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 1.6rem;
+    }
+  }
+
+  &__none {
+    margin: 0.3rem 0;
+    font-style: italic;
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    justify-content: flex-end;
+    margin-top: 0.35rem;
+
+    &:not(:has(*)) {
+      display: none;
+    }
+  }
+}
+
+.agency-boom-row {
+  padding: 0.25rem 0.35rem;
+  border: 1px solid var(--agency-rule, #{$n-rule});
+  border-left: 3px solid var(--agency-rule-strong, #{$n-rule});
+  border-radius: var(--agency-radius, 3px);
+  background: var(--agency-paper-2, #{$n-wash});
+  font-size: 0.9em;
+  line-height: 1.3;
+
+  &.is-struck {
+    border-left-color: var(--agency-red, #{$n-red});
+  }
+
+  &.is-applied {
+    opacity: 0.7;
+    border-left-color: var(--agency-green, #{$n-green});
+  }
+
+  &.is-outside {
+    opacity: 0.6;
+  }
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  &__name {
+    overflow-wrap: anywhere;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__cover {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.15rem 0;
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
+
+  &__dr {
+    width: 3.5rem;
+    height: 1.5rem;
+    text-align: right;
+  }
+
+  &__cover-source {
+    font-size: 0.9em;
+    color: var(--agency-ink-2, inherit);
+  }
+
+  &__line {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__hits {
+    margin: 0 0 0 1.1rem;
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__note {
+    font-size: 0.9em;
+    color: var(--agency-ink-2, inherit);
+  }
+
+  &__dive {
+    margin-top: 0.15rem;
+    font-weight: bold;
+
+    &.is-pending {
+      font-weight: normal;
+      font-style: italic;
+    }
+
+    &.is-good {
+      color: var(--agency-green-ink, #{$n-green});
+    }
+
+    &.is-bad {
+      color: var(--agency-red-ink, #{$n-red});
+    }
+  }
+
+  &__dive-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+  }
+
+  &__check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.9em;
+  }
+}
+
+.agency-boom-prompt {
+  &__body {
+    margin: 0 0 0.35rem;
+  }
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+
+    &.is-busy {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+
+  &__option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__result {
+    margin-top: 0.35rem;
+    text-align: center;
+  }
+}

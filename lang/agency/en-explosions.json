@@ -1,0 +1,172 @@
+{
+  "GURPS": {
+    "agency": {
+      "explosions": {
+        "settings": {
+          "enabled": {
+            "name": "Automate explosions",
+            "hint": "Explosive weapons (damage with \"ex\", fragments, stun or smoke grenades) let the thrower pick a token or a spot, scatter on a miss, and give the GM one card with every target's damage. Also enables the GM's /explode command."
+          },
+          "wallsCover": {
+            "name": "Explosions: walls are cover",
+            "hint": "Walls that block movement between the blast and a token add their cover DR against the blast and the fragments (B407-408). An airburst ignores them (B415)."
+          },
+          "wallDR": {
+            "name": "Explosions: cover DR per wall",
+            "hint": "Cover DR of a wall without its own value (B558: a modern house is DR 6). Give a wall its own with flags.gurps.agency.coverDR. Also the cover DR for someone who dives into cover a step away."
+          },
+          "scatter": {
+            "name": "Explosions: scatter on a miss",
+            "hint": "A missed explosive attack lands yards away equal to the margin of failure (at most half the distance), in a direction rolled on 1d (B414). Off: the thrower clicks where it lands."
+          },
+          "sharedRoll": {
+            "name": "Explosions: one damage roll for NPCs",
+            "hint": "B414 rolls blast damage for each target, but lets the GM use one roll for several NPCs. On: NPCs share one roll; player characters still roll their own."
+          },
+          "knockbackMove": {
+            "name": "Explosions: move tokens for knockback",
+            "hint": "When the GM applies an explosion, push tokens away from the blast by their knockback (B378), stopping at walls."
+          }
+        },
+        "special": {
+          "stun": "Stun grenade",
+          "wp": "White phosphorus",
+          "smoke": "Smoke",
+          "gas": "Tear gas",
+          "thermobaric": "Thermobaric",
+          "airburst": "Airburst"
+        },
+        "attack": {
+          "title": "Throw {weapon}",
+          "question": "Where does it go? Throwing it at {name} lets them dodge; aiming at the ground is +4 with no defense, but everyone there can dive for cover (B414).",
+          "atToken": "At {name}",
+          "atGround": "At the ground there (+4)",
+          "atSpot": "Pick a spot (+4)",
+          "manyTargets": "Several tokens are targeted: click the spot to aim at.",
+          "pickHint": "{weapon}: click where to aim (Shift: off the grid; right-click or Esc: cancel).",
+          "pickLanding": "{weapon} missed: click where it lands.",
+          "areaMod": "Attacking an area (B414)",
+          "rangeMod": "for range {yards} yds"
+        },
+        "card": {
+          "speaker": "Explosion",
+          "by": "Set off by {name}",
+          "scattered": "Missed: landed {yards} yd off (direction {direction} on 1d, B414)",
+          "dodged": "Dodged: landed {yards} yd off (direction {direction} on 1d, B414)",
+          "struck": "Struck {name}",
+          "contact": "{name} is on top of it (contact explosion, B415)",
+          "internal": "Went off inside {name} (B415)",
+          "radii": "Blast {blast} yd · fragments {fragments} yd",
+          "affliction": "HT{modifier} to resist, {radius} yd (HT193)",
+          "smoke": "Smoke cloud {radius} yd{seconds}: -10 to see through (HT171)",
+          "seconds": ", about {n} s",
+          "gas": "Tear gas cloud {radius} yd: two HT-2 rolls, coughing and blindness, while in it and minutes after (HT171)",
+          "airburst": "Airburst: no posture modifier, walls don't protect (B415)",
+          "environment": {
+            "thermobaric": "Thermobaric: damage ÷ (2 × yards) (HT170)",
+            "underwater": "Underwater: damage ÷ yards (B415)",
+            "vacuum": "Vacuum: damage ÷ (10 × yards) (B415)"
+          },
+          "space": "Space (HT181)",
+          "enclosed": {
+            "open": "Open ×1",
+            "vented": "Enclosed, doors/windows ×1.5",
+            "sealed": "Enclosed ×2"
+          },
+          "nobody": "Nobody was in reach.",
+          "apply": "Apply",
+          "applied": "Applied",
+          "appliedStamp": "APPLIED",
+          "applyAll": "Apply all",
+          "removeTemplates": "Remove templates",
+          "gmDive": "Dive",
+          "gmSmother": "Smother it",
+          "gmStay": "Stay",
+          "extraHits": "Rapid fire: {n} more hit(s); set each off with /explode ... target or a clicked spot",
+          "incendiary": "Explosions are incendiary and can start fires (B414, B433)"
+        },
+        "row": {
+          "struck": "struck",
+          "distance": "{yards} yd",
+          "moved": "→ {yards} yd",
+          "cover": "Cover DR",
+          "coverWall": "{n} wall(s)",
+          "coverDive": "dove into cover",
+          "coverBody": "behind {name}'s body (B415)",
+          "coverManual": "set by GM",
+          "coverTotal": "total DR {dr}: {source}",
+          "blastCollateral": "Blast {rolled} ÷ {divisor} = {damage} {type}",
+          "blastStruck": "Blast {damage} {type}{divisor}, as is (struck)",
+          "blastContact": "Blast {damage} {type}, maximum (contact)",
+          "blastInternal": "Blast {damage} {type} to the vitals, DR ignored, ×3 (internal)",
+          "blastDirect": "Direct hit {damage} {type}",
+          "throughCover": "→ {applied} through cover",
+          "fire": {
+            "partial": "clothing catches fire: 1d-4 burn/s, -2 DX (B434)",
+            "all": "all clothing catches fire: 1d-1 burn/s, -3 DX (B434)"
+          },
+          "range": "range",
+          "posture": "posture",
+          "fragAttack": "Fragments: 15 ({mods}) = {effective}, rolled {roll}: {result}",
+          "fragAuto": "Fragments: 1 automatic hit (struck)",
+          "fragHits": "{n} hit(s)",
+          "fragMiss": "miss",
+          "fragStopped": "{n} dived away",
+          "critical": "(critical)",
+          "at": "to the {location}",
+          "fragment": "fragment",
+          "knockback": "Knockback {yards} yd: DX{mod} or fall down (B378)",
+          "stunned": "Stun: HT {target}, rolled {roll}: stunned; {recovery} each turn to recover (HT193)",
+          "stunResisted": "Stun: HT {target}, rolled {roll}: resisted",
+          "hotFragments": "Hot fragments: 1d(0.2) burn every 10 s for a minute; a DX roll brushes one off (B415, HT172)",
+          "largeAreaDR": "vs DR {dr} (large-area, B400)"
+        },
+        "dive": {
+          "pending": "Dive for cover: waiting",
+          "none": "Did not dive",
+          "success": "Dove for cover, made it by {margin}",
+          "toCover": "(into cover)",
+          "smother": "Threw self on it! (made it by {margin})",
+          "failure": "Dove too late (failed by {margin})",
+          "declined": "Stayed put",
+          "tooLate": "Too late: the GM has resolved it"
+        },
+        "prompt": {
+          "title": "Explosion!",
+          "body": "{label} goes off {yards} yd from {name}.",
+          "dive": "Dive for cover (Dodge +3)",
+          "coverStep": "Cover within a step",
+          "smother": "Throw yourself on it",
+          "stay": "Stay put"
+        },
+        "incoming": {
+          "title": "Incoming!",
+          "body": "{attacker}'s {label} hits {name}. Dodge it?",
+          "dodge": "Dodge",
+          "dodgeDrop": "Dodge and drop (+3)",
+          "none": "No defense",
+          "dodged": "Dodged by {margin}: it lands away",
+          "struck": "Struck!"
+        },
+        "command": {
+          "disabled": "Explosion automation is off (Agency fork settings).",
+          "noScene": "No scene is open.",
+          "oneTarget": "Target exactly one token for target, contact or internal.",
+          "pickHint": "{label}: click where it goes off (Shift: off the grid; right-click or Esc: cancel).",
+          "charge": "{pounds} lb of {explosive} (REF {ref}): {damage} (B415)",
+          "error": {
+            "empty": "What explodes? For example: /explode 4d cr ex [2d]",
+            "unknownExplosive": "Unknown explosive: {detail}",
+            "notExplosive": "Not an explosion: {detail} (damage needs \"ex\", fragments in brackets, or a special munition)"
+          }
+        },
+        "warn": {
+          "noGM": "No GM is online: the explosion was resolved on this client.",
+          "notExplosive": "Not an explosion: {text}",
+          "otherScene": "The explosion is on scene {scene}: view it to measure walls and grid distance exactly.",
+          "noActor": "That token has no actor."
+        }
+      }
+    }
+  }
+}
