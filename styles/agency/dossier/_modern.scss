@@ -1,0 +1,227 @@
+// Dossier theme: the Modern sheet (templates/actor/actor-modern-sheet.hbs, NPC modern sheet, mook generator).
+//
+// styles/modern/ is built on --ms-* tokens, so the theme re-points those first; the rules below only add what tokens
+// can't express (typewriter section heads, folder tabs, a clipped-in photo, boxed attribute fields).
+@use 'tokens' as *;
+
+@mixin ms-map {
+  --ms-bg: var(--agency-paper);
+  --ms-bg-header: var(--agency-paper-2);
+  --ms-bg-card: var(--agency-paper);
+  --ms-bg-hover: var(--agency-green-wash);
+  --ms-bg-section: var(--agency-paper);
+  --ms-bg-muted: var(--agency-paper-2);
+  --ms-border: var(--agency-rule-strong);
+  --ms-border-light: var(--agency-rule);
+  --ms-text: var(--agency-ink);
+  --ms-text-muted: var(--agency-ink-2);
+  --ms-text-dim: var(--agency-ink-3);
+  --ms-accent: var(--agency-green-ink);
+  --ms-accent-light: var(--agency-green-wash);
+  --ms-advantage: var(--agency-green-ink);
+  --ms-advantage-bg: var(--agency-green-wash);
+  --ms-disadvantage: var(--agency-red-ink);
+  --ms-disadvantage-bg: var(--agency-red-wash);
+  --ms-hp: var(--agency-red);
+  --ms-fp: var(--agency-ballpoint);
+  --ms-fp-bg: color-mix(in srgb, var(--agency-ballpoint) 15%, transparent);
+  --ms-modifier-positive: var(--agency-green-ink);
+  --ms-modifier-positive-hover: var(--agency-green);
+  --ms-modifier-negative: var(--agency-red-ink);
+  --ms-modifier-negative-hover: var(--agency-red);
+  --ms-radius-sm: 1px;
+  --ms-radius: 2px;
+  --ms-radius-md: 3px;
+  --ms-radius-pill: 3px;
+  --ms-font-xs: max(12px, 0.75rem);
+  --ms-font-sm: max(13px, 0.8125rem);
+  --ms-font-md: max(14px, 0.875rem);
+}
+
+body.agency-theme {
+  --agency-ballpoint: #2f4f72;
+  @include ms-map;
+
+  .theme-light {
+    --agency-ballpoint: #2f4f72;
+    @include ms-map;
+  }
+
+  &.theme-dark,
+  .theme-dark {
+    --agency-ballpoint: #7fa3c8;
+    @include ms-map;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body.agency-theme:not(.theme-light):not(.theme-dark) {
+    --agency-ballpoint: #7fa3c8;
+    @include ms-map;
+  }
+}
+
+body.agency-theme {
+  .modern-sheet,
+  .app.window-app.sheet.actor.modern-sheet .window-resizable-handle {
+    @include paper;
+  }
+
+  .modern-sheet {
+    font-family: var(--agency-font-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Header block: the file's cover sheet.
+  .modern-sheet .ms-header {
+    border-bottom: 3px double var(--agency-rule-strong);
+    background: var(--agency-paper-2);
+  }
+
+  // Photo clipped to the file: square, bordered, slightly askew.
+  .modern-sheet .ms-portrait {
+    border: 4px solid #f8f4e8;
+    border-radius: 0;
+    box-shadow:
+      0 0 0 1px var(--agency-rule-strong),
+      2px 3px 6px var(--agency-shadow);
+    transform: rotate(-1.5deg);
+  }
+
+  .modern-sheet :is(.ms-name, .ms-name-input, .ms-name-container h1, .ms-name-container input) {
+    font-family: var(--agency-font-stencil);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .modern-sheet .ms-tagline {
+    color: var(--agency-ink-2);
+    font-family: var(--agency-font-type);
+  }
+
+  // Attributes as boxed form fields with a typed caption.
+  .modern-sheet .ms-attr-badge {
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 1px;
+    background: var(--agency-paper);
+    box-shadow: 1px 1px 0 var(--agency-rule);
+
+    &:hover {
+      background: var(--agency-highlight);
+      color: var(--agency-highlight-ink);
+    }
+
+    .ms-attr-value {
+      font-family: var(--agency-font-body);
+      font-weight: 700;
+    }
+
+    .ms-attr-label {
+      color: var(--agency-ink-2);
+      font-family: var(--agency-font-type);
+      letter-spacing: 0.06em;
+    }
+  }
+
+  .modern-sheet :is(.ms-section-header, .ms-stat-box legend, .ms-stat-box h4, fieldset > legend) {
+    color: var(--agency-ink);
+    font-family: var(--agency-font-type);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .modern-sheet .ms-section-header {
+    border-bottom: 3px double var(--agency-rule-strong);
+
+    i {
+      color: var(--agency-green-ink);
+    }
+  }
+
+  .modern-sheet .ms-section {
+    box-shadow: 1px 1px 0 var(--agency-rule);
+  }
+
+  .modern-sheet :is(.ms-stat-label, .ms-sense-label, .ms-status-item, label) {
+    font-family: var(--agency-font-type);
+  }
+
+  // Tabs: manila folder tabs standing on the page edge.
+  .modern-sheet .ms-tabs {
+    gap: 2px;
+    padding: 6px 12px 0;
+    border-bottom: 1px solid var(--agency-rule-strong);
+    background: var(--agency-paper-2);
+
+    .ms-tab-item {
+      margin-bottom: -1px;
+      padding: 5px 16px 4px;
+      border: 1px solid var(--agency-rule-strong);
+      border-bottom: 0;
+      border-radius: var(--agency-tab-radius) var(--agency-tab-radius) 0 0;
+      background: var(--agency-paper-3);
+      color: var(--agency-ink-2);
+      font-family: var(--agency-font-type);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+
+      &:hover {
+        background: color-mix(in srgb, var(--agency-paper-3) 60%, var(--agency-paper));
+        color: var(--agency-ink);
+      }
+
+      &.active {
+        position: relative;
+        z-index: 1;
+        background: var(--agency-paper);
+        box-shadow: inset 0 3px 0 var(--agency-green);
+        color: var(--agency-ink);
+        font-weight: 400;
+      }
+    }
+  }
+
+  // Tables: ruled ledger lines, typed column heads.
+  .modern-sheet :is(.ms-table th, .ms-table-header, .ms-col-header, thead th) {
+    color: var(--agency-ink-2);
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .modern-sheet .rollable:hover,
+  .modern-sheet .rollable.test {
+    background-color: var(--agency-highlight) !important;
+    color: var(--agency-highlight-ink);
+  }
+
+  .modern-sheet .ms-quicknotes {
+    border-color: var(--agency-rule);
+    font-style: italic;
+  }
+
+  .modern-sheet .ms-resource-bar {
+    border: 1px solid var(--agency-rule-strong);
+    border-radius: 0;
+    background: var(--agency-paper);
+  }
+
+  .modern-sheet :is(.ms-resource-fill, .ms-condition-badge) {
+    border-radius: 0;
+  }
+
+  .modern-sheet .ms-effect-tag,
+  .modern-sheet .ms-tag {
+    font-family: var(--agency-font-body);
+  }
+
+  .ms-footer {
+    font-family: var(--agency-font-body);
+  }
+}

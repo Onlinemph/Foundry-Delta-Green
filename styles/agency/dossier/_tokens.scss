@@ -1,0 +1,318 @@
+// Dossier theme design tokens.
+//
+// Two palettes: "manila" (Foundry light mode) and "night file" (Foundry dark mode). Both are applied wherever Foundry
+// puts a colour-scheme class: <body>, and any element with .theme-light / .theme-dark (v13 sets these per
+// application and on the interface). Custom properties inherit, so nested contexts pick the right palette.
+//
+// Each palette also re-points Foundry's own v13 theme variables and the upstream GURPS --gga-* variables at the
+// dossier colours, so stock UI picks the look up without per-selector overrides. Unknown variable names are inert.
+
+$grain: url('assets/agency/paper-grain.svg');
+$grain-dark: url('assets/agency/paper-grain-dark.svg');
+
+// Shared by both palettes: fonts, shapes, the paper texture.
+@mixin common {
+  --agency-font-type: 'Special Elite', 'Courier Prime', 'Courier New', Courier, monospace;
+  --agency-font-body: 'Courier Prime', 'Courier New', Courier, monospace;
+  --agency-font-stencil: 'Stardos Stencil', 'Special Elite', 'Arial Black', Impact, sans-serif;
+  --agency-radius: 2px;
+  --agency-tab-radius: 7px;
+
+  // Foundry fonts. Icons use --font-awesome, which is left alone.
+  --font-body: var(--agency-font-body);
+  --font-primary: var(--agency-font-body);
+  --font-sans: var(--agency-font-body);
+  --font-serif: var(--agency-font-body);
+  --font-mono: var(--agency-font-body);
+  --font-header: var(--agency-font-type);
+  --font-h1: var(--agency-font-type);
+  --font-h2: var(--agency-font-type);
+  --font-h3: var(--agency-font-type);
+  --font-h4: var(--agency-font-type);
+  --font-h5: var(--agency-font-type);
+  --font-h6: var(--agency-font-type);
+  // Nothing below 12px.
+  --font-size-8: 12px;
+  --font-size-9: 12px;
+  --font-size-10: 12px;
+  --font-size-11: 12px;
+  --font-size-12: 12px;
+}
+
+@mixin manila {
+  --agency-paper: #f1e8cf;
+  --agency-paper-2: #e8dcbd;
+  --agency-paper-3: #ddca95;
+  --agency-paper-edge: #c4ad74;
+  --agency-band: rgba(31, 29, 23, 0.055);
+  --agency-ink: #1f1d17;
+  --agency-ink-2: #47423a;
+  --agency-ink-3: #5f5848;
+  --agency-on-ink: #f1e8cf;
+  --agency-rule: rgba(31, 29, 23, 0.26);
+  --agency-rule-strong: #1f1d17;
+  --agency-green: #3b4a2b;
+  --agency-green-deep: #2f3b22;
+  --agency-green-ink: #3b4a2b;
+  --agency-green-wash: rgba(59, 74, 43, 0.1);
+  --agency-on-green: #f1e8cf;
+  --agency-red: #a5211a;
+  --agency-red-ink: #a5211a;
+  --agency-red-wash: rgba(165, 33, 26, 0.1);
+  --agency-highlight: #ecd76a;
+  --agency-highlight-ink: #1f1d17;
+  --agency-shadow: rgba(48, 36, 12, 0.35);
+  --agency-input-bg: rgba(255, 252, 240, 0.55);
+  --agency-header-bg: var(--agency-green-deep);
+  --agency-header-ink: var(--agency-on-green);
+  --agency-grain: #{$grain};
+
+  // Foundry v13 theme variables.
+  --background: var(--agency-paper);
+  --color-text-primary: var(--agency-ink);
+  --color-text-secondary: var(--agency-ink-2);
+  --color-text-subtle: var(--agency-ink-3);
+  --color-text-emphatic: var(--agency-ink);
+  --color-text-hyperlink: var(--agency-green-ink);
+  --color-text-selection: var(--agency-on-green);
+  --color-text-selection-bg: var(--agency-green);
+  --color-text-light-highlight: var(--agency-ink);
+  --color-text-dark-primary: var(--agency-ink);
+  --color-text-dark-secondary: var(--agency-ink-2);
+  --color-border: var(--agency-rule);
+  --color-border-light: var(--agency-rule);
+  --color-border-dark: var(--agency-rule-strong);
+  --color-border-highlight: var(--agency-green);
+  --color-border-light-tertiary: var(--agency-rule);
+  --color-border-dark-3: var(--agency-rule-strong);
+  --color-fieldset-border: var(--agency-rule);
+  --color-form-label: var(--agency-ink);
+  --color-form-label-hover: var(--agency-green-ink);
+  --color-form-hint: var(--agency-ink-3);
+  --color-form-hint-hover: var(--agency-ink-2);
+  --color-underline-header: var(--agency-rule-strong);
+  --color-header-background: var(--agency-header-bg);
+  --color-scrollbar: var(--agency-paper-edge);
+  --color-scrollbar-track: transparent;
+  --color-scrollbar-border: var(--agency-paper-edge);
+  --color-shadow-primary: #c9a93a;
+  --color-shadow-highlight: var(--agency-highlight);
+  --color-shadow-dark: rgba(0, 0, 0, 0.6);
+  --button-background-color: var(--agency-paper-3);
+  --button-border-color: var(--agency-ink-2);
+  --button-text-color: var(--agency-ink);
+  --button-hover-background-color: var(--agency-green);
+  --button-hover-border-color: var(--agency-ink);
+  --button-hover-text-color: var(--agency-on-green);
+  --button-focus-outline-color: var(--agency-red);
+  --input-background-color: var(--agency-input-bg);
+  --input-border-color: var(--agency-ink-3);
+  --input-text-color: var(--agency-ink);
+  --input-placeholder-color: var(--agency-ink-3);
+  --input-focus-outline-color: var(--agency-green);
+  --color-level-error: var(--agency-red);
+  --color-level-success: var(--agency-green);
+
+  // Upstream GURPS variables (styles/apps.css, styles/_variables.scss).
+  --gga-darkgreen-color: var(--agency-green-ink);
+  --gga-pdflink-color: var(--agency-green-ink);
+  --gga-rollable-background: var(--agency-green-wash);
+  --gga-rollable-background-hover: var(--agency-highlight);
+  --gga-gmod-background: rgba(31, 29, 23, 0.06);
+  --gga-gmod-background-hover: #d3d9b8;
+  --gga-gurpslink-color: var(--agency-ink);
+  --gga-gurpslink-color-hover: var(--agency-ink);
+  --gga-gurpslink-background: rgba(236, 215, 106, 0.45);
+  --gga-gurpslink-bordercolor: #8c7a28;
+  --gga-glinkmod-background: rgba(31, 29, 23, 0.05);
+  --gga-glinkmod-bordercolor: var(--agency-ink-3);
+  --gga-glinkmod-color-hover: var(--agency-ink);
+  --gga-glinkmodplus-background: var(--agency-green-wash);
+  --gga-glinkmodplus-bordercolor: var(--agency-green);
+  --gga-glinkmodplus-color: var(--agency-green-ink);
+  --gga-glinkmodplus-background-hover: #d3d9b8;
+  --gga-glinkmodminus-background: var(--agency-red-wash);
+  --gga-glinkmodminus-bordercolor: var(--agency-red);
+  --gga-glinkmodminus-color: var(--agency-red-ink);
+  --gga-glinkmodminus-background-hover: #ebc6b8;
+  --gga-glinkmodminus-popup-color: var(--agency-red-ink);
+  --color-modifier-negative: var(--agency-red-ink);
+  --color-modifier-positive: var(--agency-green-ink);
+  --lightgrey: var(--agency-rule);
+  --standardborder: 1px solid var(--agency-rule-strong);
+  --controlhover: 0 0 4px var(--agency-highlight);
+}
+
+@mixin night {
+  --agency-paper: #181d15;
+  --agency-paper-2: #20271c;
+  --agency-paper-3: #2a3324;
+  --agency-paper-edge: #46523a;
+  --agency-band: rgba(228, 220, 198, 0.05);
+  --agency-ink: #e4dcc6;
+  --agency-ink-2: #c0b8a2;
+  --agency-ink-3: #a29b86;
+  --agency-on-ink: #181d15;
+  --agency-rule: rgba(228, 220, 198, 0.22);
+  --agency-rule-strong: #b9b19b;
+  --agency-green: #4b5d34;
+  --agency-green-deep: #2e3a22;
+  --agency-green-ink: #a9bd84;
+  --agency-green-wash: rgba(169, 189, 132, 0.12);
+  --agency-on-green: #ece4ce;
+  --agency-red: #d24a3f;
+  --agency-red-ink: #e8766b;
+  --agency-red-wash: rgba(210, 74, 63, 0.16);
+  --agency-highlight: #6e6224;
+  --agency-highlight-ink: #f4edd8;
+  --agency-shadow: rgba(0, 0, 0, 0.6);
+  --agency-input-bg: rgba(0, 0, 0, 0.25);
+  --agency-header-bg: var(--agency-green-deep);
+  --agency-header-ink: var(--agency-on-green);
+  --agency-grain: #{$grain-dark};
+
+  --background: var(--agency-paper);
+  --color-text-primary: var(--agency-ink);
+  --color-text-secondary: var(--agency-ink-2);
+  --color-text-subtle: var(--agency-ink-3);
+  --color-text-emphatic: #f6efdc;
+  --color-text-hyperlink: var(--agency-green-ink);
+  --color-text-selection: var(--agency-ink);
+  --color-text-selection-bg: var(--agency-green);
+  --color-text-light-highlight: var(--agency-ink);
+  --color-text-light-primary: var(--agency-ink);
+  --color-text-light-secondary: var(--agency-ink-2);
+  --color-border: var(--agency-rule);
+  --color-border-light: var(--agency-rule);
+  --color-border-dark: var(--agency-rule-strong);
+  --color-border-highlight: var(--agency-green-ink);
+  --color-border-light-tertiary: var(--agency-rule);
+  --color-border-dark-3: var(--agency-rule-strong);
+  --color-fieldset-border: var(--agency-rule);
+  --color-form-label: var(--agency-ink);
+  --color-form-label-hover: var(--agency-green-ink);
+  --color-form-hint: var(--agency-ink-3);
+  --color-form-hint-hover: var(--agency-ink-2);
+  --color-underline-header: var(--agency-rule-strong);
+  --color-header-background: var(--agency-header-bg);
+  --color-scrollbar: var(--agency-paper-edge);
+  --color-scrollbar-track: transparent;
+  --color-scrollbar-border: var(--agency-paper-edge);
+  --color-shadow-primary: #b8a542;
+  --color-shadow-highlight: #b8a542;
+  --color-shadow-dark: rgba(0, 0, 0, 0.8);
+  --button-background-color: var(--agency-paper-3);
+  --button-border-color: var(--agency-paper-edge);
+  --button-text-color: var(--agency-ink);
+  --button-hover-background-color: var(--agency-green);
+  --button-hover-border-color: var(--agency-green-ink);
+  --button-hover-text-color: var(--agency-on-green);
+  --button-focus-outline-color: var(--agency-red);
+  --input-background-color: var(--agency-input-bg);
+  --input-border-color: var(--agency-paper-edge);
+  --input-text-color: var(--agency-ink);
+  --input-placeholder-color: var(--agency-ink-3);
+  --input-focus-outline-color: var(--agency-green-ink);
+  --color-level-error: var(--agency-red);
+  --color-level-success: var(--agency-green-ink);
+
+  --gga-darkgreen-color: var(--agency-green-ink);
+  --gga-pdflink-color: var(--agency-green-ink);
+  --gga-rollable-background: var(--agency-green-wash);
+  --gga-rollable-background-hover: var(--agency-highlight);
+  --gga-gmod-background: rgba(228, 220, 198, 0.07);
+  --gga-gmod-background-hover: #3d4a2c;
+  --gga-gurpslink-color: var(--agency-ink);
+  --gga-gurpslink-color-hover: #fff8e6;
+  --gga-gurpslink-background: rgba(184, 165, 66, 0.22);
+  --gga-gurpslink-bordercolor: #8f8240;
+  --gga-glinkmod-background: rgba(228, 220, 198, 0.06);
+  --gga-glinkmod-bordercolor: var(--agency-ink-3);
+  --gga-glinkmod-color-hover: #fff8e6;
+  --gga-glinkmodplus-background: var(--agency-green-wash);
+  --gga-glinkmodplus-bordercolor: var(--agency-green-ink);
+  --gga-glinkmodplus-color: var(--agency-green-ink);
+  --gga-glinkmodplus-background-hover: #3d4a2c;
+  --gga-glinkmodminus-background: var(--agency-red-wash);
+  --gga-glinkmodminus-bordercolor: var(--agency-red);
+  --gga-glinkmodminus-color: var(--agency-red-ink);
+  --gga-glinkmodminus-background-hover: #5a2520;
+  --gga-glinkmodminus-popup-color: var(--agency-red-ink);
+  --color-modifier-negative: var(--agency-red-ink);
+  --color-modifier-positive: var(--agency-green-ink);
+  --lightgrey: var(--agency-rule);
+  --standardborder: 1px solid var(--agency-rule-strong);
+  --controlhover: 0 0 4px #b8a542;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Apply the palettes. Manila is the default; night wherever Foundry says dark.
+// ---------------------------------------------------------------------------------------------------------------------
+body.agency-theme {
+  @include common;
+  @include manila;
+}
+
+body.agency-theme .theme-light {
+  @include manila;
+}
+
+body.agency-theme.theme-dark,
+body.agency-theme .theme-dark {
+  @include night;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.agency-theme:not(.theme-light):not(.theme-dark) {
+    @include night;
+  }
+}
+
+// Native widgets (scrollbars, date pickers, checkboxes) follow the palette.
+body.agency-theme,
+body.agency-theme .theme-light {
+  color-scheme: light;
+}
+
+body.agency-theme.theme-dark,
+body.agency-theme .theme-dark {
+  color-scheme: dark;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Shared surface mixins used by the rest of the theme.
+// ---------------------------------------------------------------------------------------------------------------------
+
+/// Sheet of paper: colour + grain. Use on large surfaces (window content, sheets, sidebar).
+@mixin paper($color: var(--agency-paper)) {
+  background-color: $color;
+  background-image: var(--agency-grain);
+  background-repeat: repeat;
+  background-size: 240px 240px;
+}
+
+/// Typewritten label: uppercase, tracked.
+@mixin typed($size: 13px, $tracking: 0.06em) {
+  font-family: var(--agency-font-type);
+  font-weight: 400;
+  font-size: $size;
+  letter-spacing: $tracking;
+  text-transform: uppercase;
+}
+
+/// Numbers that line up in columns.
+@mixin data {
+  font-family: var(--agency-font-body);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/// Section band (the GCS sheet's black header bars and similar).
+@mixin header-band {
+  background-color: var(--agency-header-bg);
+  color: var(--agency-header-ink);
+  font-family: var(--agency-font-type);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: none;
+}

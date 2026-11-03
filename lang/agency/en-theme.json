@@ -1,1 +1,13 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "theme": {
+        "setting": {
+          "name": "Dossier theme",
+          "hint": "Dress the whole interface as a classified case file: manila paper (or a dark \"night file\" when Foundry is in dark mode), typewriter labels, agency-green accents and red rubber stamps. Turn off to restore the stock look. Only affects this browser."
+        },
+        "pauseAlt": "Paused. Eyes only."
+      }
+    }
+  }
+}

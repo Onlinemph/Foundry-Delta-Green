@@ -1,0 +1,219 @@
+// Dossier theme: GURPS dialogs and small apps -- item editor, apply-damage dialog, settings windows,
+// roll confirmation, effect lists, resource editors.
+@use 'tokens' as *;
+
+body.agency-theme {
+  // Shared form furniture of .gga-app windows.
+  .gga-app button:not(.agency-btn, .gmbutton, [class*='fa-']) {
+    border: 1px solid var(--agency-ink-2);
+    border-radius: 2px;
+    background: var(--agency-paper-3);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.03em;
+
+    &:hover {
+      border-color: var(--agency-ink);
+      background: var(--agency-green);
+      color: var(--agency-on-green);
+    }
+
+    &.default {
+      border: 2px solid var(--agency-green-ink);
+    }
+  }
+
+  .gga-app .icon-prefix > span {
+    border-color: var(--agency-rule-strong);
+    background-color: var(--agency-paper-3);
+    color: var(--agency-ink-2);
+  }
+
+  .gga-app :is(input, select, textarea) {
+    border-color: var(--agency-ink-3);
+    background-color: var(--agency-input-bg);
+    color: var(--agency-ink);
+  }
+
+  .gga-app aside {
+    color: var(--agency-ink-3);
+  }
+
+  .gga-app :is(h1, h2, h3) {
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+  }
+
+  .gga-app :is(.gga-group, #calculation-results > div),
+  #apply-damage-advanced {
+    border-color: var(--agency-rule);
+  }
+
+  .gga-group .shaded-group > div:nth-child(odd),
+  .gga-group .shaded,
+  .shaded-group > div:nth-child(odd) {
+    background-color: var(--agency-band);
+  }
+
+  // Feature tabs inside the item editor (nav.gurps-tabs).
+  .sheet nav.gurps-tabs {
+    flex-wrap: wrap;
+    gap: 2px;
+    border-bottom: 1px solid var(--agency-rule-strong);
+  }
+
+  .gurps-tabs .item {
+    padding: 2px 6px 1px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: var(--agency-tab-radius) var(--agency-tab-radius) 0 0;
+    color: var(--agency-ink-2);
+    font-family: var(--agency-font-type);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+
+    &.active {
+      border-color: var(--agency-rule-strong);
+      background: var(--agency-paper-3);
+      box-shadow: inset 0 3px 0 var(--agency-green);
+      color: var(--agency-ink);
+      text-shadow: none;
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------
+  // Apply Damage dialog (templates/apply-damage/apply-damage-dialog.hbs)
+  // ---------------------------------------------------------------------------------------------------------------------
+  .apply-damage-title {
+    border-bottom: 3px double var(--agency-red);
+    color: var(--agency-ink);
+    font-family: var(--agency-font-stencil);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .apply-damage-header img {
+    padding: 3px;
+    border: 1px solid var(--agency-rule-strong) !important;
+    background: #f8f4e8;
+    box-shadow: 2px 3px 6px var(--agency-shadow);
+  }
+
+  .pagination div {
+    border-color: var(--agency-rule-strong);
+    font-family: var(--agency-font-body);
+
+    &.active {
+      background: var(--agency-header-bg);
+      color: var(--agency-header-ink);
+    }
+  }
+
+  .split-button {
+    text-transform: uppercase;
+  }
+
+  #apply-dropdown,
+  .dropdown-content {
+    border: 1px solid var(--agency-rule-strong);
+    background: var(--agency-paper-2);
+    box-shadow: 2px 3px 10px var(--agency-shadow);
+
+    > div:hover {
+      background: var(--agency-green);
+      color: var(--agency-on-green);
+    }
+  }
+
+  :is(.fa-solid.fa-circle-check.green) {
+    color: var(--agency-green-ink);
+  }
+
+  :is(.fa-solid.fa-circle-check.black) {
+    color: var(--agency-ink);
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------
+  // GURPS settings windows (module/utilities/gurps-settings-application.ts, templates/settings.hbs)
+  // ---------------------------------------------------------------------------------------------------------------------
+  .gga-settings .settings-list > div:nth-child(odd) {
+    background-color: var(--agency-band);
+  }
+
+  .gga-settings .settings-list label {
+    font-family: var(--agency-font-type);
+  }
+
+  .gga-settings .settings-list .hint {
+    color: var(--agency-ink-3);
+  }
+
+  .gga-combat-settings .gga-subhead {
+    border-bottom: 3px double var(--agency-rule-strong);
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .gga-combat-settings .gga-option-row.needs-on-target :is(.gga-option-name, .pdf-ref) {
+    text-decoration-color: var(--agency-red);
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------
+  // Roll confirmation (templates/confirmation-roll.hbs)
+  // ---------------------------------------------------------------------------------------------------------------------
+  :is(.cr-result-math, .cr-result-type) {
+    color: var(--agency-ink-3);
+    font-family: var(--agency-font-type);
+  }
+
+  .cr-item-img {
+    background-color: var(--agency-header-bg);
+  }
+
+  .cr-item-icon {
+    color: var(--agency-header-ink);
+  }
+
+  :is(.cr-token-name, .cr-item-roll) {
+    font-family: var(--agency-font-type);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cr-message {
+    border-left: 4px solid var(--agency-red);
+    background: var(--agency-red-wash);
+    color: var(--agency-ink);
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------
+  // Popups: effect modifiers, damage accumulator, resource editor
+  // ---------------------------------------------------------------------------------------------------------------------
+  .gga-popup-window {
+    color: var(--agency-ink);
+    font-family: var(--agency-font-body);
+
+    .heading {
+      border-bottom-color: var(--agency-rule-strong);
+      font-family: var(--agency-font-type);
+    }
+
+    .glinkmodplus {
+      color: var(--agency-green-ink);
+    }
+
+    .glinkmodminus {
+      color: var(--agency-red-ink);
+    }
+  }
+
+  .me-line:nth-child(even) {
+    background-color: var(--agency-band);
+  }
+
+  .resource-editor .section {
+    border-color: var(--agency-rule);
+  }
+}

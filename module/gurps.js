@@ -2597,4 +2597,5 @@ function updatePauseImage(pauseImage, src) {
   pauseImage.style.opacity = '0.6'
   pauseImage.classList.remove('fa-spin')
   pauseImage.classList.add('fa-beat')
+  Hooks.callAll('gurpsAgencyPauseImage', pauseImage, src) // AGENCY: dossier theme swaps in its pause stamp
 }
