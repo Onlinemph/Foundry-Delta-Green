@@ -97,10 +97,18 @@ function woundInputs(calculator: any, actor: any, handoff: InjuryHandoff): Wound
     areaAttack: !!calculator.isExplosion || calculator.hitLocation === 'Large-Area',
   }
 
+  // Hit-location detail from the GUHL feature (null when the GM picked a location by hand).
+  const guhl = calculator.agencyHitLocation
+  const located = {
+    bleedModifier: Number(guhl?.bleedModifier) || 0,
+    bleedFast: !!guhl?.bleedFast,
+  }
+
   if (!handoff.fromCalculator)
     return [
       {
         ...common,
+        ...located,
         id: newId(),
         injury: handoff.injury,
         location: String(calculator.hitLocation ?? ''),
@@ -131,6 +139,7 @@ function woundInputs(calculator: any, actor: any, handoff: InjuryHandoff): Wound
 
   return calculators.map(c => ({
     ...common,
+    ...located,
     id: newId(),
     injury: rfhInjury(c),
     location: String(calculator.hitLocation ?? ''),

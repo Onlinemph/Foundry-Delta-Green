@@ -246,7 +246,7 @@ async function bleedingCheck(actor: any, woundId: string): Promise<void> {
   if (!wound || !canRollBleeding(wound.bleeding) || !wound.bleeding.severity) return
   const traits = actorTraits(actor)
   const ht = htOf(actor)
-  const modifiers = bleedingModifiers(wound.bleeding.severity, traits)
+  const modifiers = bleedingModifiers(wound.bleeding.severity, traits, wound.bleedModifier ?? 0)
   const roll = await roll3d6()
   const result = resolveBleedingCheck(wound.bleeding, roll.total, ht + sumModifiers(modifiers), {
     trackMinor: trackMinorBleeding(),

@@ -19,6 +19,8 @@ export interface BleedingState {
   consecutive: number
   /** Total successful bleeding rolls (two stop bleeding from a Minor wound or Scratch). */
   successes: number
+  /** Hit-location rule (GUHL: skull, neck, vitals, veins): bleeds twice as often. */
+  fast?: boolean
 }
 
 export interface WoundRecord {
@@ -45,6 +47,8 @@ export interface WoundRecord {
   paralysis: boolean
   /** Free text notes the GM adds. */
   note: string
+  /** Hit-location bleeding penalty (GUHL: neck -2, vein/artery -3/-4, vitals -4), added to bleeding rolls. */
+  bleedModifier?: number
 }
 
 export interface LimbState {

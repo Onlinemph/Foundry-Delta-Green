@@ -52,7 +52,8 @@ export function bleedInterval(bleeding: BleedingState): number | null {
   if (bleeding.special === '2fp-per-second') return 0.5
   if (bleeding.special === '1fp-per-second') return 1
   if (!bleeding.severity) return null
-  return BLEEDING[bleeding.severity]?.seconds ?? null
+  const seconds = BLEEDING[bleeding.severity]?.seconds ?? null
+  return seconds !== null && bleeding.fast ? seconds / 2 : seconds
 }
 
 /** HT modifier for the roll to avoid losing FP to this wound's bleeding this interval. */

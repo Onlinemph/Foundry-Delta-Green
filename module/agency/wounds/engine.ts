@@ -341,6 +341,10 @@ export interface WoundInput {
   emergency: boolean
   created: number
   trackMinorBleeding?: boolean
+  /** From the hit-location feature (calculator.agencyHitLocation): extra modifier to bleeding rolls. */
+  bleedModifier?: number
+  /** From the hit-location feature: this location bleeds twice as often. */
+  bleedFast?: boolean
 }
 
 export type SkipReason = 'belowScratch' | 'reducedAway' | 'crushingScratch' | 'crushingMinor' | 'dismembered' | null
@@ -631,7 +635,11 @@ export function assessWound(
 /** A fresh wound record (also used when the GM records a wound by hand, without consequences). */
 export function newWoundRecord(input: WoundInput, severity: Severity, traits: Traits): WoundRecord {
   const info = locationFor(input, traits)
-  return {
+  const bleeding = initialBleeding(severity, input.damageType, {
+    trackMinor: !!input.trackMinorBleeding,
+    hemophilia: traits.hemophilia,
+  })
+  const record: WoundRecord = {
     id: input.id,
     severity,
     originalSeverity: severity,
@@ -642,10 +650,7 @@ export function newWoundRecord(input: WoundInput, severity: Severity, traits: Tr
     damageType: input.damageType,
     injury: input.injury ?? 0,
     created: input.created,
-    bleeding: initialBleeding(severity, input.damageType, {
-      trackMinor: !!input.trackMinorBleeding,
-      hemophilia: traits.hemophilia,
-    }),
+    bleeding: input.bleedFast ? { ...bleeding, fast: true } : bleeding,
     bandageAttempted: false,
     bandaged: false,
     stabilizeAttempted: false,
@@ -654,6 +659,8 @@ export function newWoundRecord(input: WoundInput, severity: Severity, traits: Tr
     paralysis: false,
     note: '',
   }
+  if (input.bleedModifier) record.bleedModifier = input.bleedModifier
+  return record
 }
 
 /**
@@ -893,11 +900,13 @@ export function deriveStatus(state: WoundsState, now: number): DerivedStatus {
 /* Bleeding checks and recovery                                       */
 /* ------------------------------------------------------------------ */
 
-/** HT modifiers for a wound's bleeding roll: the table modifier plus Hard to Kill. */
-export function bleedingModifiers(severity: Severity, traits: Traits): Modifier[] {
-  return [{ value: bleedingModifier(severity), label: `${K}.mod.bleeding` }, ...hardToKill(traits)].filter(
-    m => m.value !== 0
-  )
+/** HT modifiers for a wound's bleeding roll: the table modifier, the hit location's bleed penalty, and Hard to Kill. */
+export function bleedingModifiers(severity: Severity, traits: Traits, locationModifier = 0): Modifier[] {
+  return [
+    { value: bleedingModifier(severity), label: `${K}.mod.bleeding` },
+    { value: locationModifier, label: `${K}.mod.bleedingLocation` },
+    ...hardToKill(traits),
+  ].filter(m => m.value !== 0)
 }
 
 export interface RecoveryOptions {

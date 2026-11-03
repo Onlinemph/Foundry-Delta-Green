@@ -59,7 +59,8 @@
           "noRest": "without rest, food and water",
           "underCare": "under a competent healer's care",
           "rapidHealing": "Rapid Healing",
-          "beyondFP": "beyond -1 x FP"
+          "beyondFP": "beyond -1 x FP",
+          "bleedingLocation": "Hit location (bleeding)"
         },
         "check": {
           "stun": "Stun",
