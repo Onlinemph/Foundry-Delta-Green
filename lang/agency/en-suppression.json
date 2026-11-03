@@ -24,6 +24,56 @@
           "steady": "{name} keeps their nerve (by {margin}).",
           "pinned": "{name} stays behind cover this turn (failed by {margin}). They may only act in ways that don't expose them: move further behind cover, communicate, reload.",
           "pcPinned": "{name} wants to stay behind cover. Leaving cover this turn means {penalty} to every roll."
+        },
+        "cuf": {
+          "settings": {
+            "cool-under-fire": {
+              "name": "Cool Under Fire (Tactical Shooting)",
+              "hint": "Fright Check on the turn after a near miss (missed by 2 or less), being in a blast zone, taking a wound, or seeing an ally go down. Modifiers from Tactical Shooting p. 34 are filled in."
+            },
+            "cuf-npcs": {
+              "name": "Cool Under Fire: NPCs",
+              "hint": "NPCs roll automatically at the start of their turn; failure stuns them."
+            },
+            "cuf-pcs": {
+              "name": "Cool Under Fire: PCs",
+              "hint": "PCs get a card with a Fright Check button; failure costs SAN as for any Fright Check."
+            },
+            "san": {
+              "hint": "SAN loss (success/failure) for this event when a PC fails or passes the check. These defaults are the fork's, not Delta Green's; set your own.",
+              "nearMiss": "Cool Under Fire SAN loss: near miss",
+              "blast": "Cool Under Fire SAN loss: blast zone",
+              "wounded": "Cool Under Fire SAN loss: wounded",
+              "allyDown": "Cool Under Fire SAN loss: ally down"
+            }
+          },
+          "trigger": {
+            "nearMiss": "near miss",
+            "blast": "caught in a blast",
+            "wounded": "wounded",
+            "allyDown": "saw an ally go down"
+          },
+          "mod": {
+            "heat": "heat of battle",
+            "rof": "volume of fire",
+            "silenced": "silenced weapon",
+            "casualty": "casualty's injuries"
+          },
+          "card": {
+            "title": "Cool under fire?",
+            "stamp": "Shaken",
+            "why": "{name}: {reasons}.",
+            "gmMods": "GM: also -1 if the attack's source is unclear, -2 non-penetrating hit, -1 blood on you, -1 to -3 knew the victim, +1 veteran, +1 each (or +5 all) for a plan, an ambush, 100+ yards.",
+            "roll": "Fright Check {target}: rolled {roll}.",
+            "steady": "{name} holds it together.",
+            "npcStunned": "{name} freezes: stunned.",
+            "pcFailed": "{name} fails the Fright Check. GM: roll on the Fright Check Table.",
+            "pcPrompt": "Fright Check now, with the modifiers above. SAN at stake: {loss}.",
+            "button": "Fright Check"
+          },
+          "warn": {
+            "notOwner": "Only the character's owner can make this roll."
+          }
         }
       }
     }

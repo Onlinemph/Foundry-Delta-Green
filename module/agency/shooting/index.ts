@@ -95,7 +95,6 @@ export function init(): void {
   const g = GURPS as any
   g.agency ??= {}
   g.agency.shooting = { beforeRangedAttack }
-
   ;(Hooks as any).on('gurpsAgencyRollComplete', (ctx: any) => {
     void onRollComplete(ctx).catch(err => console.error('GURPS | Agency shooting: roll-complete failed', err))
   })
@@ -288,7 +287,10 @@ async function fireDialog(args: {
     const braced = !!(form.querySelector('[name=braced]') as HTMLInputElement)?.checked
     const rcl = parseRcl((form.querySelector('[name=rcl]') as HTMLInputElement)?.value) ?? 1
     const out = form.querySelector('.agency-fire-preview')
-    if (out) out.textContent = recoilPenalties(Math.min(shots, 50), rcl, braced).map(p => (p === 0 ? '±0' : String(p))).join('  ')
+    if (out)
+      out.textContent = recoilPenalties(Math.min(shots, 50), rcl, braced)
+        .map(p => (p === 0 ? '±0' : String(p)))
+        .join('  ')
   }
 
   const result = await (foundry.applications.api.DialogV2 as any).wait({
@@ -335,7 +337,9 @@ async function onRollComplete(ctx: any): Promise<void> {
   const actor = ctx.actor
   const chatdata = ctx.chatdata
   const mods: { modint: number; desc: string }[] = chatdata.targetmods ?? []
-  const aimSum = mods.filter(m => isAimModifier(String(m.desc ?? ''))).reduce((sum, m) => sum + (Number(m.modint) || 0), 0)
+  const aimSum = mods
+    .filter(m => isAimModifier(String(m.desc ?? '')))
+    .reduce((sum, m) => sum + (Number(m.modint) || 0), 0)
 
   if (mark.burst) {
     await resolveRestOfBurst(ctx, mark, aimSum)
@@ -372,13 +376,12 @@ async function resolveRestOfBurst(ctx: any, planned: ShootingMark, aimSum: numbe
     shots: mark.shots,
   })
   const extra = mark.shots - 1
-  const roll = extra > 0 ? await (Roll as any).create(Array.from({ length: extra }, () => '3d6').join(' + ')).evaluate() : null
+  const roll =
+    extra > 0 ? await (Roll as any).create(Array.from({ length: extra }, () => '3d6').join(' + ')).evaluate() : null
   const rest: number[] = roll ? roll.dice.map((d: any) => Number(d.total)) : []
   const result: BurstResult = resolveBurst(plan, [Number(chatdata.rtotal), ...rest])
 
-  const targets = mark.targetIds
-    .map(id => (canvas as any)?.tokens?.get(id))
-    .filter((t: any) => !!t)
+  const targets = mark.targetIds.map(id => (canvas as any)?.tokens?.get(id)).filter((t: any) => !!t)
   const render = (foundry.applications as any).handlebars.renderTemplate as (p: string, d: object) => Promise<string>
   const content = await render(CARD_TEMPLATE, {
     weapon: mark.weaponName,
@@ -403,11 +406,18 @@ async function resolveRestOfBurst(ctx: any, planned: ShootingMark, aimSum: numbe
     speaker: ctx.speaker,
     content,
     rolls: roll ? [roll] : [],
-    ...(blind
-      ? { whisper: (ChatMessage as any).getWhisperRecipients('GM').map((u: any) => u.id), blind: true }
-      : {}),
+    ...(blind ? { whisper: (ChatMessage as any).getWhisperRecipients('GM').map((u: any) => u.id), blind: true } : {}),
     sound: (CONFIG as any).sounds?.dice,
     flags: { gurps: { agency: { burst: { ...mark, hits: result.hits, criticalHits: result.criticalHits } } } },
+  })
+
+  // Other features (Cool Under Fire) react to every shot of the burst.
+  ;(globalThis as any).Hooks?.callAll('gurpsAgencyBurstResolved', {
+    actor: ctx.actor,
+    targetIds: mark.targetIds,
+    shots: result.shots,
+    shotsFired: mark.shots,
+    weapon: ctx.optionalArgs?.obj,
   })
 
   const defenseApi = (GURPS as any).agency?.defense

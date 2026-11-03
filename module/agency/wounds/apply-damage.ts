@@ -293,6 +293,11 @@ export async function recordWoundsOp(payload: RecordWoundsPayload): Promise<void
   }
 
   await writeState(actor, state)
+  // Other features (Cool Under Fire) react to the wounds just recorded.
+  ;(globalThis as any).Hooks?.callAll('gurpsAgencyWounded', {
+    actor,
+    severities: assessments.map(a => a.severity).filter(Boolean),
+  })
   for (const assessment of assessments) await applyEffectStatuses(actor, assessment.effects)
   await syncPain(actor, before.pain, state.pain, traits)
   await syncDerived(actor, before, state)

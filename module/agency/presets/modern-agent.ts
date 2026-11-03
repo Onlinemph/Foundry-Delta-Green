@@ -30,6 +30,7 @@ export const MODERN_AGENT_SETTINGS: PresetSetting[] = [
   { key: 'agency-defense-auto-damage', value: true, label: `${L}.autoDamage` },
   { key: 'agency-turn-maneuver-prompt', value: true, label: `${L}.maneuverPrompt` },
   { key: 'agency-suppression', value: true, label: `${L}.suppression` },
+  { key: 'agency-cool-under-fire', value: true, label: `${L}.coolUnderFire` },
 ]
 
 /**

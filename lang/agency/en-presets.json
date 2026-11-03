@@ -31,7 +31,8 @@
           "defense": "Targets get Dodge / Parry / Block buttons when attacked",
           "autoDamage": "Failed defenses lead to one-click damage",
           "maneuverPrompt": "Each combatant picks a maneuver at turn start",
-          "suppression": "NPCs under fire roll Will-2 or stay pinned behind cover"
+          "suppression": "NPCs under fire roll Will-2 or stay pinned behind cover",
+          "coolUnderFire": "Near misses, blasts, wounds and fallen allies call for Fright Checks (PCs risk SAN)"
         },
         "applied": "Modern Agent preset applied."
       },

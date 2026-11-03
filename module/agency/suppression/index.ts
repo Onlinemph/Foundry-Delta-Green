@@ -12,6 +12,7 @@ import { isIncapacitated } from '../defense/flow.ts'
 import { measureYards, tokenCenter } from '../explosions/scene.ts'
 import { flattenList, isRangedWeapon } from '../firearms/ammo.ts'
 import { getAgencySetting, registerAgencySetting } from '../settings.ts'
+import { initCoolUnderFire } from './cool-under-fire.ts'
 import { isExempt, leaveCoverPenalty, resolvePin, underFire, type Placed } from './rules.ts'
 
 const L = 'GURPS.agency.suppression'
@@ -46,6 +47,8 @@ export function init(): void {
     type: Boolean,
     default: false,
   })
+
+  initCoolUnderFire()
 
   onSocket('suppressionMark', async (data: any) => {
     if (game.user?.isGM) await markUnderFire(data?.combatId, data?.tokenIds)
