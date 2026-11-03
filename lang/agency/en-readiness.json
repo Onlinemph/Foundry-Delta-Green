@@ -1,0 +1,102 @@
+{
+  "GURPS": {
+    "agency": {
+      "readiness": {
+        "settings": {
+          "enabled": {
+            "name": "Weapon readiness",
+            "hint": "Track whether each weapon from equipment is ready, holstered, slung, stowed or dropped (icon on each weapon row; /ready and /holster). In combat, attacking with an unready weapon takes a Ready maneuver or a Fast-Draw roll, reloading needs the gun in hand (Fast-Draw (Ammo) takes a second off), and only ready weapons can parry. Out of combat, attacking simply draws the weapon."
+          },
+          "combatStart": {
+            "name": "Weapons when combat starts",
+            "hint": "Keep each weapon as it is, or put every combatant's weapons back in their carry state (pistols and knives holstered, long arms slung) when the GM starts combat.",
+            "keep": "Keep as they are",
+            "carry": "Back to carry state"
+          }
+        },
+        "state": {
+          "ready": "Ready",
+          "holstered": "Holstered",
+          "slung": "Slung",
+          "stowed": "Stowed",
+          "dropped": "Dropped"
+        },
+        "cardTitle": "Readiness",
+        "off": "Weapon readiness is turned off in the Agency settings.",
+        "alreadyReady": "{weapon} is already ready.",
+        "autoReady": "{weapon} was {state}: drawn (not in combat).",
+        "reloadNotReady": "{weapon} is {state}: ready it before reloading.",
+        "mod": {
+          "situation": "Fast-Draw: situation"
+        },
+        "tooltip": {
+          "carry": "Carried: {state}",
+          "fastDraw": "Fast-Draw ({specialty})",
+          "noFastDraw": "No Fast-Draw: takes a Ready maneuver",
+          "hint": "Click: next state. Right-click: carry state and Fast-Draw."
+        },
+        "prompt": {
+          "title": "{weapon} is not ready",
+          "intro": "{weapon} is {state}.",
+          "introAttack": "{weapon} is {state}: it has to be readied before you can attack with it.",
+          "ready": "Ready",
+          "readyText": "Takes this turn (Ready maneuver); attack next turn.",
+          "readyOffTurn": "Marks it ready; it is not this character's turn, so the maneuver is left alone.",
+          "fastDrawLabel": "Fast-Draw",
+          "fastDraw": "Fast-Draw ({specialty}) {level}",
+          "success": "Success: ready at once, free.",
+          "successAttack": "Success: ready at once, and the attack goes ahead.",
+          "failureText": "Failure: ready, but the turn is spent. Critical failure: dropped.",
+          "noSpecialty": "No Fast-Draw specialty covers this weapon.",
+          "notFrom": "Can't Fast-Draw a weapon that is {state}.",
+          "noSkill": "No Fast-Draw ({specialty}) skill (it has no default).",
+          "modifier": "Fast-Draw modifier",
+          "modifierHint": "Situation only, e.g. a concealed holster. The modifiers already in the bucket are kept for the attack.",
+          "gunslinger": "Gunslinger: penalties halved."
+        },
+        "note": {
+          "ready": "Readies {weapon}.",
+          "readyManeuver": "Readies {weapon} (Ready maneuver).",
+          "autoReadyReload": "Draws {weapon} first (not in combat).",
+          "holster": "Puts {weapon} away: {state}.",
+          "holsterManeuver": "Puts {weapon} away: {state} (Ready maneuver).",
+          "gunslinger": "Gunslinger: Fast-Draw penalty {from} halved to {to}.",
+          "fastDraw": {
+            "success": "Fast-Draw ({specialty}): {weapon} is ready at once.",
+            "failure": "Fast-Draw ({specialty}) failed: {weapon} is ready, but the turn is spent (Ready maneuver).",
+            "critical-failure": "Fast-Draw ({specialty}) critical failure: {weapon} is dropped, and the turn is spent."
+          },
+          "ammo": {
+            "success": "{skill}: success, one second faster.",
+            "failure": "{skill}: failed, normal time.",
+            "critical-failure": "{skill}: critical failure, the magazine is dropped. No reload."
+          }
+        },
+        "pick": {
+          "title": "Ready maneuver: {actor}",
+          "intro": "Which weapon does {actor} ready?",
+          "other": "Something else",
+          "ok": "Ready"
+        },
+        "config": {
+          "title": "Readiness: {weapon}",
+          "state": "Now",
+          "carry": "Carried",
+          "carryHint": "How it is carried when not in hand: where /holster puts it, and where it goes when combat starts (if the GM chose that).",
+          "fastDraw": "Fast-Draw",
+          "fastDrawHint": "The Fast-Draw specialty that readies it. Guns: Pistol or Long Arm from the gun class.",
+          "auto": "Automatic: {value}",
+          "none": "None",
+          "save": "Save"
+        },
+        "chat": {
+          "header": "Weapons of {actor}:",
+          "noWeapons": "{actor} has no weapons from equipment.",
+          "noMatch": "No weapon matches \"{name}\":",
+          "ambiguous": "Which weapon?",
+          "nothingInHand": "{actor} has no weapon in hand."
+        }
+      }
+    }
+  }
+}

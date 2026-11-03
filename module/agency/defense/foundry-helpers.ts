@@ -13,6 +13,10 @@ const OWNER = 3 // CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER
 export const ROLL_COMPLETE_HOOK = 'gurpsAgencyRollComplete'
 export const TURN_START_HOOK = 'gurpsAgencyTurnStart'
 export const TURN_END_HOOK = 'gurpsAgencyTurnEnd'
+/** { actor, type: 'parry' | 'block', weapons }: handlers may replace weapons (readiness keeps parries with ready weapons). */
+export const DEFENSE_WEAPONS_HOOK = 'gurpsAgencyDefenseWeapons'
+/** { actor, token, maneuver }: a maneuver was picked on the turn card (readiness asks which weapon a Ready readies). */
+export const MANEUVER_PICKED_HOOK = 'gurpsAgencyManeuverPicked'
 
 export function localize(key: string, data?: Record<string, unknown>): string {
   const i18n = game.i18n as any

@@ -5,7 +5,7 @@
         "settings": {
           "tracking": {
             "name": "Track ammunition",
-            "hint": "Count rounds loaded in ranged weapons with a Shots value such as 17+1(3) or 8(3i). Attacks spend rounds, and weapons reload from the sheet (rounds badge in the ranged table) or with /reload. Right-click the badge to choose the magazine or ammo item a reload uses."
+            "hint": "Count rounds loaded in ranged weapons with a Shots value such as 17+1(3) or 8(3i). Usages of one gun (same name and Shots) share one magazine. Attacks spend rounds, and weapons reload from the sheet (rounds badge in the ranged table) or with /reload; the swap icon (or /reload change) picks which carried magazine to load, and a magazine ejected with rounds left is kept as a partial magazine. Right-click the badge to choose the magazines or ammo items a weapon uses."
           },
           "empty": {
             "name": "Firing an empty weapon",
@@ -49,21 +49,50 @@
           "noMatch": "No weapon with tracked ammunition matches \"{name}\".",
           "allFull": "All of {actor}'s weapons are fully loaded.",
           "ambiguous": "Which weapon? Use /reload &lt;weapon&gt;:",
-          "ammoHeader": "Ammunition for {actor}:"
+          "ammoHeader": "Ammunition for {actor}:",
+          "change": "Changes magazine in {weapon}: {item}, {rounds}.",
+          "reloadFrom": "Reloads {weapon} from {item}: {rounds}.",
+          "loadOneFrom": "Loads a round of {item} into {weapon}: {rounds}.",
+          "partialKept": "The old {item} still holds {count} rounds: kept as a partial magazine.",
+          "partialLoaded": "Loads a partial {item} ({count} rounds).",
+          "returned": "The old {item} is still full: back with the others ({count}).",
+          "timeInstant": "Takes no time."
         },
         "config": {
           "title": "Ammunition: {weapon}",
           "loaded": "Rounds loaded",
-          "ammoItem": "Ammo item",
-          "ammoItemHint": "Carried equipment a reload uses up (magazines, shells, arrows). Leave blank to use the weapon's Ammo field; with neither, reloads are free.",
-          "matched": "Reloads from:",
+          "matched": "Carried:",
           "unitLabel": "The ammo item counts",
           "unitAuto": "Automatic: {unit}",
           "unit": {
             "magazines": "magazines (one per reload)",
             "rounds": "loose rounds"
           },
-          "save": "Save"
+          "save": "Save",
+          "ammoItems": "Magazines / ammo items",
+          "ammoItemsHint": "Carried equipment this weapon loads from (magazines, shells, arrows), one per line, in order of preference. Blank: use the weapon's Ammo field; with neither, reloads are free. Save and reopen for more lines.",
+          "separate": "Separate magazine for this usage",
+          "separateHint": "{usage} keeps its own magazine instead of sharing the gun's (an underbarrel launcher, a second barrel). Usages with different Shots are always separate.",
+          "sharedWith": "shared by {count} usages"
+        },
+        "choiceGone": "That magazine is no longer available for {weapon}.",
+        "noChoices": "No magazines or ammunition for {weapon} are carried. Right-click the rounds badge to say which items it uses.",
+        "changeMagazine": "Change magazine",
+        "changeAmmo": "Load from…",
+        "loadedMagazine": "Loaded: {item}",
+        "sparePartials": "partial: {count} ({rounds} rds)",
+        "sharedTooltip": "One magazine shared by {count} usages",
+        "change": {
+          "title": "Change magazine: {weapon}",
+          "hintSwap": "The magazine in the weapon comes out first: with rounds left it is kept as a partial magazine (still full: back with the others). A chambered round stays.",
+          "hintRounds": "Loads from the item picked.",
+          "item": "Magazine / ammunition",
+          "rounds": "Rounds",
+          "count": "Carried",
+          "partial": "partial",
+          "current": "loaded",
+          "load": "Load",
+          "loadRounds": "Load"
         }
       }
     }

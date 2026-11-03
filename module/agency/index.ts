@@ -13,6 +13,7 @@ import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
 import * as shooting from './shooting/index.ts'
 import * as gcsImport from './import/index.ts'
+import * as readiness from './readiness/index.ts'
 import { registerAgencySettingsMenu } from './settings-app.ts'
 
 // One feature per line keeps parallel branches from conflicting here.
@@ -23,6 +24,7 @@ const features = [
   defense,
   firearms,
   shooting,
+  readiness,
   gcsImport,
   presets,
 ]

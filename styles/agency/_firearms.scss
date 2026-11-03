@@ -40,7 +40,8 @@
   }
 }
 
-.agency-ammo-reload {
+.agency-ammo-reload,
+.agency-ammo-change {
   cursor: pointer;
   opacity: 0.75;
 
@@ -101,7 +102,7 @@
   }
 }
 
-// Dialog ---------------------------------------------------------------------
+// Dialogs --------------------------------------------------------------------
 
 .agency-firearms-config {
   .agency-firearms-config-summary {
@@ -114,4 +115,30 @@
   .form-fields span {
     flex: none;
   }
+}
+
+.agency-firearms-magazines {
+  .agency-firearms-config-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .agency-table td:first-child {
+    width: 2em;
+  }
+
+  .agency-table label {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35em;
+  }
+}
+
+.agency-firearms-ammo-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
 }

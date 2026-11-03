@@ -121,6 +121,12 @@
       "name": "English",
       "path": "lang/agency/en-import.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-readiness.json",
+      "flags": {}
     }
   ],
   "grid": {

@@ -1,0 +1,48 @@
+{{! AGENCY firearms: change-magazine dialog (module/agency/firearms/reload.ts changeMagazine). }}
+<div class='agency-firearms-magazines'>
+  <p class='agency-firearms-config-summary'>
+    <strong>{{weapon}}</strong>
+    <span class='agency-badge'>{{rounds}}</span>
+    {{#if loadedText}}<span class='agency-firearms-loaded'>{{loadedText}}</span>{{/if}}
+  </p>
+  <p class='hint'>{{hint}}</p>
+  <table class='agency-table'>
+    <thead>
+      <tr>
+        <th></th>
+        <th>{{localize 'GURPS.agency.firearms.change.item'}}</th>
+        <th class='num'>{{localize 'GURPS.agency.firearms.change.rounds'}}</th>
+        <th class='num'>{{localize 'GURPS.agency.firearms.change.count'}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr class='{{cls}}'>
+          <td>
+            <input
+              type='radio'
+              name='choice'
+              id='agency-mag-{{@index}}'
+              value='{{id}}'
+              {{checked checked}}
+              {{disabled disabled}}
+            />
+          </td>
+          <td>
+            <label for='agency-mag-{{@index}}'>
+              {{name}}
+              {{#if partial}}<span class='agency-badge agency-badge--outline'>{{localize
+                    'GURPS.agency.firearms.change.partial'
+                  }}</span>{{/if}}
+              {{#if current}}<span class='agency-badge agency-badge--green'>{{localize
+                    'GURPS.agency.firearms.change.current'
+                  }}</span>{{/if}}
+            </label>
+          </td>
+          <td class='num'>{{rounds}}</td>
+          <td class='num'>×{{count}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

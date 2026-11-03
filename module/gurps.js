@@ -1022,6 +1022,10 @@ if (!globalThis.GURPS) {
         return { target: target + modifier, thing: thing }
       }
 
+      // AGENCY: weapon readiness. An unready weapon in combat needs a Ready maneuver or a Fast-Draw roll first;
+      // runs before the bucket is touched and before the shooting fire dialog. false cancels the attack.
+      if ((await GURPS.agency?.readiness?.beforeAttack?.({ actor, action, att, event })) === false) return false
+
       const opt = {
         blind: action.blindroll,
         event,

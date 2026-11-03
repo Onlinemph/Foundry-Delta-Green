@@ -1,0 +1,25 @@
+{{! AGENCY readiness: which weapon a Ready maneuver readies (module/agency/readiness/actions.ts onManeuverPicked). }}
+<div class='agency-readiness-pick'>
+  <p>{{intro}}</p>
+  <table class='agency-table'>
+    <tbody>
+      {{#each weapons}}
+        <tr>
+          <td><input
+              type='radio'
+              name='weapon'
+              id='agency-ready-pick-{{@index}}'
+              value='{{id}}'
+              {{checked checked}}
+            /></td>
+          <td><label for='agency-ready-pick-{{@index}}'>{{name}}</label></td>
+          <td><span class='agency-badge'>{{state}}</span></td>
+        </tr>
+      {{/each}}
+      <tr>
+        <td><input type='radio' name='weapon' id='agency-ready-pick-other' value='' /></td>
+        <td colspan='2'><label for='agency-ready-pick-other'>{{otherLabel}}</label></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,32 @@
+{{! AGENCY readiness: per-weapon readiness settings (module/agency/readiness/sheet.ts configureReadiness). }}
+<div class='agency-readiness-config'>
+  <p><strong>{{weapon}}</strong></p>
+  <div class='form-group'>
+    <label for='agency-readiness-state'>{{localize 'GURPS.agency.readiness.config.state'}}</label>
+    <div class='form-fields'>
+      <select id='agency-readiness-state' name='state'>{{selectOptions states selected=state localize=false}}</select>
+    </div>
+  </div>
+  <div class='form-group'>
+    <label for='agency-readiness-carry'>{{localize 'GURPS.agency.readiness.config.carry'}}</label>
+    <div class='form-fields'>
+      <select id='agency-readiness-carry' name='carry'>{{selectOptions
+          carryStates
+          selected=carry
+          localize=false
+        }}</select>
+    </div>
+    <p class='hint'>{{localize 'GURPS.agency.readiness.config.carryHint'}}</p>
+  </div>
+  <div class='form-group'>
+    <label for='agency-readiness-fastdraw'>{{localize 'GURPS.agency.readiness.config.fastDraw'}}</label>
+    <div class='form-fields'>
+      <select id='agency-readiness-fastdraw' name='fastDraw'>{{selectOptions
+          specialties
+          selected=fastDraw
+          localize=false
+        }}</select>
+    </div>
+    <p class='hint'>{{localize 'GURPS.agency.readiness.config.fastDrawHint'}}</p>
+  </div>
+</div>
