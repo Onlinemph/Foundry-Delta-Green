@@ -11,8 +11,9 @@ import * as sanity from './sanity/index.ts'
 import * as defense from './defense/index.ts'
 import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
+import * as gcsImport from './import/index.ts'
 
-const features = [theme, wounds, sanity, defense, firearms, presets]
+const features = [theme, wounds, sanity, defense, firearms, presets, gcsImport]
 
 /** Sheet partials shared by all features. Features add their own via registerAgencyPartials(). */
 const partials: Record<string, string> = {
