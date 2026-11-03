@@ -13,6 +13,7 @@ import {
 } from '../../lib/utilities.js'
 import { GurpsActor } from '../actor/actor.js'
 import { TokenActions } from '../token-actions.js'
+import { handleAgencyInjury } from '../agency/wounds/apply-damage.ts' // AGENCY
 import { CompositeDamageCalculator } from './damagecalculator.js'
 
 const simpleDialogHeight = 160
@@ -762,6 +763,9 @@ export default class ApplyDamageDialog extends Application {
    * @param {boolean} publicly - if true, display to everyone; else display to GM and owner.
    */
   async resolveInjury(keepOpen, injury, publicly, results = null) {
+    // AGENCY: under Revised Fractional Health, record wounds (or FP by severity) instead of subtracting points.
+    if (await handleAgencyInjury(this, { keepOpen, injury, publicly, fromCalculator: results !== null })) return
+
     let [resource, path] = this._calculator.resource
 
     if (!resource || !path) {

@@ -1,0 +1,25 @@
+{{!-- Agency: worst-wound summary that replaces the HP tracker in the #hp-fp block of the Full (GCS) sheet under Revised Fractional Health. --}}
+{{#with (agencyWounds this) as |w|}}
+<div class='tracked-resource agency-wounds-summary' data-agency-wounds-summary>
+  <div class='header'>{{localize 'GURPS.agency.wounds.summary.title'}}</div>
+  <div class='condition-block tooltip-wrapper'>
+    <div class='tooltip condition agency-sev agency-sev-{{w.worstKey}}'>
+      {{w.worstLabel}}
+      <span class='tooltiptext'>
+        <div class='fieldblock'>
+          {{#each w.thresholds as |t|}}
+            <div class='field condensed noedit'>{{t.injury}}</div>
+            <div class='label'>{{t.label}}</div>
+          {{/each}}
+        </div>
+      </span>
+    </div>
+  </div>
+  {{#if w.summaryText}}<div class='agency-wounds-summary-detail'>{{w.summaryText}}</div>{{/if}}
+  <div class='basic-value fieldblock3'>
+    <div class='points'>[{{w.hpPoints}}]</div>
+    <div class='field'>{{w.maxHP}}</div>
+    <div class='label'>{{localize 'GURPS.agency.wounds.summary.maxHP'}}</div>
+  </div>
+</div>
+{{/with}}

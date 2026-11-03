@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Agency (Revised Fractional Health): wounds halve Move and Dodge -->
+  <circle cx="50" cy="50" r="44" fill="#d6e4ff" stroke="#16264a" stroke-width="6"/>
+  <text x="50" y="66" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="46" fill="#16264a">&#189;</text>
+</svg>

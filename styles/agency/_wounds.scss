@@ -1,1 +1,239 @@
-// Agency: wounds styles
+@use 'sass:list';
+
+// Agency: wounds styles (Revised Fractional Health).
+//
+// The theme feature defines the shared kit (.agency-panel, .agency-btn, ...). The fallbacks below are
+// wrapped in :where() so they have zero specificity: the theme's rules always win once both are merged.
+
+$severity-colors: (
+  none: (
+    #d8f0d8,
+    #1f3d1f,
+  ),
+  scratch: (
+    #fbf3c4,
+    #4a4000,
+  ),
+  minor: (
+    #f8e08a,
+    #4a3a00,
+  ),
+  moderate: (
+    #f5b971,
+    #4a2600,
+  ),
+  major: (
+    #ec8a55,
+    #3d1300,
+  ),
+  critical: (
+    #d94a3a,
+    #ffffff,
+  ),
+  massive: (
+    #9e1b1b,
+    #ffffff,
+  ),
+  gawdawful: (
+    #4a0d2e,
+    #ffd6e8,
+  ),
+  destroyed: (
+    #111111,
+    #f08080,
+  ),
+);
+
+// ---- Fallback kit (zero specificity) ----
+:where(.agency-wounds-panel.agency-panel) {
+  border: 1px solid #555;
+  margin: 4px 0;
+  padding: 4px 6px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+:where(.agency-wounds-panel) :where(.agency-panel-header),
+:where(.agency-wounds-card) :where(.agency-chat-card-header) {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+:where(.agency-wounds-panel) :where(.agency-stamp) {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+:where(.agency-wounds-panel, .agency-wounds-card, .agency-wounds-roll) :where(.agency-badge) {
+  display: inline-block;
+  padding: 0 4px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+  font-size: 0.85em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+:where(.agency-wounds-panel, .agency-wounds-card) :where(.agency-btn) {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  margin: 1px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+:where(.agency-wounds-panel, .agency-wounds-card, .agency-wounds-roll) :where(.agency-table) {
+  width: 100%;
+  margin: 2px 0;
+  border-collapse: collapse;
+  font-size: 0.9em;
+
+  th,
+  td {
+    padding: 1px 3px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+}
+
+:where(.agency-wounds-card.agency-chat-card, .agency-wounds-roll.agency-chat-card) {
+  padding: 2px;
+}
+
+// ---- Feature styles ----
+@each $name, $pair in $severity-colors {
+  .agency-sev.agency-sev-#{$name} {
+    background-color: list.nth($pair, 1);
+    color: list.nth($pair, 2);
+  }
+}
+
+.agency-wounds-panel {
+  .agency-wounds-conditions {
+    display: inline-flex;
+    flex-flow: row wrap;
+    gap: 3px;
+    margin-left: auto;
+  }
+
+  .agency-wounds-pain {
+    background-color: #f3d1f4;
+  }
+
+  .agency-wounds-shock {
+    background-color: #d6e4ff;
+  }
+
+  .agency-wounds-actions {
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .agency-wounds-bleeding {
+    color: #9e1b1b;
+    font-weight: bold;
+  }
+
+  .agency-wounds-crippled {
+    color: #a35a00;
+    font-weight: bold;
+  }
+
+  .agency-wounds-lost {
+    color: #9e1b1b;
+    font-weight: bold;
+  }
+
+  .agency-wounds-empty {
+    margin: 2px 0;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .agency-wounds-footer {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 2px;
+    margin-top: 3px;
+  }
+}
+
+.agency-wounds-flag {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 0 3px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.08);
+  font-size: 0.8em;
+}
+
+.agency-wounds-card,
+.agency-wounds-roll {
+  .agency-wounds-title {
+    font-style: italic;
+  }
+
+  .agency-chat-card-header .agency-sev {
+    margin-left: auto;
+  }
+
+  .agency-wounds-entry {
+    margin: 2px 0 4px;
+  }
+
+  .agency-wounds-line {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .agency-wounds-detail {
+    margin-left: 6px;
+    font-size: 0.9em;
+  }
+
+  .agency-wounds-check-label {
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .agency-wounds-target {
+    font-size: 0.85em;
+    opacity: 0.85;
+  }
+
+  .agency-wounds-result.success,
+  td.success {
+    color: #1f6e1f;
+    font-weight: bold;
+  }
+
+  .agency-wounds-result.failure,
+  td.failure {
+    color: #9e1b1b;
+    font-weight: bold;
+  }
+}
+
+// The worst-wound summary that replaces the HP tracker on the Full (GCS) sheet.
+.agency-wounds-summary {
+  .condition.agency-sev {
+    font-weight: bold;
+  }
+
+  .agency-wounds-summary-detail {
+    font-size: var(--font-size-11, 0.8em);
+    text-align: center;
+  }
+}
