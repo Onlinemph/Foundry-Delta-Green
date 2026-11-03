@@ -24,7 +24,13 @@
           "sanity": "Turn on SAN, Breaking Points and Bonds",
           "sanRoll": "SAN checks use the Fright Check roll",
           "ammo": "Track rounds in every firearm",
-          "ammoEmpty": "Block attacks with an empty weapon"
+          "ammoEmpty": "Block attacks with an empty weapon",
+          "rapidFire": "Rapid fire uses Progressive Recoil (a roll per shot)",
+          "carryover": "Single shots carry half their Acc into the next turn",
+          "gunslinger": "Gunslinger advantage works automatically",
+          "defense": "Targets get Dodge / Parry / Block buttons when attacked",
+          "autoDamage": "Failed defenses lead to one-click damage",
+          "maneuverPrompt": "Each combatant picks a maneuver at turn start"
         },
         "applied": "Modern Agent preset applied."
       },

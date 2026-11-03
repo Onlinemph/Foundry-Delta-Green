@@ -23,6 +23,12 @@ export const MODERN_AGENT_SETTINGS: PresetSetting[] = [
   { key: 'agency-san-roll', value: 'fright', label: `${L}.sanRoll` },
   { key: 'agency-ammo-tracking', value: true, label: `${L}.ammo` },
   { key: 'agency-ammo-empty', value: 'block', label: `${L}.ammoEmpty` },
+  { key: 'agency-rapid-fire', value: 'prs', label: `${L}.rapidFire` },
+  { key: 'agency-aim-carryover', value: true, label: `${L}.carryover` },
+  { key: 'agency-gunslinger', value: true, label: `${L}.gunslinger` },
+  { key: 'agency-defense-prompts', value: true, label: `${L}.defense` },
+  { key: 'agency-defense-auto-damage', value: true, label: `${L}.autoDamage` },
+  { key: 'agency-turn-maneuver-prompt', value: true, label: `${L}.maneuverPrompt` },
 ]
 
 /**
