@@ -88,7 +88,7 @@ export class GurpsSettingsApplication extends foundry.applications.api.Handlebar
   ): Promise<foundry.applications.api.ApplicationV2.RenderContext> {
     const context = await super._prepareContext(options)
 
-    const settings = settingsForModule(this._module, game.settings!.settings.values() as Iterable<any>)
+    const settings = this._selectSettings() // AGENCY: overridable so the fork can list its own settings
 
     // @ts-expect-error: missing types
     const entries: SettingEntry[] = []
@@ -135,6 +135,11 @@ export class GurpsSettingsApplication extends foundry.applications.api.Handlebar
     })
 
     return result
+  }
+
+  /** AGENCY: settings shown in this window. Subclasses may override. */
+  protected _selectSettings(): any[] {
+    return settingsForModule(this._module, game.settings!.settings.values() as Iterable<any>)
   }
 
   static async update(event: SubmitEvent | Event, form: HTMLFormElement, formData: FormDataExtended): Promise<void> {

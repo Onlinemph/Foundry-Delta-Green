@@ -27,6 +27,12 @@
           "ammoEmpty": "Block attacks with an empty weapon"
         },
         "applied": "Modern Agent preset applied."
+      },
+      "settings": {
+        "title": "Agency fork settings",
+        "name": "Agency fork",
+        "label": "Agency fork settings",
+        "hint": "House rules and automation added by this fork: wounds, SAN, defense prompts, ammo, import."
       }
     }
   }

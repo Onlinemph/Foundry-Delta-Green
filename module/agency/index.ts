@@ -11,6 +11,7 @@ import * as sanity from './sanity/index.ts'
 import * as defense from './defense/index.ts'
 import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
+import { registerAgencySettingsMenu } from './settings-app.ts'
 
 const features = [theme, wounds, sanity, defense, firearms, presets]
 
@@ -27,6 +28,7 @@ export function registerAgencyPartials(more: Record<string, string>): void {
 }
 
 export function initAgency(): void {
+  registerAgencySettingsMenu()
   for (const feature of features) feature.init()
   // Register after features so they can add partials in init().
   foundry.applications.handlebars.loadTemplates(partials)
