@@ -1,8 +1,8 @@
 {
   "id": "gurps",
-  "title": "GURPS 4e Game Aid (Unofficial)",
-  "description": "A game aid to help play GURPS 4e for Foundry VTT",
-  "version": "0.18.27",
+  "title": "GURPS 4e Game Aid (Agency fork, private)",
+  "description": "Private fork of the GURPS 4e Game Aid: dossier theme, Revised Fractional Health wounds, SAN with Breaking Points, defense prompts, ammo tracking.",
+  "version": "0.18.27-agency.1",
   "authors": [
     {
       "name": "Chris Normand",
@@ -27,9 +27,16 @@
     "maximum": "14",
     "verified": "14.369"
   },
-  "esmodules": ["module/gurps.js", "lib/xregexp-all.js"],
-  "scripts": ["scripts/jquery.tinycolorpicker.js"],
-  "styles": ["gurps.css"],
+  "esmodules": [
+    "module/gurps.js",
+    "lib/xregexp-all.js"
+  ],
+  "scripts": [
+    "scripts/jquery.tinycolorpicker.js"
+  ],
+  "styles": [
+    "gurps.css"
+  ],
   "languages": [
     {
       "lang": "en",
@@ -66,6 +73,42 @@
       "name": "Español (Spanish)",
       "path": "lang/es.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-theme.json",
+      "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-wounds.json",
+      "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-sanity.json",
+      "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-defense.json",
+      "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-firearms.json",
+      "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-presets.json",
+      "flags": {}
     }
   ],
   "grid": {
@@ -89,7 +132,5 @@
   "secondaryTokenAttribute": "FP",
   "license": "LICENSE.txt",
   "socket": true,
-  "url": "https://github.com/crnormand/gurps",
-  "manifest": "https://raw.githubusercontent.com/crnormand/gurps/release/system.json",
-  "download": "https://github.com/crnormand/gurps/releases/download/v0.18.27/system.zip"
+  "url": "https://github.com/crnormand/gurps"
 }

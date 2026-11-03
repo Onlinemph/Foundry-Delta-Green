@@ -17,3 +17,6 @@ simple.css.map
 # Build
 dist/
 .tsbuildinfo
+
+# AGENCY
+release/

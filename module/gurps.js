@@ -82,6 +82,8 @@ import { Length } from './data/common/length.js'
 import { findBestActionInChain } from './otf/best-action.ts'
 import { applyModifierDesc } from './otf/description-utilities.js'
 import { OtfActionType } from './otf/types.ts'
+// AGENCY: fork additions entry point
+import { initAgency, readyAgency } from './agency/index.ts'
 import { Pdf } from './pdf/index.js'
 import { ResourceTracker } from './resource-tracker/index.js'
 import { Token } from './token/index.js'
@@ -2214,6 +2216,8 @@ if (!globalThis.GURPS) {
 
     GURPS.ActorSheets = { character: GurpsActorSheet }
 
+    initAgency() // AGENCY
+
     Hooks.call('gurpsinit', GURPS)
   })
 
@@ -2552,6 +2556,8 @@ if (!globalThis.GURPS) {
       element[0].innerHTML = gurpslink(element[0].innerHTML)
       GurpsWiring.hookupAllEvents(html)
     })
+
+    readyAgency() // AGENCY
 
     // End of system "READY" hook.
     Hooks.call('gurpsready')

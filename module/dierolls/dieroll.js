@@ -134,6 +134,13 @@ export async function doRoll({
     return false
   }
 
+  // AGENCY: let fork features veto a roll (e.g. an empty magazine). Handlers return false to cancel.
+  if (
+    Hooks.call('gurpsAgencyPreRoll', { actor, formula, thing, chatthing, origtarget, optionalArgs, action, token }) ===
+    false
+  )
+    return false
+
   let bucketRoll
   let displayFormula = formula
   const isAttributeOrCheckRoll = Object.keys(GURPS.PARSELINK_MAPPINGS).includes(
@@ -686,5 +693,19 @@ async function _doRoll({
     if (failure && !!optionalArgs.action.falsetext) messageData.content = optionalArgs.action.falsetext
     if (!!messageData.content) ChatMessage.create(messageData)
   }
+
+  // AGENCY: notify fork features (defense prompts, ammo use) that a roll finished.
+  Hooks.callAll('gurpsAgencyRollComplete', {
+    actor,
+    speaker,
+    chatdata,
+    optionalArgs,
+    thing,
+    chatthing,
+    origtarget,
+    isTargeted,
+    failure,
+    roll,
+  })
   return !failure
 }
