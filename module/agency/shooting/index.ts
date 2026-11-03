@@ -92,7 +92,7 @@ export function init(): void {
   g.agency ??= {}
   g.agency.shooting = { beforeRangedAttack }
 
-  Hooks.on('gurpsAgencyRollComplete', (ctx: any) => {
+  ;(Hooks as any).on('gurpsAgencyRollComplete', (ctx: any) => {
     void onRollComplete(ctx).catch(err => console.error('GURPS | Agency shooting: roll-complete failed', err))
   })
 }
