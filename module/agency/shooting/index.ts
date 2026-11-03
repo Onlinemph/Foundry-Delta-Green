@@ -12,6 +12,7 @@
 import { flattenList, isRangedWeapon, weaponId, weaponKey, type RangedLike } from '../firearms/ammo.ts'
 import { isTracked } from '../firearms/shots.ts'
 import { rangedWeapons, viewOf, type AmmoActor } from '../firearms/state.ts'
+import { hitLocationFromModifiers } from '../defense/defense-card.ts'
 import { getAgencySetting, registerAgencySetting } from '../settings.ts'
 import {
   carriedAcc,
@@ -405,6 +406,8 @@ async function resolveRestOfBurst(ctx: any, mark: ShootingMark, aimSum: number):
         isRanged: true,
         hits: result.hits,
         criticalHits: result.criticalHits,
+        // A called shot applies to every shot of the burst.
+        hitLocation: hitLocationFromModifiers(chatdata.targetmods) ?? undefined,
         chatMessageId: message?.id,
       })
     }

@@ -68,6 +68,11 @@ export function defenseWeapons(defender: AnyActor | null, type: 'parry' | 'block
 /*  Attack -> defense cards                  */
 /* ---------------------------------------- */
 
+/** The called-shot location in a roll's modifiers ("to hit <location>"), or null. Used by the shooting feature for bursts. */
+export function hitLocationFromModifiers(mods: any[] | null | undefined): string | null {
+  return parseHitLocation(mods as any, localize('GURPS.modifierToHit'), hitLocationNames())
+}
+
 /** Upstream localized hit location names -> raw keys, for reading "to hit <location>" modifiers. */
 function hitLocationNames(): Record<string, string> {
   const names: Record<string, string> = {}
