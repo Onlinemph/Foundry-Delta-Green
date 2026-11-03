@@ -1,1 +1,117 @@
 // Agency: firearms styles
+//
+// Rounds badge + reload icon injected into the ranged tables (module/agency/firearms/sheet.ts),
+// the reload chat card and the per-weapon ammo dialog.
+//
+// .agency-badge / .agency-chat-card belong to the theme kit (styles/agency/_theme.scss). The
+// fallbacks below sit inside :where() so they have zero specificity and the theme always wins.
+
+:where(.agency-badge) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0 0.35em;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.85em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+:where(.agency-chat-card) {
+  border-left: 3px solid currentColor;
+  padding: 0.25em 0.5em;
+}
+
+// Sheet badge -------------------------------------------------------------
+
+.agency-ammo {
+  margin: 0.15em 0 0;
+  font-variant-numeric: tabular-nums;
+  cursor: context-menu;
+
+  &.agency-ammo-low {
+    color: #b35c00;
+  }
+
+  &.agency-ammo-empty {
+    color: #b30000;
+    font-weight: bold;
+  }
+}
+
+.agency-ammo-reload {
+  cursor: pointer;
+  opacity: 0.75;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    text-shadow: 0 0 4px currentColor;
+  }
+
+  &.agency-ammo-full {
+    opacity: 0.35;
+  }
+
+  i {
+    font-size: 0.9em;
+  }
+}
+
+// Full (GCS) sheet: the badge sits under the Shots notation in the same cell.
+#ranged .shots.agency-ammo-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+}
+
+// Modern sheets: the badge sits at the right end of the weapon's name cell.
+.ms-attack-row .agency-ammo-host {
+  display: flex;
+  align-items: center;
+  gap: var(--ms-space-2, 4px);
+
+  > .ms-use-button {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  > .agency-ammo {
+    flex: none;
+    margin: 0 0 0 auto;
+  }
+}
+
+// Chat card ----------------------------------------------------------------
+
+.agency-firearms-card {
+  p {
+    margin: 0.2em 0;
+  }
+}
+
+.agency-firearms-card-title {
+  font-weight: bold;
+
+  i {
+    margin-right: 0.25em;
+  }
+}
+
+// Dialog ---------------------------------------------------------------------
+
+.agency-firearms-config {
+  .agency-firearms-config-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .form-fields span {
+    flex: none;
+  }
+}
