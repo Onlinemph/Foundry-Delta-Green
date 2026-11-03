@@ -1,0 +1,57 @@
+<div class='agency-defense-controls'>
+  {{#if notes.length}}
+    <ul class='agency-defense-controls__notes'>
+      {{#each notes}}<li>{{this}}</li>{{/each}}
+    </ul>
+  {{/if}}
+
+  {{#if toggles.length}}
+    <div class='agency-defense-controls__toggles'>
+      {{#each toggles}}
+        <label class='agency-defense-controls__toggle' data-tooltip='{{hint}}'>
+          <input type='checkbox' name='{{id}}' />
+          {{label}}
+        </label>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  <div class='agency-defense-controls__buttons'>
+    {{#if dodge}}
+      <button type='button' class='agency-btn' data-agency-action='defend' data-defense='dodge'>
+        <i class='fa-solid fa-person-running'></i>
+        {{dodge.label}}
+        {{dodge.value}}
+      </button>
+    {{/if}}
+
+    {{#if parries.length}}
+      <div class='agency-defense-controls__pick'>
+        <select name='parry'>
+          {{#each parries}}<option value='{{name}}'>{{name}} ({{value}})</option>{{/each}}
+        </select>
+        <button type='button' class='agency-btn' data-agency-action='defend' data-defense='parry'>
+          <i class='fa-solid fa-swords'></i>
+          {{parryLabel}}
+        </button>
+      </div>
+    {{/if}}
+
+    {{#if blocks.length}}
+      <div class='agency-defense-controls__pick'>
+        <select name='block'>
+          {{#each blocks}}<option value='{{name}}'>{{name}} ({{value}})</option>{{/each}}
+        </select>
+        <button type='button' class='agency-btn' data-agency-action='defend' data-defense='block'>
+          <i class='fa-solid fa-shield-halved'></i>
+          {{blockLabel}}
+        </button>
+      </div>
+    {{/if}}
+
+    <button type='button' class='agency-btn agency-btn--quiet' data-agency-action='defend' data-defense='none'>
+      <i class='fa-solid fa-xmark'></i>
+      {{noDefenseLabel}}
+    </button>
+  </div>
+</div>
