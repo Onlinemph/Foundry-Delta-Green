@@ -1,0 +1,48 @@
+<div class='agency-chat-card agency-defense-card' data-agency-card='defense' data-status='{{status}}'>
+  <header class='agency-defense-card__header'>
+    <span class='agency-badge agency-defense-card__kind'><i class='{{kindIcon}}'></i> {{kindLabel}}</span>
+    <span class='agency-defense-card__title'>{{title}}</span>
+  </header>
+
+  <div class='agency-defense-card__attack'>
+    <div class='agency-defense-card__weapon'>
+      <strong>{{weapon}}</strong>{{#if damage}} <span class='agency-defense-card__damage-text'>{{damage}}</span>{{/if}}
+    </div>
+    {{#if hitLocation}}<div>{{hitLocation}}</div>{{/if}}
+    {{#if hitsText}}<div>{{hitsText}}</div>{{/if}}
+    {{#if criticalText}}<div class='agency-defense-card__critical'>{{criticalText}}</div>{{/if}}
+    {{#if marginText}}<div class='agency-defense-card__margin'>{{marginText}}</div>{{/if}}
+    {{#if deceptiveText}}<div>{{deceptiveText}}</div>{{/if}}
+  </div>
+
+  {{#if reasonText}}<div class='agency-defense-card__reason'>{{reasonText}}</div>{{/if}}
+
+  {{#if attempts.length}}
+    <ul class='agency-defense-card__attempts'>
+      {{#each attempts}}
+        <li class='{{cls}}'>{{text}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{#if isAwaiting}}
+    <div class='agency-defense-card__controls' data-agency-defense-controls>
+      <p class='agency-defense-card__waiting'>{{waitingText}}</p>
+    </div>
+  {{/if}}
+
+  {{#if stampText}}
+    <div class='agency-defense-card__result'><span
+        class='agency-stamp agency-defense-card__stamp is-{{status}}'
+      >{{stampText}}</span></div>
+  {{/if}}
+
+  {{#if isHit}}
+    <div class='agency-defense-card__damage' data-agency-role='attacker'>
+      <button type='button' class='agency-btn' data-agency-action='roll-damage'>
+        <i class='fa-solid fa-burst'></i>
+        {{damageButtonLabel}}
+      </button>
+    </div>
+  {{/if}}
+</div>

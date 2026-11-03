@@ -1,0 +1,52 @@
+<div class='agency-chat-card agency-turn-card' data-agency-card='turn' data-phase='{{phase}}'>
+  <header class='agency-turn-card__header'>
+    <span class='agency-badge'>{{roundLabel}}</span>
+    <span class='agency-turn-card__title'>{{title}}</span>
+  </header>
+
+  {{#if stunnedText}}
+    <div class='agency-turn-card__stun'><span class='agency-stamp is-stunned'>{{stunnedText}}</span></div>
+  {{/if}}
+
+  {{#if recovery.length}}
+    <div class='agency-turn-card__recovery'>
+      {{#each recovery}}
+        {{#if done}}
+          <div class='agency-turn-card__result {{cls}}'>{{text}}</div>
+        {{else}}
+          <div data-agency-role='owner'>
+            <button type='button' class='agency-btn' data-agency-action='recover' data-attribute='{{attribute}}'>
+              <i class='fa-solid fa-dice'></i>
+              {{label}}
+            </button>
+          </div>
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{#if promptManeuver}}
+    {{#if chosen}}
+      <div class='agency-turn-card__chosen'>
+        {{#if chosen.img}}<img src='{{chosen.img}}' alt='' />{{/if}}
+        {{chosenText}}
+      </div>
+    {{else}}
+      <p class='agency-turn-card__prompt'>{{maneuverPromptText}}</p>
+      <div class='agency-maneuver-grid' data-agency-role='owner'>
+        {{#each maneuvers}}
+          <button
+            type='button'
+            class='agency-maneuver-btn'
+            data-agency-action='maneuver'
+            data-maneuver='{{id}}'
+            data-tooltip='{{label}}'
+          >
+            <img src='{{img}}' alt='' />
+            <span>{{label}}</span>
+          </button>
+        {{/each}}
+      </div>
+    {{/if}}
+  {{/if}}
+</div>

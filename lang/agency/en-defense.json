@@ -1,1 +1,117 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "defense": {
+        "settings": {
+          "prompts": {
+            "name": "Defense prompts",
+            "hint": "When an attack on targeted tokens succeeds, post a defense card (Dodge, Parry, Block, No defense) to each target's owners and the GM."
+          },
+          "autoDamage": {
+            "name": "Open Apply Damage after a hit",
+            "hint": "After 'Roll damage' on a defense card, open the Apply Damage dialog on the target, prefilled with the rolled damage, hit location and number of hits (on the GM's screen when only GMs may open it)."
+          },
+          "maneuverPrompt": {
+            "name": "Maneuver prompt at turn start",
+            "hint": "When a combatant's turn starts, last turn's maneuver ends (it lasts until your next turn, B364): reset it to Do Nothing and ask the owner (the GM for NPCs) to pick one, unless they already picked one for this turn."
+          },
+          "stunRecovery": {
+            "name": "Stun recovery roll",
+            "hint": "Offer the stunned combatant's recovery roll (HT, or IQ for mental stun, B420). By the book the roll comes at the end of each of the stunned character's turns.",
+            "end": "At the end of the stunned character's turn (B420)",
+            "start": "At the start of the stunned character's turn",
+            "off": "Off"
+          }
+        },
+        "card": {
+          "title": "{attacker} attacks {target}",
+          "kind": {
+            "melee": "Melee",
+            "ranged": "Ranged",
+            "thrown": "Thrown"
+          },
+          "hitLocation": "Aimed at: {location}",
+          "potentialHits": "{hits} hits",
+          "margin": "Hit by {margin}",
+          "criticalHit": "Critical hit!",
+          "criticalHits": "{critical} critical: can't be defended (B556)",
+          "deceptive": "Deceptive Attack: -{penalty} to defend",
+          "waiting": "Waiting for {target} to defend...",
+          "noDefense": "No defense",
+          "noDefenseTaken": "No defense",
+          "attemptSuccess": "{defense}: success by {margin}.",
+          "attemptFailure": "{defense}: failed by {margin}.",
+          "critSuccess": "(critical success)",
+          "critFailure": "(critical failure)",
+          "hitsStopped": "Stopped {stopped} of {of} hits.",
+          "stampDefended": "Defended",
+          "stampHit": "Hit",
+          "stampHits": "Hit x{hits}",
+          "stampDamaged": "Damage rolled",
+          "rollDamage": "Roll damage",
+          "rollDamageTimes": "Roll damage x{hits}"
+        },
+        "defense": {
+          "dodge": "Dodge",
+          "parry": "Parry",
+          "block": "Block",
+          "none": "No defense"
+        },
+        "toggle": {
+          "retreat": "Retreat",
+          "retreatHint": "+3 Dodge, +1 Block/Parry, +3 Parry with a fencing weapon (B377). Not while stunned.",
+          "dodgeAndDrop": "Dodge and drop",
+          "dodgeAndDropHint": "+3 to Dodge a ranged attack; you end up prone (B377).",
+          "acrobatic": "Acrobatic",
+          "acrobaticHint": "Roll Acrobatics first: +2 to Dodge on a success, -2 on a failure (B375).",
+          "feverish": "Feverish",
+          "feverishHint": "+2 to this defense for 1 FP (B357).",
+          "side": "From the side",
+          "sideHint": "-2: attacked from the side (B390)."
+        },
+        "note": {
+          "noParryRanged": "Ranged attacks can't be parried, except thrown weapons (B376).",
+          "parryThrown": "Parrying a thrown weapon: -1 (B376).",
+          "noBlockFirearm": "Bullets and beams can't be blocked (B375).",
+          "noParryManeuver": "Move and Attack: dodge or block only (B365).",
+          "dodgeOnlyManeuver": "Committed Aim: dodge only.",
+          "doubleDefense": "All-Out Defense (Double): try a different defense (B366).",
+          "deceptive": "Deceptive Attack: -{penalty} to defend (added for you, B369)."
+        },
+        "reason": {
+          "critical": "Critical hit: no active defense (B556).",
+          "maneuver": "{maneuver}: no active defense (B366).",
+          "cantSee": "Can't see the ranged attack: no active defense (B390)."
+        },
+        "mod": {
+          "parryThrown": "to Parry (thrown weapon)",
+          "stunned": "to active defenses (Stunned)",
+          "cantSee": "to active defenses (can't see attacker)",
+          "committedAttack": "to defense (Committed Attack (Ranged))"
+        },
+        "turn": {
+          "start": "{name}'s turn",
+          "end": "End of {name}'s turn",
+          "round": "Round {round}",
+          "stunnedStart": "Stunned: Do Nothing this turn (B420)",
+          "stunnedEnd": "Stunned: roll to recover (B420)",
+          "recoverButton": "Roll {attribute} to recover",
+          "recovered": "{attribute} roll made by {margin}: no longer stunned.",
+          "stillStunned": "{attribute} roll failed by {margin}: still stunned.",
+          "stillStunnedNote": "{name} is still stunned.",
+          "pickManeuver": "Choose a maneuver:",
+          "chosen": "Maneuver: {maneuver}"
+        },
+        "warn": {
+          "noDefender": "The defending token or actor can't be found.",
+          "noAttacker": "The attacking token or actor can't be found.",
+          "noDamage": "No rollable damage found for {weapon}.",
+          "noGMForDamage": "Only GMs may open Apply Damage and no GM is online: drag the damage from the chat message onto the target."
+        },
+        "info": {
+          "damageSentToGM": "Damage sent to the GM to apply."
+        }
+      }
+    }
+  }
+}

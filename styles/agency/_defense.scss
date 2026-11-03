@@ -1,1 +1,250 @@
-// Agency: defense styles
+// Agency: defense prompts and turn-flow cards.
+//
+// The theme kit (.agency-chat-card, .agency-btn, .agency-stamp, .agency-badge) is defined by the
+// theme feature. The fallbacks below use :where() so they have zero specificity: the theme's rules
+// always win, and the cards still look sane without it.
+
+:where(.agency-defense-card, .agency-turn-card) {
+  &:where(.agency-chat-card) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+  }
+
+  :where(.agency-badge) {
+    display: inline-block;
+    padding: 0 0.35rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  :where(.agency-btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    width: auto;
+    min-height: 1.8rem;
+    padding: 0 0.6rem;
+    line-height: 1.6rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  :where(.agency-stamp) {
+    display: inline-block;
+    padding: 0.05rem 0.5rem;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transform: rotate(-2deg);
+  }
+}
+
+.agency-defense-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__title {
+    font-weight: bold;
+  }
+
+  &__attack {
+    font-size: 0.9rem;
+  }
+
+  &__damage-text,
+  &__margin {
+    opacity: 0.85;
+  }
+
+  &__reason {
+    font-weight: bold;
+  }
+
+  &__attempts {
+    margin: 0;
+    padding-left: 1.1rem;
+
+    .is-success {
+      color: #2e6b30;
+    }
+
+    .is-failure {
+      color: #8b1d1d;
+    }
+  }
+
+  &__waiting {
+    margin: 0;
+    font-style: italic;
+    opacity: 0.75;
+  }
+
+  &__result {
+    text-align: center;
+  }
+
+  &__stamp {
+    &.is-defended {
+      color: #2e6b30;
+    }
+
+    &.is-hit,
+    &.is-damaged {
+      color: #8b1d1d;
+    }
+  }
+
+  &__damage {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Our controls replace the waiting line for the defender's owners and the GM.
+  &__controls:has(.agency-defense-controls) &__waiting {
+    display: none;
+  }
+}
+
+.agency-defense-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  &__notes {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+
+  &__toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  &__pick {
+    display: flex;
+    flex: 1 1 100%;
+    gap: 0.3rem;
+
+    select {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .is-busy & {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.agency-defense-card__controls.is-busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.agency-turn-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__title {
+    font-weight: bold;
+  }
+
+  &__stun {
+    text-align: center;
+    color: #8b1d1d;
+  }
+
+  &__recovery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  &__result {
+    &.is-success {
+      color: #2e6b30;
+    }
+
+    &.is-failure {
+      color: #8b1d1d;
+    }
+  }
+
+  &__prompt {
+    margin: 0;
+  }
+
+  &__chosen {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: bold;
+
+    img {
+      width: 28px;
+      height: 28px;
+      border: none;
+    }
+  }
+}
+
+.agency-maneuver-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.25rem;
+}
+
+.agency-maneuver-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  height: auto;
+  padding: 0.2rem;
+  line-height: 1.1;
+  font-size: 0.65rem;
+  text-align: center;
+  white-space: normal;
+
+  img {
+    width: 28px;
+    height: 28px;
+    border: none;
+  }
+}
