@@ -159,3 +159,26 @@ When you receive a **Critical Wound** on a limb, you must immediately make a Hea
 - **Status Penalty:** Apply a further **-3 penalty** if the limb is already crippled.
 - **On a failure:** The limb is **dismembered** or otherwise destroyed. It can take no further damage and bleeds as if it has a Massive Wound.
 - **On a success:** The limb remains attached but does not escape unscathed. It is **automatically crippled** from the sheer trauma (if it wasn't already). The Critical Wound still applies all its other effects and counts toward the cumulative penalty for future checks.
+
+## Rulings made while automating (confirm or change)
+
+Where the text above is silent or ambiguous, the automation does this:
+
+1. Severity boundaries: exactly 1/16 HP is a Scratch; exactly 4×HP is Gawdawful (the text leaves 4×HP in no band); exactly 8×HP is Destroyed.
+2. The brain check after a Critical wound is HT-3 (the text says both -2 and -3). Hard to Kill adds to it.
+3. Knockdown is checked for head/vitals hits and for any Major or worse wound. Failing the stun roll by 5+ knocks out on head/vitals hits or Major or worse wounds. Hard to Subdue only helps against the knockout.
+4. One damage application gets one stun roll, at the worst modifier among its wounds.
+5. Shock only applies above the current pain penalty. Several wounds in one round take the highest shock, not the sum.
+6. Pain level comes from the impairment roll's failure. Only a worse level replaces current pain; the same level extends its duration. With High Pain Threshold, Agony stays Agony.
+7. Massive or Gawdawful wounds to a limb also get the Critical dismemberment check. Limb-trauma penalties count the Major-or-worse wounds currently on that limb. Crippling stays until the GM clears it. Progressive Limb Trauma also covers hands and feet.
+8. Any Major-or-worse wound to a leg halves Move and Dodge. Half Move and the Gawdawful -1 DX per wound apply automatically; the -1 to tasks with a traumatised limb is shown on the sheet only.
+9. The non-emergency -3 to impairment applies unless the victim is in a started combat.
+10. Crushing Minor wounds aren't recorded but still cause shock and the stun roll.
+11. Bandaging and stabilizing are one attempt per wound, and stabilizing needs a bandage attempt first.
+12. Rapid Healing gives +5 to the weekly recovery roll.
+13. Fixed-rate bleeding (vitals/neck "lose N FP per second" results) only stops with stabilizing or surgery.
+14. "GM's option" results (bleeding or paralysis) are picked at random; the GM can edit the wound afterwards.
+15. Homogeneous and Diffuse bodies have no vitals or brain.
+16. The damage calculator's limb-injury cap is skipped, and its Diffuse 1–2 HP cap is undone, so RFH can cap the wound at Minor instead.
+
+Not automated yet: Regeneration timers, the healer's periodic rolls, the Homogeneous damage-per-die rule, and treating bites as cutting for bleeding.
