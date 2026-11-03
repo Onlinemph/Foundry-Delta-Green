@@ -1,0 +1,54 @@
+{{! AGENCY firearms: per-weapon ammunition dialog (module/agency/firearms/reload.ts configureWeapon). }}
+<div class='agency-firearms-config'>
+  <p class='agency-firearms-config-summary'>
+    <strong>{{weapon}}</strong>
+    <span class='agency-badge'>{{localize 'GURPS.shots'}} {{shots}}</span>
+    <span class='agency-badge'>{{rounds}}</span>
+  </p>
+
+  <div class='form-group'>
+    <label for='agency-firearms-loaded'>{{localize 'GURPS.agency.firearms.config.loaded'}}</label>
+    <div class='form-fields'>
+      <input
+        id='agency-firearms-loaded'
+        type='number'
+        name='loaded'
+        value='{{loaded}}'
+        min='0'
+        max='{{full}}'
+        step='1'
+      />
+      <span>/ {{full}}</span>
+    </div>
+  </div>
+
+  <div class='form-group'>
+    <label for='agency-firearms-ammo-item'>{{localize 'GURPS.agency.firearms.config.ammoItem'}}</label>
+    <div class='form-fields'>
+      <input
+        id='agency-firearms-ammo-item'
+        type='text'
+        name='ammoItem'
+        value='{{ammoItem}}'
+        list='agency-firearms-equipment'
+        placeholder='{{ammoField}}'
+      />
+      <datalist id='agency-firearms-equipment'>
+        {{#each items}}<option value='{{this}}'></option>{{/each}}
+      </datalist>
+    </div>
+    <p class='hint'>{{localize 'GURPS.agency.firearms.config.ammoItemHint'}}</p>
+    {{#if matched}}
+      <p class='hint'>{{localize 'GURPS.agency.firearms.config.matched'}} <strong>{{matched}}</strong></p>
+    {{/if}}
+  </div>
+
+  <div class='form-group'>
+    <label for='agency-firearms-ammo-unit'>{{localize 'GURPS.agency.firearms.config.unitLabel'}}</label>
+    <div class='form-fields'>
+      <select id='agency-firearms-ammo-unit' name='ammoUnit'>
+        {{selectOptions units selected=unit localize=false}}
+      </select>
+    </div>
+  </div>
+</div>

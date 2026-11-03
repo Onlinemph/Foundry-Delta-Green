@@ -1,1 +1,71 @@
-{}
+{
+  "GURPS": {
+    "agency": {
+      "firearms": {
+        "settings": {
+          "tracking": {
+            "name": "Track ammunition",
+            "hint": "Count rounds loaded in ranged weapons with a Shots value such as 17+1(3) or 8(3i). Attacks spend rounds, and weapons reload from the sheet (rounds badge in the ranged table) or with /reload. Right-click the badge to choose the magazine or ammo item a reload uses."
+          },
+          "empty": {
+            "name": "Firing an empty weapon",
+            "hint": "What happens when an attack is made with no rounds loaded.",
+            "block": "Block the attack (\"Click.\")",
+            "warn": "Warn, but roll anyway"
+          },
+          "thrown": {
+            "name": "Thrown weapons use up the item",
+            "hint": "Throwing a weapon with Shots T(...) lowers the count of the equipment it comes from, and an attack with none left is handled like an empty gun."
+          }
+        },
+        "click": "Click. {weapon} is empty.",
+        "noneToThrow": "No {weapon} left to throw.",
+        "rollAnyway": "Rolling anyway.",
+        "capped": "Only {count} rounds left in {weapon}: firing {count}, not {requested}.",
+        "cappedThrown": "Only {count} {weapon} left: throwing {count}, not {requested}.",
+        "rofNotAdjusted": "Adjust the RoF bonus by hand.",
+        "nowEmpty": "{weapon} is empty.",
+        "trackingOff": "Ammunition tracking is turned off in the system settings.",
+        "untracked": "{weapon} has no ammunition to track.",
+        "full": "{weapon} is already fully loaded.",
+        "noAmmo": "No {item} left to reload {weapon}.",
+        "notCarried": "{weapon} reloads from \"{item}\", but none is carried.",
+        "reload": "Reload",
+        "reloadTooltip": "Reload ({seconds} s)",
+        "reloadOneTooltip": "Load one round ({seconds} s)",
+        "configureHint": "Right-click: ammunition settings",
+        "spare": "spare: {count} × {item}",
+        "thrownTooltip": "{count} × {item} left",
+        "chat": {
+          "reload": "Reloads {weapon}: {rounds}.",
+          "loadOne": "Loads a round into {weapon}: {rounds}.",
+          "used": "Used {count} × {item} ({left} left).",
+          "oldMagazine": "{count} rounds stay in the old magazine.",
+          "time": "Takes {seconds} s.",
+          "timeUnknown": "Reload time not given.",
+          "readyOne": "In combat: one Ready maneuver.",
+          "readyMany": "In combat: {count} Ready maneuvers (one per turn).",
+          "noTracked": "{actor} has no weapons with tracked ammunition.",
+          "noMatch": "No weapon with tracked ammunition matches \"{name}\".",
+          "allFull": "All of {actor}'s weapons are fully loaded.",
+          "ambiguous": "Which weapon? Use /reload &lt;weapon&gt;:",
+          "ammoHeader": "Ammunition for {actor}:"
+        },
+        "config": {
+          "title": "Ammunition: {weapon}",
+          "loaded": "Rounds loaded",
+          "ammoItem": "Ammo item",
+          "ammoItemHint": "Carried equipment a reload uses up (magazines, shells, arrows). Leave blank to use the weapon's Ammo field; with neither, reloads are free.",
+          "matched": "Reloads from:",
+          "unitLabel": "The ammo item counts",
+          "unitAuto": "Automatic: {unit}",
+          "unit": {
+            "magazines": "magazines (one per reload)",
+            "rounds": "loose rounds"
+          },
+          "save": "Save"
+        }
+      }
+    }
+  }
+}

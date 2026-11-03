@@ -135,11 +135,9 @@ export async function doRoll({
   }
 
   // AGENCY: let fork features veto a roll (e.g. an empty magazine). Handlers return false to cancel.
-  if (
-    Hooks.call('gurpsAgencyPreRoll', { actor, formula, thing, chatthing, origtarget, optionalArgs, action, token }) ===
-    false
-  )
-    return false
+  // targetmods is passed so a handler can correct modifiers in place (firearms: RoF bonus when fewer rounds are left).
+  const agencyPreRoll = { actor, formula, thing, chatthing, origtarget, optionalArgs, action, token, targetmods }
+  if (Hooks.call('gurpsAgencyPreRoll', agencyPreRoll) === false) return false
 
   let bucketRoll
   let displayFormula = formula
