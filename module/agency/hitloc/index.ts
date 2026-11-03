@@ -23,6 +23,7 @@ import {
   openCoverDialog,
   registerCoverStatus,
 } from './cover-ui.ts'
+import { coveredLocations, rollLocation } from './api.ts'
 import { configureDialog, decorateDialog, randomizeHitLocation } from './dialog.ts'
 import { decorateHitCard, getHitCard, onDamageRolled, registerHitCardSocket } from './hit-card.ts'
 import { onRollComplete } from './miss-by-one.ts'
@@ -46,7 +47,7 @@ export function init(): void {
   // Called from upstream's ApplyDamageDialog (AGENCY hooks) and available to non-TS code.
   const gurps = GURPS as any
   gurps.agency = gurps.agency ?? {}
-  gurps.agency.hitloc = { configureDialog, randomizeHitLocation, openCoverDialog }
+  gurps.agency.hitloc = { configureDialog, randomizeHitLocation, openCoverDialog, rollLocation, coveredLocations }
 
   Hooks.once('i18nInit' as any, aliasLabels)
   Hooks.on(DAMAGE_ROLLED_HOOK as any, onDamageRolled)

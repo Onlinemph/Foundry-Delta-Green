@@ -92,7 +92,7 @@ export function regionOfWhere(where: string): Region {
   return 'chest'
 }
 
-function sideOfWhere(where: string): Side | null {
+export function sideOfWhere(where: string): Side | null {
   if (/^left\b|\(left\)/i.test(where)) return 'left'
   if (/^right\b|\(right\)/i.test(where)) return 'right'
   return null

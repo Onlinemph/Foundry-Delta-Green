@@ -133,6 +133,12 @@
       "name": "English",
       "path": "lang/agency/en-hitloc.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-explosions.json",
+      "flags": {}
     }
   ],
   "grid": {

@@ -1,0 +1,93 @@
+{{!-- Agency: the GM's explosion summary (module/agency/explosions/card.ts) --}}
+<div class='agency-chat-card agency-boom-card' data-agency-card='explosion'>
+  <header class='agency-chat-card-header agency-boom-card__header'>
+    <span class='agency-boom-card__title'><i class='fa-solid fa-explosion'></i> {{label}}</span>
+    {{#if allApplied}}<span class='agency-stamp agency-stamp--green'>{{localize 'GURPS.agency.explosions.card.appliedStamp'}}</span>{{/if}}
+  </header>
+
+  <div class='agency-chat-card-body'>
+    <div class='agency-boom-card__meta'>
+      <div class='agency-boom-card__damage agency-num'>{{damage}}</div>
+      {{#if attacker}}<div>{{localize 'GURPS.agency.explosions.card.by' name=attacker}}</div>{{/if}}
+      {{#if where}}<div class='agency-boom-card__where'>{{where}}</div>{{/if}}
+      <div class='agency-label'>{{radii}}</div>
+      {{#each specials}}<div class='agency-boom-card__special'>{{this}}</div>{{/each}}
+      <label class='agency-boom-card__enclosed' data-boom-gm>
+        {{localize 'GURPS.agency.explosions.card.space'}}
+        <select data-boom-action='enclosed'>
+          {{#each enclosed}}<option value='{{value}}' {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </label>
+    </div>
+
+    {{#if none}}<p class='agency-boom-card__none'>{{localize 'GURPS.agency.explosions.card.nobody'}}</p>{{/if}}
+
+    <ol class='agency-boom-card__rows'>
+      {{#each rows}}
+        <li class='agency-boom-row{{#if applied}} is-applied{{/if}}{{#if outside}} is-outside{{/if}}{{#if struck}} is-struck{{/if}}'>
+          <div class='agency-boom-row__head'>
+            <strong class='agency-boom-row__name'>{{name}}</strong>
+            <span class='agency-badge agency-badge--outline'>{{distance}}</span>
+            {{#if moved}}<span class='agency-badge'>{{moved}}</span>{{/if}}
+            {{#if npc}}<span class='agency-badge agency-badge--ink'>NPC</span>{{/if}}
+            <span class='agency-boom-row__spacer'></span>
+            {{#if applied}}
+              <span class='agency-badge agency-badge--green'>{{localize 'GURPS.agency.explosions.card.applied'}}</span>
+            {{else if hasEffect}}
+              <button type='button' class='agency-btn agency-btn--small agency-btn--primary' data-boom-gm data-boom-action='apply' data-token='{{id}}'>
+                <i class='fa-solid fa-heart-crack'></i> {{localize 'GURPS.agency.explosions.card.apply'}}
+              </button>
+            {{/if}}
+          </div>
+
+          {{#if coverEditable}}
+            <div class='agency-boom-row__cover'>
+              <label data-boom-gm>{{localize 'GURPS.agency.explosions.row.cover'}}
+                <input type='number' min='0' step='1' class='agency-boom-row__dr' data-boom-action='cover' data-token='{{id}}' value='{{coverBase}}' />
+              </label>
+              {{#if coverText}}<span class='agency-boom-row__cover-source'>{{coverText}}</span>{{/if}}
+            </div>
+          {{/if}}
+
+          {{#each blast}}<div class='agency-boom-row__line'>{{this}}</div>{{/each}}
+          {{#if fragAttack}}<div class='agency-boom-row__line'>{{fragAttack}}</div>{{/if}}
+          {{#if fragHits.length}}
+            <ul class='agency-boom-row__hits'>{{#each fragHits}}<li>{{this}}</li>{{/each}}</ul>
+          {{/if}}
+          {{#each notes}}<div class='agency-boom-row__note'>{{this}}</div>{{/each}}
+          {{#if dive.text}}<div class='agency-boom-row__dive {{dive.cls}}'>{{dive.text}}</div>{{/if}}
+
+          {{#if canGMDive}}
+            <div class='agency-boom-row__dive-controls' data-boom-gm>
+              <button type='button' class='agency-btn agency-btn--small' data-boom-action='gm-dive' data-token='{{id}}'>
+                <i class='fa-solid fa-person-falling'></i> {{localize 'GURPS.agency.explosions.card.gmDive'}}
+              </button>
+              {{#if canSmother}}
+                <button type='button' class='agency-btn agency-btn--small agency-btn--danger' data-boom-action='gm-dive' data-smother='true' data-token='{{id}}'>
+                  {{localize 'GURPS.agency.explosions.card.gmSmother'}}
+                </button>
+              {{/if}}
+              <label class='agency-boom-row__check'><input type='checkbox' data-boom-cover-step='{{id}}' /> {{localize 'GURPS.agency.explosions.prompt.coverStep'}}</label>
+              <button type='button' class='agency-btn agency-btn--small' data-boom-action='gm-stay' data-token='{{id}}'>
+                {{localize 'GURPS.agency.explosions.card.gmStay'}}
+              </button>
+            </div>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ol>
+  </div>
+
+  <footer class='agency-chat-card-footer agency-boom-card__footer' data-boom-gm>
+    {{#if pendingApply}}
+      <button type='button' class='agency-btn agency-btn--primary' data-boom-action='apply-all'>
+        <i class='fa-solid fa-burst'></i> {{localize 'GURPS.agency.explosions.card.applyAll'}}
+      </button>
+    {{/if}}
+    {{#if hasTemplates}}
+      <button type='button' class='agency-btn agency-btn--small' data-boom-action='templates'>
+        <i class='fa-solid fa-eraser'></i> {{localize 'GURPS.agency.explosions.card.removeTemplates'}}
+      </button>
+    {{/if}}
+  </footer>
+</div>

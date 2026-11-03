@@ -1,0 +1,35 @@
+{{!-- Agency: dive-for-cover and incoming-explosive prompts (module/agency/explosions/prompts.ts) --}}
+<div class='agency-chat-card agency-boom-prompt{{#if good}} agency-chat-card--success{{/if}}{{#if bad}} agency-chat-card--failure{{/if}}' data-agency-card='explosion-prompt'>
+  <header class='agency-chat-card-header'><i class='fa-solid fa-explosion'></i> {{title}}</header>
+  <div class='agency-chat-card-body'>
+    <p class='agency-boom-prompt__body'>{{body}}</p>
+    {{#if awaiting}}
+      <div class='agency-boom-prompt__controls' data-boom-controls>
+        {{#if dive}}
+          <button type='button' class='agency-btn agency-btn--primary' data-boom-action='dive'>
+            <i class='fa-solid fa-person-falling'></i> {{localize 'GURPS.agency.explosions.prompt.dive'}}
+          </button>
+          <label class='agency-boom-prompt__option'><input type='checkbox' name='coverStep' /> {{localize 'GURPS.agency.explosions.prompt.coverStep'}}</label>
+          {{#if canSmother}}
+            <button type='button' class='agency-btn agency-btn--danger' data-boom-action='smother'>
+              <i class='fa-solid fa-shield-heart'></i> {{localize 'GURPS.agency.explosions.prompt.smother'}}
+            </button>
+          {{/if}}
+          <button type='button' class='agency-btn agency-btn--small' data-boom-action='stay'>{{localize 'GURPS.agency.explosions.prompt.stay'}}</button>
+        {{/if}}
+        {{#if incoming}}
+          <button type='button' class='agency-btn agency-btn--primary' data-boom-action='dodge'>
+            <i class='fa-solid fa-person-running'></i> {{localize 'GURPS.agency.explosions.incoming.dodge'}}
+          </button>
+          <button type='button' class='agency-btn' data-boom-action='dodge-drop'>
+            <i class='fa-solid fa-person-falling'></i> {{localize 'GURPS.agency.explosions.incoming.dodgeDrop'}}
+          </button>
+          <button type='button' class='agency-btn agency-btn--small' data-boom-action='no-defense'>{{localize 'GURPS.agency.explosions.incoming.none'}}</button>
+        {{/if}}
+      </div>
+    {{/if}}
+    {{#if result}}
+      <div class='agency-boom-prompt__result'><span class='agency-stamp{{#if good}} agency-stamp--green{{/if}}{{#unless good}}{{#unless bad}} agency-stamp--ink{{/unless}}{{/unless}}'>{{result}}</span></div>
+    {{/if}}
+  </div>
+</div>
