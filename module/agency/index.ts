@@ -12,9 +12,10 @@ import * as defense from './defense/index.ts'
 import * as firearms from './firearms/index.ts'
 import * as presets from './presets/index.ts'
 import * as shooting from './shooting/index.ts'
+import * as hitloc from './hitloc/index.ts'
 import { registerAgencySettingsMenu } from './settings-app.ts'
 
-const features = [theme, wounds, sanity, defense, firearms, shooting, presets]
+const features = [theme, wounds, sanity, defense, firearms, shooting, hitloc, presets]
 
 /** Sheet partials shared by all features. Features add their own via registerAgencyPartials(). */
 const partials: Record<string, string> = {
@@ -44,8 +45,11 @@ export function readyAgency(): void {
  *
  * PRE_ROLL fires in doRoll() after actor.canRoll() passes; return false from a handler to cancel the roll.
  * ROLL_COMPLETE fires at the end of _doRoll() once the chat message has been sent.
+ * DAMAGE_ROLLED fires (Hooks.call) after a defense card's damage roll, with { attack, target, payload };
+ * return false from a handler to take over applying it (the hit-location card does).
  */
 export const AgencyHooks = {
   PRE_ROLL: 'gurpsAgencyPreRoll',
   ROLL_COMPLETE: 'gurpsAgencyRollComplete',
+  DAMAGE_ROLLED: 'gurpsAgencyDamageRolled',
 } as const

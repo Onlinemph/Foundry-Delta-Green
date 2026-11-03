@@ -13,6 +13,7 @@ const OWNER = 3 // CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER
 export const ROLL_COMPLETE_HOOK = 'gurpsAgencyRollComplete'
 export const TURN_START_HOOK = 'gurpsAgencyTurnStart'
 export const TURN_END_HOOK = 'gurpsAgencyTurnEnd'
+export const DAMAGE_ROLLED_HOOK = 'gurpsAgencyDamageRolled'
 
 export function localize(key: string, data?: Record<string, unknown>): string {
   const i18n = game.i18n as any

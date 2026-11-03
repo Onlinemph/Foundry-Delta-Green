@@ -1,0 +1,18 @@
+<div class='agency-chat-card agency-hitloc-note'>
+  <header class='agency-chat-card-header'>
+    <span class='agency-hitloc-note__title'>{{title}}</span>
+    <span class='agency-badge'><i class='fa-solid fa-crosshairs'></i></span>
+  </header>
+  <div class='agency-chat-card-body'>
+    <div class='agency-hitloc-note__path'><strong>{{path}}</strong></div>
+    {{#if summary}}<div class='agency-hitloc-note__summary'>{{summary}}</div>{{/if}}
+    {{#if notes.length}}
+      <ul class='agency-hitloc-note__notes'>
+        {{#each notes}}<li>{{this}}</li>{{/each}}
+      </ul>
+    {{/if}}
+    <div class='agency-hitloc-note__dice agency-num'>
+      {{#if dice}}<i class='fa-solid fa-dice'></i> {{dice}} · {{/if}}{{facing}}
+    </div>
+  </div>
+</div>

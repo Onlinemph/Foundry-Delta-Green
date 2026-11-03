@@ -134,3 +134,21 @@ Revised Fractional Health decides what a wound *does* (severity, shock, stun, im
 - A hit whose location (after the sub-table roll) is behind cover **hits the cover**: apply damage to the cover's DR. If it penetrates, the remainder goes on to the target at that location (B407, Shooting Through Cover).
 - Aiming at a body part the GM has declared fully covered automatically hits the cover.
 - Optional minimal exposure: a target "popping out" to shoot exposes only part of one zone; the GM may add -2 to -4 to attacks on it.
+
+## Implementation notes (module/agency/hitloc)
+
+Interpretations made in code, beyond the ones marked above:
+
+- **Eyes (A6):** only imp, pi and tight-beam burning reach the eye (the targeted Eye row's restriction); other damage types count as a face hit.
+- **Nose (A2) as a called shot:** the "imp, pi, tb burn hit the skull" rule applies to an aimed nose hit too.
+- **Neck spine (G1):** "Spine" rules (×1 crushing, +3 DR, torso injury cap), with the neck's DR.
+- **Torso injury cap:** applies to chest, abdomen, digestive tract, pelvis, groin and spine hits; not to vitals.
+- **Skull +2 DR:** assumed already in the body plan's skull DR (GCS imports include it), so it isn't added again. Spine +3 DR is added.
+- **Armor gaps:** DR becomes the target's innate DR, read from Damage Resistance traits; the GM can override it in the dialog.
+- **Chinks (Other):** a random location, re-rolling chest and abdomen results. Chinks halve DR (rounded down).
+- **Called limb / joint / vein / extremity without a side or limb:** rolled (limb 1d6: 1-3 arm, 4-6 leg; extremity 1d6: 1-3 hand, 4-6 foot; side as for hands and feet).
+- **Inside Thigh:** the optional vein/artery rule is used.
+- **Called shots the attack can't make** (wrong damage type or facing): resolved at the chart's fallback (eye, nose, jaw, eyeslits: face; spine, vitals, armpit: chest; veins and joints: the parent limb or neck) and flagged on the card.
+- **Default location:** with upstream's default location "Torso" an attack without a called shot hits the chest and still rolls sub-table D; with "Random" it rolls the main table.
+- **Facing:** front arc = within 90° of the token's facing (hex and gridless), side = up to 150°, rear beyond; on square grids 67.5° / 112.5°. Token art direction at rotation 0 is a setting.
+- **Cover:** cover DR is subtracted from basic damage (armor divisors apply to it); the rest continues to the target at that location. No extra halving. Cover loses HP equal to the damage that got through it. Half-covered parts (corner presets: the torso) are hit on 1d6 1-3 by a random hit; a called shot hits the exposed half.
