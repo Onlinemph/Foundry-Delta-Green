@@ -115,6 +115,12 @@
       "name": "English",
       "path": "lang/agency/en-shooting.json",
       "flags": {}
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/agency/en-readiness.json",
+      "flags": {}
     }
   ],
   "grid": {

@@ -1,0 +1,111 @@
+// Agency: weapon readiness styles
+//
+// State icon injected at the start of each weapon row's name cell (module/agency/readiness/sheet.ts),
+// the Ready / Fast-Draw prompt, the "which weapon?" question and the per-weapon dialog.
+// Kit classes (.agency-badge, .agency-table, .agency-label, .agency-chat-card) come from _theme.scss;
+// colours use the kit tokens with neutral fallbacks so the stock sheets work with the theme off.
+
+$n-red: #c0362c;
+$n-green: #3f7d4e;
+
+.agency-ready {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.3em;
+  border: 1px solid var(--agency-rule-strong, rgba(128, 128, 128, 0.45));
+  border-radius: 2px;
+  background: var(--agency-paper-2, transparent);
+  color: var(--agency-ink-2, inherit);
+  font-size: 0.8em;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--agency-ink, currentColor);
+    color: var(--agency-ink, inherit);
+    text-shadow: none;
+  }
+
+  &--ready {
+    border-color: var(--agency-green-ink, #{$n-green});
+    background: var(--agency-green-wash, rgba(63, 125, 78, 0.12));
+    color: var(--agency-green-ink, #{$n-green});
+  }
+
+  &--stowed {
+    opacity: 0.75;
+  }
+
+  &--dropped {
+    border-color: var(--agency-red, #{$n-red});
+    background: var(--agency-red-wash, rgba(192, 54, 44, 0.12));
+    color: var(--agency-red-ink, #{$n-red});
+  }
+
+  &.is-readonly {
+    cursor: default;
+  }
+}
+
+// Full (GCS) sheet: the icon sits first in the name cell's flex row.
+:is(#melee, #ranged) .gga-desc-text > .agency-ready {
+  align-self: center;
+}
+
+// Modern sheets: icon, then the name's dice button.
+.ms-attack-row .agency-ready-host {
+  display: flex;
+  align-items: center;
+  gap: var(--ms-space-1, 2px);
+
+  > .ms-use-button {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+}
+
+// Dialogs ---------------------------------------------------------------------
+
+.agency-readiness-prompt {
+  .agency-readiness-prompt__weapon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .agency-readiness-prompt__options {
+    margin: 0.3em 0 0.6em;
+    padding-left: 1.2em;
+
+    li {
+      margin: 0.2em 0;
+    }
+
+    .agency-label {
+      margin-right: 0.3em;
+    }
+  }
+}
+
+.agency-ready-badge--ready {
+  --_badge: var(--agency-green-ink, #{$n-green});
+}
+
+.agency-ready-badge--dropped {
+  --_badge: var(--agency-red-ink, #{$n-red});
+}
+
+.agency-readiness-pick .agency-table td:first-child {
+  width: 2em;
+}
+
+.agency-readiness-card p {
+  margin: 0.2em 0;
+}

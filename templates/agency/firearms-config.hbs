@@ -4,7 +4,9 @@
     <strong>{{weapon}}</strong>
     <span class='agency-badge'>{{localize 'GURPS.shots'}} {{shots}}</span>
     <span class='agency-badge'>{{rounds}}</span>
+    {{#if sharedWith}}<span class='agency-badge agency-badge--outline'>{{sharedWith}}</span>{{/if}}
   </p>
+  {{#if loadedText}}<p class='hint'>{{loadedText}}</p>{{/if}}
 
   <div class='form-group'>
     <label for='agency-firearms-loaded'>{{localize 'GURPS.agency.firearms.config.loaded'}}</label>
@@ -22,24 +24,25 @@
     </div>
   </div>
 
-  <div class='form-group'>
-    <label for='agency-firearms-ammo-item'>{{localize 'GURPS.agency.firearms.config.ammoItem'}}</label>
-    <div class='form-fields'>
-      <input
-        id='agency-firearms-ammo-item'
-        type='text'
-        name='ammoItem'
-        value='{{ammoItem}}'
-        list='agency-firearms-equipment'
-        placeholder='{{ammoField}}'
-      />
+  <div class='form-group stacked'>
+    <label>{{localize 'GURPS.agency.firearms.config.ammoItems'}}</label>
+    <div class='agency-firearms-ammo-items'>
+      {{#each ammoItems}}
+        <input
+          type='text'
+          name='ammoItem'
+          value='{{value}}'
+          list='agency-firearms-equipment'
+          placeholder='{{placeholder}}'
+        />
+      {{/each}}
       <datalist id='agency-firearms-equipment'>
         {{#each items}}<option value='{{this}}'></option>{{/each}}
       </datalist>
     </div>
-    <p class='hint'>{{localize 'GURPS.agency.firearms.config.ammoItemHint'}}</p>
-    {{#if matched}}
-      <p class='hint'>{{localize 'GURPS.agency.firearms.config.matched'}} <strong>{{matched}}</strong></p>
+    <p class='hint'>{{localize 'GURPS.agency.firearms.config.ammoItemsHint'}}</p>
+    {{#if spare}}
+      <p class='hint'>{{localize 'GURPS.agency.firearms.config.matched'}} <strong>{{spare}}</strong></p>
     {{/if}}
   </div>
 
@@ -51,4 +54,14 @@
       </select>
     </div>
   </div>
+
+  {{#if showSeparate}}
+    <div class='form-group'>
+      <label for='agency-firearms-separate'>{{localize 'GURPS.agency.firearms.config.separate'}}</label>
+      <div class='form-fields'>
+        <input id='agency-firearms-separate' type='checkbox' name='separate' {{checked separate}} />
+      </div>
+      <p class='hint'>{{localize 'GURPS.agency.firearms.config.separateHint' usage=usage}}</p>
+    </div>
+  {{/if}}
 </div>

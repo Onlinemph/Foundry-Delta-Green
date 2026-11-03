@@ -365,8 +365,13 @@ describe('reloadWeapon', () => {
     expect(await reloadWeapon(actor, view(actor))).toBe(true)
     expect(view(actor).loaded).toBe(30)
     expect(actor.updateEqtCount).toHaveBeenCalledWith('system.equipment.carried.00000', 2)
-    expect(lastCard()).toContain('GURPS.agency.firearms.chat.reload:weapon=AK-47,rounds=30/30')
-    expect(lastCard()).toContain('GURPS.agency.firearms.chat.oldMagazine:count=4')
+    expect(lastCard()).toContain('GURPS.agency.firearms.chat.reload:weapon=AK-47,')
+    expect(lastCard()).toContain('rounds=30/30')
+    // The old magazine still had 4 rounds: it is kept as a partial magazine instead of thrown away.
+    expect(lastCard()).toContain('GURPS.agency.firearms.chat.partialKept:item=AK Magazine (30),count=4')
+    expect(actor.flags.gurps.agency.firearms.partials).toEqual([
+      expect.objectContaining({ item: 'AK Magazine (30)', rounds: 4, capacity: 30 }),
+    ])
     expect(lastCard()).toContain('GURPS.agency.firearms.chat.time:seconds=3')
   })
 
@@ -402,7 +407,8 @@ describe('reloadWeapon', () => {
     await Promise.all([reloadWeapon(actor, view(actor)), reloadWeapon(actor, view(actor))])
     expect(view(actor).loaded).toBe(2)
     expect(actor.system.equipment.carried['00000'].count).toBe(8)
-    expect(lastCard()).toContain('GURPS.agency.firearms.chat.loadOne:weapon=Colt Python,rounds=2/6')
+    expect(lastCard()).toContain('GURPS.agency.firearms.chat.loadOne:weapon=Colt Python,')
+    expect(lastCard()).toContain('rounds=2/6')
   })
 
   test('weapon names are escaped in the chat card', async () => {

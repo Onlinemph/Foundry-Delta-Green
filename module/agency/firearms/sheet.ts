@@ -4,13 +4,15 @@
  *    Rows are identified by the data-key on the row's Usage cell (system.ranged.<key>).
  *  - Modern / NPC modern sheets: in the name cell of each ranged attack row.
  *    Rows are identified by the data-key on the row's edit action.
- * Click the reload icon to reload; right-click the badge for the per-weapon ammo dialog.
+ * Click the reload icon to reload, the swap icon to change magazines (pick one of those carried,
+ * partial magazines included); right-click the badge for the per-weapon ammo dialog. Usages of one
+ * gun share a magazine, so their badges show the same count.
  */
 import { getAgencySetting } from '../settings.ts'
-import { findThrownItem, weaponLabel } from './ammo.ts'
+import { findThrownItem, resolveUnit } from './ammo.ts'
 import { L10N, SETTING_THROWN, SETTING_TRACKING } from './constants.ts'
 import { asAmmoActor } from './firing.ts'
-import { ammoSource, configureWeapon, escapeHtml, reloadWeapon, spareText } from './reload.ts'
+import { changeMagazine, configureWeapon, escapeHtml, loadedText, reloadWeapon, spareSummary } from './reload.ts'
 import { formatRounds, fullLoad, isTracked } from './shots.ts'
 import { allEquipment, findViewByPath, type AmmoActor, type WeaponView } from './state.ts'
 
@@ -74,8 +76,9 @@ function roundsWidget(actor: AmmoActor, view: WeaponView): HTMLElement {
   else if (view.loaded <= full / 4) badge.classList.add('agency-ammo-low')
   badge.dataset.agencyAmmo = view.id
 
-  const spare = spareText(ammoSource(actor, view))
-  badge.dataset.tooltipHtml = [weaponLabel(view.weapon), spare, localize('configureHint')]
+  const spare = spareSummary(actor, view)
+  const shared = view.modes > 1 ? format('sharedTooltip', { count: view.modes }) : ''
+  badge.dataset.tooltipHtml = [view.label, loadedText(view), spare, shared, localize('configureHint')]
     .filter(Boolean)
     .map(escapeHtml)
     .join('<br>')
@@ -97,6 +100,15 @@ function roundsWidget(actor: AmmoActor, view: WeaponView): HTMLElement {
   if (view.loaded >= full) reload.classList.add('agency-ammo-full')
   badge.append(reload)
 
+  const swaps = resolveUnit(view.state.ammoUnit, view.spec) === 'magazines' && !view.spec.individual
+  const change = document.createElement('a')
+  change.className = 'agency-ammo-change'
+  change.setAttribute('role', 'button')
+  change.setAttribute('aria-label', localize(swaps ? 'changeMagazine' : 'changeAmmo'))
+  change.dataset.tooltipText = localize(swaps ? 'changeMagazine' : 'changeAmmo')
+  change.innerHTML = '<i class="fa-solid fa-right-left"></i>'
+  badge.append(change)
+
   const path = view.path
   const fresh = () => findViewByPath(actor, path)
 
@@ -105,6 +117,12 @@ function roundsWidget(actor: AmmoActor, view: WeaponView): HTMLElement {
     event.stopPropagation()
     const current = fresh()
     if (current) void reloadWeapon(actor, current)
+  })
+  change.addEventListener('click', event => {
+    event.preventDefault()
+    event.stopPropagation()
+    const current = fresh()
+    if (current) void changeMagazine(actor, current)
   })
   // Keep the sheet's own row handlers (roll, expand, drag) away from the badge.
   badge.addEventListener('click', event => event.stopPropagation())

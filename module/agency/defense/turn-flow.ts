@@ -18,6 +18,7 @@ import {
   currentManeuver,
   gmIds,
   localize,
+  MANEUVER_PICKED_HOOK,
   parseOtf,
   performAndCapture,
   playerOwnerIds,
@@ -235,8 +236,10 @@ async function onPickManeuver(message: any, card: TurnCardFlag, maneuver: string
   try {
     const actor = resolveActor(card.token)
     if (!actor) return
-    await applyManeuver(resolveTokenDoc(card.token), actor, maneuver)
+    const tokenDoc = resolveTokenDoc(card.token)
+    await applyManeuver(tokenDoc, actor, maneuver)
     await submitCardEvent(message, { kind: 'maneuver', maneuver })
+    Hooks.callAll(MANEUVER_PICKED_HOOK as any, { actor, token: tokenDoc, maneuver })
   } finally {
     busy.delete(message.id)
   }

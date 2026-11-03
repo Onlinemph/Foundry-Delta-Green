@@ -1,0 +1,39 @@
+{{! AGENCY readiness: Ready / Fast-Draw choice for an unready weapon (module/agency/readiness/actions.ts promptReady). }}
+<div class='agency-readiness-prompt'>
+  <p class='agency-readiness-prompt__weapon'>
+    <strong>{{weapon}}</strong>
+    <span class='agency-badge agency-ready-badge agency-ready-badge--{{stateId}}'>{{state}}</span>
+  </p>
+  <p>{{intro}}</p>
+  <ul class='agency-readiness-prompt__options'>
+    <li>
+      <span class='agency-label'>{{localize 'GURPS.agency.readiness.prompt.ready'}}</span>
+      {{#if turn}}
+        {{localize 'GURPS.agency.readiness.prompt.readyText'}}
+      {{else}}
+        {{localize 'GURPS.agency.readiness.prompt.readyOffTurn'}}
+      {{/if}}
+    </li>
+    <li>
+      <span class='agency-label'>{{localize 'GURPS.agency.readiness.prompt.fastDrawLabel'}}</span>
+      {{#if canFastDraw}}
+        {{successText}}
+        {{localize 'GURPS.agency.readiness.prompt.failureText'}}
+      {{else}}
+        <em>{{blocked}}</em>
+      {{/if}}
+    </li>
+  </ul>
+  {{#if canFastDraw}}
+    <div class='form-group'>
+      <label for='agency-readiness-modifier'>{{localize 'GURPS.agency.readiness.prompt.modifier'}}</label>
+      <div class='form-fields'>
+        <input id='agency-readiness-modifier' type='number' name='modifier' value='0' step='1' />
+      </div>
+      <p class='hint'>
+        {{localize 'GURPS.agency.readiness.prompt.modifierHint'}}
+        {{#if gunslinger}}<strong>{{localize 'GURPS.agency.readiness.prompt.gunslinger'}}</strong>{{/if}}
+      </p>
+    </div>
+  {{/if}}
+</div>

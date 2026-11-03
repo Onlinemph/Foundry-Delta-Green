@@ -13,6 +13,7 @@ import {
   activeGMId,
   canControl,
   currentManeuver,
+  DEFENSE_WEAPONS_HOOK,
   gmIds,
   inActiveCombat,
   localize,
@@ -40,6 +41,7 @@ import {
   parseHitLocation,
   quoteOtfName,
   type DefenseToggles,
+  type DefenseWeapon,
 } from './rules.ts'
 import { autoDamageEnabled, defensePromptsEnabled } from './settings.ts'
 import { emitSocket, onSocket } from './socket.ts'
@@ -50,6 +52,16 @@ const L = 'GURPS.agency.defense'
 const DEFENSES: DefenseType[] = ['dodge', 'parry', 'block']
 
 const hasStatus = (actor: AnyActor | null, id: string): boolean => !!actor?.statuses?.has?.(id)
+
+/**
+ * The defender's parries or blocks, after other features have had their say: handlers of
+ * DEFENSE_WEAPONS_HOOK may replace data.weapons (readiness drops parries with weapons not in hand).
+ */
+export function defenseWeapons(defender: AnyActor | null, type: 'parry' | 'block'): DefenseWeapon[] {
+  const data = { actor: defender, type, weapons: listDefenseWeapons(defender?.system?.melee, type) }
+  Hooks.callAll(DEFENSE_WEAPONS_HOOK as any, data)
+  return Array.isArray(data.weapons) ? data.weapons : []
+}
 
 /* ---------------------------------------- */
 /*  Attack -> defense cards                  */
@@ -217,8 +229,8 @@ async function postDefenseCard(
     isCritical: attack.isCritSuccess,
     maneuverRule: maneuverDefenseRule(maneuver, (Maneuvers.getManeuver(maneuver) as any)?.flags?.gurps?.defense),
     cantSee: hasStatus(defender, 'blind') || hasStatus(attacker, 'invisible'),
-    hasParry: listDefenseWeapons(defender?.system?.melee, 'parry').length > 0,
-    hasBlock: listDefenseWeapons(defender?.system?.melee, 'block').length > 0,
+    hasParry: defenseWeapons(defender, 'parry').length > 0,
+    hasBlock: defenseWeapons(defender, 'block').length > 0,
   })
 
   const card: DefenseCardFlag = {
@@ -278,8 +290,8 @@ export async function decorateDefenseCard(message: any, html: HTMLElement, card:
 
 function controlsView(card: DefenseCardFlag, defender: AnyActor): Record<string, unknown> {
   const attacker = resolveActor(card.attack.attacker)
-  const parries = listDefenseWeapons(defender.system?.melee, 'parry')
-  const blocks = listDefenseWeapons(defender.system?.melee, 'block')
+  const parries = defenseWeapons(defender, 'parry')
+  const blocks = defenseWeapons(defender, 'block')
   const live = defenseAvailability({
     attack: card.attack.profile,
     isCritical: false,
@@ -377,7 +389,7 @@ async function onDefend(
     const weapon =
       type === 'dodge'
         ? null
-        : (listDefenseWeapons(defender.system?.melee, type).find(
+        : (defenseWeapons(defender, type).find(
             w => w.name === container.querySelector<HTMLSelectElement>(`select[name="${type}"]`)?.value
           ) ?? null)
     if (type !== 'dodge' && !weapon) return
