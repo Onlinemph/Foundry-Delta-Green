@@ -2,7 +2,7 @@
   "id": "gurps",
   "title": "GURPS 4e Game Aid (Agency fork, private)",
   "description": "Private fork of the GURPS 4e Game Aid: dossier theme, Revised Fractional Health wounds, SAN with Breaking Points, defense prompts, ammo tracking.",
-  "version": "0.18.27-agency.4",
+  "version": "0.18.27-agency.5",
   "authors": [
     {
       "name": "Chris Normand",
