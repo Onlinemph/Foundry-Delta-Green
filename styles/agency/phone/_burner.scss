@@ -1,0 +1,422 @@
+// =====================================================================================================================
+// Agency phone: burner. An original clamshell: matte graphite plastic, a small 4-shade LCD (a 128x128 canvas shown at
+// 2x with crisp pixels), rubber keys. Scoped under .aph-burner.
+// =====================================================================================================================
+
+$plastic: #2c2f33;
+$plastic-hi: #43474d;
+$plastic-lo: #18191c;
+$key: #34373c;
+$key-hi: #4c5056;
+$key-ink: #e8eaed;
+$key-sub: #9fa6ae;
+
+.aph-burner {
+  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: $key-ink;
+
+  button {
+    font: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    line-height: normal;
+    min-height: 0;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      box-shadow: none;
+      text-shadow: none;
+    }
+  }
+}
+
+.aph-flip {
+  position: relative;
+  width: 292px;
+  cursor: grab;
+  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.5)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// ---- Lid -------------------------------------------------------------------------------------------------------------
+
+.aph-flip-lid {
+  position: relative;
+  padding: 16px 16px 20px;
+  border-radius: 40px 40px 14px 14px;
+  background:
+    radial-gradient(120% 60% at 30% 0%, rgba(255, 255, 255, 0.12), transparent 60%),
+    linear-gradient(180deg, $plastic-hi, $plastic 30%, $plastic-lo);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+.aph-flip-speaker {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 12px;
+
+  i {
+    width: 22px;
+    height: 4px;
+    border-radius: 2px;
+    background: #0d0e10;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+}
+
+.aph-flip-bezel {
+  position: relative;
+  padding: 18px 12px 14px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #121315, #0a0a0b);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.aph-flip-brand {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  color: #6b7076;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.aph-lcd {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 2px #070708,
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+
+  canvas {
+    display: block;
+    width: 256px;
+    height: 256px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+}
+
+.aph-lcd-glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    // Gaps between LCD cells: a faint 2px grid.
+    repeating-linear-gradient(0deg, rgba(10, 30, 20, 0.11) 0 0.6px, transparent 0.6px 2px),
+    repeating-linear-gradient(90deg, rgba(10, 30, 20, 0.11) 0 0.6px, transparent 0.6px 2px),
+    // Uneven backlight and a glare streak.
+    radial-gradient(120% 80% at 50% 45%, rgba(255, 255, 240, 0.1), transparent 65%),
+    radial-gradient(140% 120% at 50% 50%, transparent 55%, rgba(0, 20, 10, 0.32) 100%),
+    linear-gradient(118deg, transparent 30%, rgba(255, 255, 255, 0.07) 38%, transparent 46%);
+  box-shadow: inset 0 0 14px rgba(0, 30, 15, 0.35);
+}
+
+// ---- Hinge -----------------------------------------------------------------------------------------------------------
+
+.aph-flip-hinge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  margin: -4px 6px;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #4b4f55, #24262a 45%, #121315 55%, #2b2e32);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  i {
+    width: 34px;
+    height: 100%;
+    border-radius: 13px;
+    background: linear-gradient(180deg, #5a5f66, #2a2c30 50%, #1a1b1e 52%, #34373b);
+  }
+
+  span {
+    flex: 1;
+    height: 4px;
+    margin: 0 10px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+}
+
+// ---- Base ------------------------------------------------------------------------------------------------------------
+
+.aph-flip-base {
+  position: relative;
+  padding: 18px 18px 22px;
+  border-radius: 14px 14px 46px 46px;
+  background:
+    radial-gradient(120% 50% at 70% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
+    linear-gradient(180deg, $plastic, $plastic-lo 90%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+.aph-nav {
+  display: grid;
+  grid-template-columns: 1fr 104px 1fr;
+  grid-template-rows: 30px 44px;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 14px;
+}
+
+// Generic rubber key.
+.aph-burner .aph-bk {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(180deg, $key-hi, $key 55%, #2a2c30);
+  box-shadow:
+    0 2px 0 #101113,
+    0 3px 5px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    transform 0.05s,
+    box-shadow 0.05s;
+
+  &:active,
+  &.is-down {
+    transform: translateY(2px);
+    box-shadow:
+      0 0 0 #101113,
+      0 1px 2px rgba(0, 0, 0, 0.5),
+      inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.aph-burner .aph-bk--soft {
+  width: 62px;
+  height: 22px;
+  border-radius: 11px 11px 14px 14px;
+
+  &::after {
+    content: '';
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    background: $key-sub;
+  }
+}
+
+.aph-burner .aph-bk--softL {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  transform-origin: left;
+}
+
+.aph-burner .aph-bk--softR {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.aph-burner .aph-bk--call,
+.aph-burner .aph-bk--end {
+  grid-row: 2;
+  width: 62px;
+  height: 30px;
+  border-radius: 15px 15px 18px 18px;
+  font-size: 15px;
+}
+
+.aph-burner .aph-bk--call {
+  grid-column: 1;
+  justify-self: start;
+  color: #4fd27f;
+}
+
+.aph-burner .aph-bk--end {
+  grid-column: 3;
+  justify-self: end;
+  color: #ff6a6a;
+
+  i {
+    transform: rotate(135deg);
+  }
+}
+
+.aph-dpad {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #4a4e54, #2b2e32);
+  box-shadow:
+    0 3px 0 #101113,
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+
+  .aph-bk {
+    position: absolute;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+
+    &:active,
+    &.is-down {
+      transform: none;
+      box-shadow: none;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    &::before {
+      content: '';
+      border: 5px solid transparent;
+    }
+  }
+}
+
+.aph-burner .aph-dpad-up {
+  left: 30px;
+  right: 30px;
+  top: 0;
+  height: 30px;
+  border-radius: 40px 40px 0 0;
+
+  &::before {
+    border-bottom-color: $key-sub;
+    margin-top: -8px;
+  }
+}
+
+.aph-burner .aph-dpad-down {
+  left: 30px;
+  right: 30px;
+  bottom: 0;
+  height: 30px;
+  border-radius: 0 0 40px 40px;
+
+  &::before {
+    border-top-color: $key-sub;
+    margin-bottom: -8px;
+  }
+}
+
+.aph-burner .aph-dpad-left {
+  top: 30px;
+  bottom: 30px;
+  left: 0;
+  width: 30px;
+  border-radius: 40px 0 0 40px;
+
+  &::before {
+    border-right-color: $key-sub;
+    margin-left: -8px;
+  }
+}
+
+.aph-burner .aph-dpad-right {
+  top: 30px;
+  bottom: 30px;
+  right: 0;
+  width: 30px;
+  border-radius: 0 40px 40px 0;
+
+  &::before {
+    border-left-color: $key-sub;
+    margin-right: -8px;
+  }
+}
+
+.aph-burner .aph-dpad .aph-dpad-ok {
+  left: 27px;
+  top: 27px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #5a5e65, #33363b);
+  box-shadow:
+    0 2px 0 #121315,
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: $key-ink;
+
+  &::before {
+    display: none;
+  }
+
+  &:active,
+  &.is-down {
+    transform: translateY(1px);
+    background: linear-gradient(180deg, #4a4e54, #2b2e32);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.aph-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px 12px;
+  padding: 0 4px;
+
+  .aph-bk {
+    height: 40px;
+    border-radius: 14px 14px 18px 18px;
+    flex-direction: row;
+    gap: 6px;
+
+    span {
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    small {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: $key-sub;
+      min-width: 22px;
+    }
+  }
+}
+
+.aph-flip-mic {
+  width: 6px;
+  height: 6px;
+  margin: 16px auto 0;
+  border-radius: 50%;
+  background: #0b0c0d;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+}

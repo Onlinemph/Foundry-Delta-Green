@@ -1,0 +1,31 @@
+<fieldset class="agency-phone-scene">
+  <legend><i class="fa-solid fa-mobile-screen-button"></i> {{localize "GURPS.agency.phone.scene.legend"}}</legend>
+  <div class="form-group">
+    <label>{{localize "GURPS.agency.phone.scene.signal"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="flags.gurps.agency.phone.signal" {{checked signal}}>
+    </div>
+    <p class="hint">{{localize "GURPS.agency.phone.scene.signalHint"}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize "GURPS.agency.phone.scene.map"}}</label>
+    <div class="form-fields">
+      <select name="flags.gurps.agency.phone.map">
+        {{selectOptions mapModes selected=map localize=true}}
+      </select>
+    </div>
+    <p class="hint">{{localize "GURPS.agency.phone.scene.mapHint"}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize "GURPS.agency.phone.scene.mapImage"}}</label>
+    <div class="form-fields">
+      <file-picker name="flags.gurps.agency.phone.mapImage" type="image" value="{{mapImage}}"></file-picker>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>{{localize "GURPS.agency.phone.scene.mapLabel"}}</label>
+    <div class="form-fields">
+      <input type="text" name="flags.gurps.agency.phone.mapLabel" value="{{mapLabel}}" placeholder="{{localize 'GURPS.agency.phone.scene.mapLabelPlaceholder'}}">
+    </div>
+  </div>
+</fieldset>

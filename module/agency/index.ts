@@ -17,6 +17,7 @@ import * as readiness from './readiness/index.ts'
 import * as hitloc from './hitloc/index.ts'
 import * as explosions from './explosions/index.ts'
 import * as suppression from './suppression/index.ts'
+import * as phone from './phone/index.ts'
 import { registerAgencySettingsMenu } from './settings-app.ts'
 
 // One feature per line keeps parallel branches from conflicting here.
@@ -33,6 +34,7 @@ const features = [
   presets,
   explosions,
   suppression,
+  phone,
 ]
 
 /** Sheet partials shared by all features. Features add their own via registerAgencyPartials(). */

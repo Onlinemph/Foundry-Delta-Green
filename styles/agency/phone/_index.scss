@@ -1,0 +1,147 @@
+// =====================================================================================================================
+// Agency phone. The devices (smartphone, burner) are their own visual world and don't follow the dossier theme;
+// the Handler console and the scene-config fields use the theme kit (styles/agency/_theme.scss).
+// =====================================================================================================================
+@use 'smartphone';
+@use 'burner';
+@use 'launcher';
+@use 'console';
+
+// ---- Window: frameless ApplicationV2 holding one device --------------------------------------------------------------
+
+.agency-phone-window {
+  // Foundry gives positioned apps a background and border via .application; the device draws itself.
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0;
+  overflow: visible;
+  min-width: 0;
+  min-height: 0;
+  outline: none;
+}
+
+.aph-device,
+.aph-device *,
+.aph-device *::before,
+.aph-device *::after {
+  box-sizing: border-box;
+}
+
+.aph-device {
+  position: relative;
+  display: inline-block;
+  padding: 26px 14px 14px;
+  zoom: var(--aph-scale, 1);
+  outline: none;
+  user-select: none;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.aph-chrome {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  .aph-device:hover &,
+  .aph-device:focus-within & {
+    opacity: 1;
+  }
+}
+
+.aph-chrome-label {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 9px;
+  border-radius: 10px;
+  background: rgba(10, 12, 15, 0.72);
+  color: rgba(255, 255, 255, 0.85);
+  font:
+    600 11px/16px 'Inter',
+    system-ui,
+    sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  justify-self: start;
+  max-width: max-content;
+}
+
+.aph-device .aph-win-btn {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 12, 15, 0.72);
+  color: #fff;
+  font-size: 11px;
+  line-height: 22px;
+  cursor: pointer;
+  box-shadow: none;
+
+  &:hover {
+    background: #c0362c;
+  }
+}
+
+.aph-inspect {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 2px;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: #b22a22;
+  color: #fff;
+  font:
+    700 10px/14px 'Inter',
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+// Incoming call / text while the window is open: the whole device shakes.
+.aph-device.is-buzzing {
+  animation: aph-buzz 0.5s linear 2;
+}
+
+@keyframes aph-buzz {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  10%,
+  50%,
+  90% {
+    transform: translate(-2px, 0) rotate(-0.6deg);
+  }
+  30%,
+  70% {
+    transform: translate(2px, 0) rotate(0.6deg);
+  }
+}
+
+// ---- Phone messages never show in the chat log -----------------------------------------------------------------------
+
+.chat-message.agency-phone-hidden,
+li.agency-phone-hidden {
+  display: none !important;
+}

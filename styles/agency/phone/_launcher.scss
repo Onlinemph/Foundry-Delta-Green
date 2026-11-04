@@ -1,0 +1,142 @@
+// Floating phone button (players) / handler button (GM), and the device picker.
+
+#agency-phone-launcher {
+  position: fixed;
+  z-index: 70;
+  left: 240px;
+  bottom: 14px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #2f343c, #15181c);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+  color: #e9edf2;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.12s;
+  pointer-events: all;
+
+  &:hover {
+    transform: translateY(-2px);
+    color: #fff;
+  }
+
+  &.is-gm {
+    background: linear-gradient(160deg, #6b2a24, #2a0f0d);
+  }
+
+  &.is-buzzing {
+    animation: aph-launcher-buzz 0.09s linear 8;
+  }
+
+  .aph-launcher-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: #f2545b;
+    color: #fff;
+    font:
+      700 11px/20px 'Inter',
+      system-ui,
+      sans-serif;
+    text-align: center;
+    box-shadow: 0 0 0 2px #15181c;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+@keyframes aph-launcher-buzz {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(-2px, 0) rotate(-8deg);
+  }
+  75% {
+    transform: translate(2px, 0) rotate(8deg);
+  }
+}
+
+#agency-phone-picker {
+  position: fixed;
+  z-index: 71;
+  min-width: 230px;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(20, 23, 28, 0.97);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+  color: #e9edf2;
+  font:
+    13px/1.3 'Inter',
+    system-ui,
+    sans-serif;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: none;
+    line-height: inherit;
+    min-height: 0;
+    height: auto;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    i {
+      width: 18px;
+      text-align: center;
+      font-size: 16px;
+      color: #9aa3b2;
+    }
+
+    b {
+      display: block;
+      font-weight: 650;
+    }
+
+    span {
+      font-size: 11.5px;
+      color: #9aa3b2;
+    }
+
+    em {
+      margin-left: auto;
+      min-width: 18px;
+      padding: 0 5px;
+      border-radius: 9px;
+      background: #f2545b;
+      color: #fff;
+      font:
+        700 10px/18px 'Inter',
+        system-ui,
+        sans-serif;
+      font-style: normal;
+      text-align: center;
+    }
+  }
+}

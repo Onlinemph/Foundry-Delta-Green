@@ -1,0 +1,106 @@
+// Handler console (GM) and the scene-config fieldset. Built from the theme kit (.agency-panel, .agency-table,
+// .agency-btn, .agency-badge); this only lays them out.
+
+.agency-phone-console {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px;
+
+  .aphc-intro {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .agency-panel-header {
+    gap: 6px;
+  }
+
+  .agency-table {
+    width: 100%;
+    margin: 0;
+    font-size: 12.5px;
+
+    td,
+    th {
+      vertical-align: middle;
+      padding: 3px 5px;
+    }
+  }
+
+  .aphc-who {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+
+    img {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 4px;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    b {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .aphc-device {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+
+    .aphc-number {
+      font-family: var(--agency-font-body, monospace);
+      font-variant-numeric: tabular-nums;
+      margin-right: 2px;
+    }
+  }
+
+  .aphc-signal {
+    white-space: nowrap;
+
+    &.is-off {
+      color: var(--agency-red-ink, #c0362c);
+    }
+  }
+
+  .aphc-none {
+    opacity: 0.55;
+    font-style: italic;
+  }
+
+  .aphc-actions {
+    display: flex;
+    gap: 3px;
+    justify-content: flex-end;
+  }
+
+  .agency-btn--icon {
+    width: 24px;
+    height: 24px;
+    min-height: 0;
+    padding: 0;
+    line-height: 22px;
+  }
+}
+
+.agency-phone-scene {
+  .form-group label {
+    flex: 0 0 140px;
+  }
+}
+
+.agency-phone-dialog {
+  .form-group {
+    margin: 4px 0;
+  }
+}

@@ -1,0 +1,104 @@
+<section class="agency-phone-console">
+  <p class="aphc-intro">{{localize "GURPS.agency.phone.console.intro"}}</p>
+
+  {{#if scene}}
+  <div class="agency-panel agency-panel--compact">
+    <header class="agency-panel-header">
+      <h3>{{localize "GURPS.agency.phone.console.scene" name=scene.name}}</h3>
+      <button type="button" class="agency-btn agency-btn--small {{#if scene.signal}}agency-btn--primary{{else}}agency-btn--danger{{/if}}" data-action="toggleSignal" data-scene="{{scene.id}}">
+        <i class="fa-solid {{#if scene.signal}}fa-tower-cell{{else}}fa-ban{{/if}}"></i>
+        {{#if scene.signal}}{{localize "GURPS.agency.phone.console.signalOn"}}{{else}}{{localize "GURPS.agency.phone.console.signalOff"}}{{/if}}
+      </button>
+      <span class="agency-badge agency-badge--outline">{{localize "GURPS.agency.phone.console.map"}}: {{scene.mapLabel}}</span>
+    </header>
+  </div>
+  {{/if}}
+
+  <div class="agency-panel">
+    <header class="agency-panel-header"><h3>{{localize "GURPS.agency.phone.console.agents"}}</h3></header>
+    <table class="agency-table">
+      <thead>
+        <tr>
+          <th>{{localize "GURPS.agency.phone.console.agent"}}</th>
+          <th>{{localize "GURPS.agency.phone.console.signal"}}</th>
+          <th>{{localize "GURPS.agency.phone.smartphone"}}</th>
+          <th>{{localize "GURPS.agency.phone.burner"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each agents}}
+        <tr>
+          <td><div class="aphc-who"><img src="{{img}}" alt=""><b>{{name}}</b></div></td>
+          <td class="aphc-signal {{#unless signal}}is-off{{/unless}}">
+            <i class="fa-solid {{#if signal}}fa-signal{{else}}fa-ban{{/if}}"></i> {{where}}
+          </td>
+          {{#each devices}}
+          <td>
+            {{#if this.id}}
+            <div class="aphc-device">
+              <span class="aphc-number">{{this.number}}</span>
+              {{#if this.unread}}<span class="agency-badge agency-badge--red">{{this.unread}}</span>{{/if}}
+              <span class="aphc-actions">
+                <button type="button" class="agency-btn agency-btn--icon" data-action="open" data-device="{{this.id}}" data-tooltip="{{localize 'GURPS.agency.phone.console.read'}}"><i class="fa-solid fa-eye"></i></button>
+                <button type="button" class="agency-btn agency-btn--icon" data-action="addContact" data-device="{{this.id}}" data-tooltip="{{localize 'GURPS.agency.phone.console.addContact'}}"><i class="fa-solid fa-user-plus"></i></button>
+                <button type="button" class="agency-btn agency-btn--icon" data-action="push" data-device="{{this.id}}" data-tooltip="{{localize 'GURPS.agency.phone.console.push'}}"><i class="fa-solid fa-file-image"></i></button>
+                <button type="button" class="agency-btn agency-btn--icon" data-action="number" data-actor="{{../id}}" data-kind="{{this.kind}}" data-tooltip="{{localize 'GURPS.agency.phone.console.setNumber'}}"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="agency-btn agency-btn--icon agency-btn--danger" data-action="revoke" data-actor="{{../id}}" data-kind="{{this.kind}}" data-tooltip="{{localize 'GURPS.agency.phone.console.revoke'}}"><i class="fa-solid fa-trash"></i></button>
+              </span>
+            </div>
+            {{else}}
+            <button type="button" class="agency-btn agency-btn--small" data-action="issue" data-actor="{{../id}}" data-kind="{{this.kind}}"><i class="fa-solid fa-plus"></i> {{localize "GURPS.agency.phone.console.issue"}}</button>
+            {{/if}}
+          </td>
+          {{/each}}
+        </tr>
+        {{else}}
+        <tr><td colspan="4" class="aphc-none">{{localize "GURPS.agency.phone.console.noAgents"}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="agency-panel">
+    <header class="agency-panel-header">
+      <h3>{{localize "GURPS.agency.phone.console.npcs"}}</h3>
+      <button type="button" class="agency-btn agency-btn--small agency-btn--primary" data-action="npcNew"><i class="fa-solid fa-plus"></i> {{localize "GURPS.agency.phone.console.npcNew"}}</button>
+    </header>
+    <table class="agency-table">
+      <tbody>
+        {{#each npcs}}
+        <tr>
+          <td><div class="aphc-who">{{#if img}}<img src="{{img}}" alt="">{{/if}}<b>{{name}}</b></div></td>
+          <td><span class="aphc-number">{{number}}</span> {{#if unread}}<span class="agency-badge agency-badge--red">{{unread}}</span>{{/if}}</td>
+          <td>
+            <span class="aphc-actions">
+              <button type="button" class="agency-btn agency-btn--small agency-btn--primary" data-action="npcOpen" data-npc="{{id}}"><i class="fa-solid fa-mobile-screen-button"></i> {{localize "GURPS.agency.phone.console.npcOpen"}}</button>
+              <button type="button" class="agency-btn agency-btn--icon" data-action="npcEdit" data-npc="{{id}}" data-tooltip="{{localize 'GURPS.agency.phone.console.npcEdit'}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" class="agency-btn agency-btn--icon agency-btn--danger" data-action="npcDelete" data-npc="{{id}}" data-tooltip="{{localize 'GURPS.agency.phone.console.npcDelete'}}"><i class="fa-solid fa-trash"></i></button>
+            </span>
+          </td>
+        </tr>
+        {{else}}
+        <tr><td class="aphc-none">{{localize "GURPS.agency.phone.console.noNpcs"}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{#if unlisted.length}}
+  <div class="agency-panel agency-panel--alert">
+    <header class="agency-panel-header"><h3>{{localize "GURPS.agency.phone.console.unlisted"}}</h3></header>
+    <table class="agency-table">
+      <tbody>
+        {{#each unlisted}}
+        <tr>
+          <td><span class="aphc-number">{{label}}</span></td>
+          <td><span class="agency-badge">{{count}}</span></td>
+          <td><span class="aphc-actions"><button type="button" class="agency-btn agency-btn--small" data-action="claim" data-number="{{number}}"><i class="fa-solid fa-user-secret"></i> {{localize "GURPS.agency.phone.console.claim"}}</button></span></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{/if}}
+</section>
