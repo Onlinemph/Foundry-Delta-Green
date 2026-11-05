@@ -143,7 +143,8 @@ export class TokenActions {
   }
 
   async removeManeuverModifiers() {
-    const allModifiers = await foundry.utils.getProperty(this.actor, 'system.conditions.usermods')
+    // AGENCY: new actors have no usermods yet (template.json starts conditions empty); starting combat with one threw here
+    const allModifiers = (await foundry.utils.getProperty(this.actor, 'system.conditions.usermods')) || []
     const validModifiers = allModifiers.filter(m => !m.includes('#maneuver'))
     await this.actor.update({ 'system.conditions.usermods': validModifiers })
   }
@@ -418,9 +419,10 @@ export class TokenActions {
       }
     }
 
-    const allModifiers = await foundry.utils
-      .getProperty(this.actor, 'system.conditions.usermods')
-      .filter(m => !m.includes('#maneuver') && !m.includes('@eft:'))
+    // AGENCY: default an actor with no usermods yet to none, as removeModifiers does (each new turn threw here)
+    const allModifiers = (foundry.utils.getProperty(this.actor, 'system.conditions.usermods') || []).filter(
+      m => !m.includes('#maneuver') && !m.includes('@eft:')
+    )
 
     const maneuverModifiers = []
 
@@ -818,7 +820,8 @@ export class TokenActions {
 
     if (combatTempTags.length < 1) return
 
-    const userMods = foundry.utils.getProperty(this.actor, 'system.conditions.usermods')
+    // AGENCY: same default for an actor with no usermods yet
+    const userMods = foundry.utils.getProperty(this.actor, 'system.conditions.usermods') || []
 
     const validMods = userMods.filter(m => {
       const tags = m.match(/#(\S+)/g) || []
