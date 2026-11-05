@@ -113,7 +113,9 @@ export class EffectModifierPopout extends Application {
     let selfMods = []
 
     selfMods = this.convertModifiers(this._token.actor.system.conditions.self.modifiers)
-    selfMods.push(...this.convertModifiers([...this._token.actor.system.conditions.usermods]))
+    // AGENCY: new actors have no usermods yet (template.json starts conditions empty), so default like actor.js does
+    const userMods = foundry.utils.getProperty(this._token.actor, 'system.conditions.usermods') || []
+    selfMods.push(...this.convertModifiers([...userMods]))
     selfMods.sort((left, right) => {
       if (left.itemName === right.itemName) {
         return left.desc.localeCompare(right.desc)
